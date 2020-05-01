@@ -1,0 +1,27 @@
+# file-exclusions
+*.o
+*.pyc
+*.pyo
+*.swp
+*.swo
+*.so
+*.a
+*.ini
+*.log
+
+# folder-exclusions
+build/
+tmp/
+.vscode/
+build/
+dist/
+tmp/
+*.egg-info/
+*.ipynb_checkpoints/
+
+# compressed files
+*.zip
+*.rar
+
+# logging files
+*.json
