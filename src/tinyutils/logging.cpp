@@ -19,7 +19,6 @@ namespace tinyutils
         s_IsActive = true;
         s_Type = logger_type;
 
-    #if defined(TINYUTILS_USE_LOGS)
         spdlog::set_pattern( "%^[%T] %n: %v%$" );
         if ( s_Type == Logger::eType::CONSOLE_LOGGER )
         {
@@ -34,7 +33,7 @@ namespace tinyutils
             {
                 s_CoreLogger = spdlog::basic_logger_mt( "CORE", "./core_logs.txt" );
                 s_CoreLogger->set_level( spdlog::level::trace );
-                s_ClientLogger = spdlog::stdout_color_mt( "USER", "./user_logs.txt" );
+                s_ClientLogger = spdlog::basic_logger_mt( "USER", "./user_logs.txt" );
                 s_ClientLogger->set_level( spdlog::level::trace );
             }
             catch ( const spdlog::spdlog_ex& ex )
@@ -42,7 +41,6 @@ namespace tinyutils
                 std::cout << "Logger initialization FAILED: " << ex.what() << std::endl;
             }
         }
-    #endif
     }
 
     void Logger::Release()

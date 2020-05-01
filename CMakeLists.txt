@@ -32,7 +32,6 @@ endif()
 
 option( TINYUTILS_BUILD_EXAMPLES "Build c/c++ examples" ON )
 option( TINYUTILS_BUILD_PYTHON_BINDINGS "Build python bindings" ON )
-option( TINYUTILS_BUILD_LOGGING_MODULE "Build with logging module enabled" ON )
 
 # Add external dependencies only if master project. If child project, root adds the dependencies
 if ( TINYUTILS_IS_MASTER_PROJECT )
@@ -59,7 +58,7 @@ if ( TINYUTILS_BUILD_PYTHON_BINDINGS )
     add_subdirectory( python/tinyutils/bindings )
 endif()
 
-if ( TINYUTILS_IS_MASTER_PROJECT AND TINYUTILS_BUILD_EXAMPLES )
+if ( TINYUTILS_BUILD_EXAMPLES )
     add_subdirectory( examples )
 endif()
 
@@ -71,5 +70,4 @@ message( "CMAKE_BUILD_RPATH                     : ${CMAKE_BUILD_RPATH}" )
 message( "TINYUTILS_IS_MASTER_PROJECT           : ${TINYUTILS_IS_MASTER_PROJECT}" )
 message( "TINYUTILS_BUILD_EXAMPLES              : ${TINYUTILS_BUILD_EXAMPLES}" )
 message( "TINYUTILS_BUILD_PYTHON_BINDINGS       : ${TINYUTILS_BUILD_PYTHON_BINDINGS}" )
-message( "TINYUTILS_BUILD_LOGGING_MODULE        : ${TINYUTILS_BUILD_LOGGING_MODULE}" )
 message( "***************************************************************************************" )
