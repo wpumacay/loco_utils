@@ -42,6 +42,7 @@ set( TINYUTILS_INCLUDES_DIR
      "${CMAKE_CURRENT_SOURCE_DIR}/include"
      "${CMAKE_CURRENT_SOURCE_DIR}/ext/spdlog/include" )
 set( TINYUTILS_SRCS
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/tinyutils/common.cpp"
      "${CMAKE_CURRENT_SOURCE_DIR}/src/tinyutils/logging.cpp"
      "${CMAKE_CURRENT_SOURCE_DIR}/src/tinyutils/profiling.cpp"
      "${CMAKE_CURRENT_SOURCE_DIR}/src/tinyutils/path_handling.cpp"
