@@ -8,7 +8,8 @@ int main()
     auto vec_str = tinyutils::Split( "comp1/comp2", '/' );
     assert( vec_str.size() == 2 );
 
-    auto address = tinyutils::PointerToHexAddress( &vec_str );
+    auto buffer = std::make_unique<uint8_t[]>( 100 );
+    auto address = tinyutils::PointerToHexAddress( buffer.get() );
 
     // Core logs
     {
