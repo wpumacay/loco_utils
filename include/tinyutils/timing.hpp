@@ -5,7 +5,6 @@
 #include <unordered_map>
 #include <chrono>
 
-
 /// Number of frames used for averaging-window
 #define NUM_FRAMES_FOR_AVG 100
 /// Name of the default event to keep track of (wall-time)
