@@ -72,9 +72,9 @@ namespace tinyutils
         }
 
         template<typename... Args>
-        static void CoreAssert( bool is_ok, fmt::basic_string_view<char> fmt, const Args&... args )
+        static void CoreAssert( bool is_not_ok, fmt::basic_string_view<char> fmt, const Args&... args )
         {
-            if ( is_ok )
+            if ( !is_not_ok )
                 return;
 
             if ( s_CoreLogger )
@@ -121,9 +121,9 @@ namespace tinyutils
         }
 
         template<typename... Args>
-        static void ClientAssert( bool is_ok, fmt::basic_string_view<char> fmt, const Args&... args )
+        static void ClientAssert( bool is_not_ok, fmt::basic_string_view<char> fmt, const Args&... args )
         {
-            if ( is_ok )
+            if ( !is_not_ok )
                 return;
 
             if ( s_ClientLogger )
@@ -148,7 +148,7 @@ namespace tinyutils
 #define LOG_CORE_WARN(...)      ::tinyutils::Logger::CoreWarn(__VA_ARGS__)
 #define LOG_CORE_ERROR(...)     ::tinyutils::Logger::CoreError(__VA_ARGS__)
 #define LOG_CORE_CRITICAL(...)  ::tinyutils::Logger::CoreCritical(__VA_ARGS__)
-#define LOG_CORE_ASSERT(x,...)  ::tinyutils::Logger::CoreAssert((x), __VA_ARGS__)
+#define LOG_CORE_ASSERT(x,...)  ::tinyutils::Logger::CoreAssert(!(x), __VA_ARGS__)
 
 #define LOG_TRACE(...)     ::tinyutils::Logger::ClientTrace(__VA_ARGS__)
 #define LOG_INFO(...)      ::tinyutils::Logger::ClientInfo(__VA_ARGS__)

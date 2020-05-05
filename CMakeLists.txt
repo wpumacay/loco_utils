@@ -44,6 +44,7 @@ set( TINYUTILS_INCLUDES_DIR
 set( TINYUTILS_SRCS
     "${CMAKE_CURRENT_SOURCE_DIR}/src/tinyutils/common.cpp"
      "${CMAKE_CURRENT_SOURCE_DIR}/src/tinyutils/logging.cpp"
+     "${CMAKE_CURRENT_SOURCE_DIR}/src/tinyutils/timing.cpp"
      "${CMAKE_CURRENT_SOURCE_DIR}/src/tinyutils/profiling.cpp"
      "${CMAKE_CURRENT_SOURCE_DIR}/src/tinyutils/path_handling.cpp"
      "${CMAKE_CURRENT_SOURCE_DIR}/src/tinyutils/perlin_noise.cpp" )

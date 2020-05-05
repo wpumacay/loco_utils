@@ -7,7 +7,9 @@
 #include <sstream>
 #include <string>
 #include <vector>
+#include <array>
 #include <cassert>
+#include <memory>
 
 namespace tinyutils
 {
@@ -32,7 +34,6 @@ namespace tinyutils
 // post: https://stackoverflow.com/questions/7038357/make-unique-and-perfect-forwarding
 // url: https://isocpp.org/files/papers/N3656.txt
 #include <cstddef>
-#include <memory>
 #include <type_traits>
 #include <utility>
 
