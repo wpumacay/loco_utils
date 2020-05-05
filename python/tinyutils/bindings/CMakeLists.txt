@@ -3,6 +3,7 @@ message( "TINYUTILS::Python >>> configuring python-bindings" )
 pybind11_add_module( tinyutils_py
                      src/logging_py.cpp
                      src/path_handling_py.cpp
+                     src/timing_py.cpp
                      src/perlin_noise_py.cpp
                      src/profiling_py.cpp
                      src/bindings_py.cpp )
