@@ -7,7 +7,7 @@ namespace tinyutils
     /*                                 Scoped Profiling Timer                                     */
     /**********************************************************************************************/
 
-    ProfilerTimer::ProfilerTimer( const char* name, const char* session, const bool& verbose )
+    ProfilerTimer::ProfilerTimer( const std::string& name, const std::string& session, const bool& verbose )
     {
         m_Name = name;
         m_Session = session;
@@ -38,7 +38,7 @@ namespace tinyutils
     /*                                 Internal profiling session                                 */
     /**********************************************************************************************/
 
-    ProfilerSessionInternal::ProfilerSessionInternal( const char* name )
+    ProfilerSessionInternal::ProfilerSessionInternal( const std::string& name )
         : IProfilerSession( name )
     {
         m_Type = IProfilerSession::eType::INTERNAL;
@@ -64,7 +64,7 @@ namespace tinyutils
     /*                              Chrome-tracing profiling session                              */
     /**********************************************************************************************/
 
-    ProfilerSessionExtChrome::ProfilerSessionExtChrome( const char* name )
+    ProfilerSessionExtChrome::ProfilerSessionExtChrome( const std::string& name )
         : IProfilerSession( name )
     {
         m_Type = IProfilerSession::eType::EXTERNAL_CHROME;
@@ -148,19 +148,19 @@ namespace tinyutils
         s_Instance = nullptr;
     }
 
-    void Profiler::BeginSession( const char* session_name )
+    void Profiler::BeginSession( const std::string& session_name )
     {
         LOG_CORE_ASSERT( s_Instance, "Profiler::BeginSession >>> Profiler module must be initialized before using it" );
         s_Instance->_BeginSession( session_name );
     }
 
-    void Profiler::EndSession( const char* session_name )
+    void Profiler::EndSession( const std::string& session_name )
     {
         LOG_CORE_ASSERT( s_Instance, "Profiler::EndSession >>> Profiler module must be initialized before using it" );
         s_Instance->_EndSession( session_name );
     }
 
-    void Profiler::WriteProfileResult( const ProfilerResult& result, const char* session_name )
+    void Profiler::WriteProfileResult( const ProfilerResult& result, const std::string& session_name )
     {
         LOG_CORE_ASSERT( s_Instance, "Profiler::WriteProfileResult >>> Profiler module must be initialized before using it" );
         s_Instance->_WriteProfileResult( result, session_name );
@@ -172,7 +172,7 @@ namespace tinyutils
         return s_Instance->_GetSessions();
     }
 
-    void Profiler::_BeginSession( const char* session_name )
+    void Profiler::_BeginSession( const std::string& session_name )
     {
         if ( m_Sessions.find( session_name ) == m_Sessions.end() )
         {
@@ -184,7 +184,7 @@ namespace tinyutils
         m_Sessions[session_name]->Begin();
     }
 
-    void Profiler::_EndSession( const char* session_name )
+    void Profiler::_EndSession( const std::string& session_name )
     {
         if ( m_Sessions.find( session_name ) == m_Sessions.end() )
             LOG_CORE_WARN( "Profiler::_EndSession() >>> session with name {0} not found", session_name );
@@ -192,7 +192,7 @@ namespace tinyutils
             m_Sessions[session_name]->End();
     }
 
-    void Profiler::_WriteProfileResult( const ProfilerResult& result, const char* session_name )
+    void Profiler::_WriteProfileResult( const ProfilerResult& result, const std::string& session_name )
     {
         if ( m_Sessions.find( session_name ) == m_Sessions.end() )
             LOG_CORE_WARN( "Profiler::_WriteProfileResult() >>> session with name {0} not found", session_name );

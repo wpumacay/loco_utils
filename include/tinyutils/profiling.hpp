@@ -35,7 +35,7 @@ namespace tinyutils
     public :
 
         /// Creates and initializes a scoped-timer
-        ProfilerTimer( const char* name, const char* session, const bool& verbose = false );
+        ProfilerTimer( const std::string& name, const std::string& session, const bool& verbose = false );
 
         /// Stops timer execution and releases scoped-timer resources
         ~ProfilerTimer();
@@ -47,9 +47,9 @@ namespace tinyutils
 
     private :
         /// Unique identifier of the timer
-        const char* m_Name;
+        std::string m_Name;
         /// Session identifier (to which session is associated)
-        const char* m_Session;
+        std::string m_Session;
         /// Flag used to check if timer has stopped
         bool m_Stopped;
         /// Flag used to check if in verbose mode (prints results to stdout)
@@ -82,7 +82,7 @@ namespace tinyutils
         };
 
         /// Creates a profiler session with given name
-        IProfilerSession( const char* name ) : m_Name( name ), m_State( eState::IDLE ) {};
+        IProfilerSession( const std::string& name ) : m_Name( name ), m_State( eState::IDLE ) {};
 
         /// Releases resources allocated by the session
         virtual ~IProfilerSession() = default;
@@ -103,12 +103,12 @@ namespace tinyutils
         eState state() const { return m_State; }
 
         /// Gets the name of this session
-        const char* name() const { return m_Name; }
+        std::string name() const { return m_Name; }
 
     protected :
 
         /// Unique identifier of this session
-        const char* m_Name;
+        std::string m_Name;
         /// Type of this profiling session
         eType m_Type;
         /// Current state of the profiling session
@@ -121,7 +121,7 @@ namespace tinyutils
     public :
 
         /// Creates a session that stores profiling results for usage with internal tooling
-        ProfilerSessionInternal( const char* name );
+        ProfilerSessionInternal( const std::string& name );
 
         // Documentation inherited
         ~ProfilerSessionInternal() = default;
@@ -150,7 +150,7 @@ namespace tinyutils
     public :
 
         /// Creates a session that saves its results to disk in the chrome-tracing tool format (.json)
-        ProfilerSessionExtChrome( const char* name );
+        ProfilerSessionExtChrome( const std::string& name );
 
         // Documentation inherited
         ~ProfilerSessionExtChrome() = default;
@@ -184,19 +184,19 @@ namespace tinyutils
     public:
 
         /// Initializes profiler module(singleton)
-        static void Init( const IProfilerSession::eType& type = IProfilerSession::eType::INTERNAL );
+        static void Init( const IProfilerSession::eType& type = IProfilerSession::eType::EXTERNAL_CHROME );
 
         /// Releases resources used by the profiler module(singleton)
         static void Release();
 
         /// Starts a profiling session with a given name
-        static void BeginSession( const char* session_name );
+        static void BeginSession( const std::string& session_name );
 
         /// Stops an existing profiling sessino with given name
-        static void EndSession( const char* session_name );
+        static void EndSession( const std::string& session_name );
 
         /// Sends results to a profiler-session for appropriate handling
-        static void WriteProfileResult( const ProfilerResult& result, const char* session_name = DEFAULT_SESSION );
+        static void WriteProfileResult( const ProfilerResult& result, const std::string& session_name = DEFAULT_SESSION );
 
         /// Returns all sessions currently being tracked by the profiler module
         static std::vector<IProfilerSession*> GetSessions();
@@ -210,13 +210,13 @@ namespace tinyutils
         Profiler( const IProfilerSession::eType& type ) : m_ProfilerType( type ) {}
 
         /// Start a session with a given name
-        void _BeginSession( const char* session_name );
+        void _BeginSession( const std::string& session_name );
 
         /// Stops a session with a given name
-        void _EndSession( const char* session_name );
+        void _EndSession( const std::string& session_name );
 
         /// Sends results to a profiler-session for appropriate handling
-        void _WriteProfileResult( const ProfilerResult& result, const char* session_name );
+        void _WriteProfileResult( const ProfilerResult& result, const std::string& session_name );
 
         /// Returns all sessions currently being tracked
         std::vector<IProfilerSession*> _GetSessions();
