@@ -69,3 +69,12 @@ namespace std {
 }
 
 #endif /* checks that we're using c++11 or older */
+
+// Function-name helper macro, directive depends on the compiler being used
+#if defined( __GNUC__ )
+    #define __FUNCTION_NAME__ __PRETTY_FUNCTION__
+#elif defined(__clang__)
+    #define __FUNCTION_NAME__ __FUNCTION__
+#elif defined(_MSC_VER)
+    #define __FUNCTION_NAME__ __FUNCSIG__
+#endif
