@@ -155,4 +155,4 @@ namespace tinyutils
 #define LOG_WARN(...)      ::tinyutils::Logger::ClientWarn(__VA_ARGS__)
 #define LOG_ERROR(...)     ::tinyutils::Logger::ClientError(__VA_ARGS__)
 #define LOG_CRITICAL(...)  ::tinyutils::Logger::ClientCritical(__VA_ARGS__)
-#define LOG_ASSERT(x,...)  ::tinyutils::Logger::ClientAssert((x), __VA_ARGS__)
+#define LOG_ASSERT(x,...)  ::tinyutils::Logger::ClientAssert(!(x), __VA_ARGS__)

@@ -67,34 +67,40 @@ namespace tinyutils
         return s_Instance->m_ClockEvents.at( event_name );
     }
 
-    double Clock::GetWallTime()
+    float Clock::GetWallTime()
     {
         LOG_CORE_ASSERT( s_Instance, "Clock::GetWallTime >>> Must initialize clock-module before using it" );
         return s_Instance->m_TimeCurrent;
     }
 
-    double Clock::GetTimeStep()
+    float Clock::GetTimeStep()
     {
         LOG_CORE_ASSERT( s_Instance, "Clock::GetTimeStep >>> Must initialize clock-module before using it" );
         return s_Instance->m_TimeStep;
     }
 
-    double Clock::GetAvgTimeStep()
+    float Clock::GetAvgTimeStep()
     {
         LOG_CORE_ASSERT( s_Instance, "Clock::GetAvgTimeStep >>> Must initialize clock-module before using it" );
         return s_Instance->m_TimeStepAvg;
     }
 
-    double Clock::GetFps()
+    float Clock::GetFps()
     {
         LOG_CORE_ASSERT( s_Instance, "Clock::GetFps >>> Must initialize clock-module before using it" );
         return 1.0 / s_Instance->m_TimeStep;
     }
 
-    double Clock::GetAvgFps()
+    float Clock::GetAvgFps()
     {
         LOG_CORE_ASSERT( s_Instance, "Clock::GetAvgFps >>> Must initialize clock-module before using it" );
         return 1.0 / s_Instance->m_TimeStepAvg;
+    }
+
+    ssize_t Clock::GetTimeIndex()
+    {
+        LOG_CORE_ASSERT( s_Instance, "Clock::GetTimeIndex >>> Must initialize clock-module before using it" );
+        return s_Instance->m_TimeIndex;
     }
 
     Clock::BufferArray Clock::GetTimesBuffer()
@@ -130,7 +136,6 @@ namespace tinyutils
         m_ClockEvents[event_name].time_duration = m_ClockEvents[event_name].time_stop - m_ClockEvents[event_name].time_start;
         if ( event_name == MAIN_EVENT )
         {
-            LOG_CORE_INFO( "start: {0}, stop: {1}", m_ClockEvents[MAIN_EVENT].time_start, m_ClockEvents[MAIN_EVENT].time_stop );
             m_TimeStep = m_ClockEvents[MAIN_EVENT].time_duration;
             m_TimeCurrent += m_TimeStep;
             m_TimeStepAvg = m_TimeStepAvg + ( m_TimeStep - m_TimesBuffer[m_TimeIndex] ) / NUM_FRAMES_FOR_AVG;

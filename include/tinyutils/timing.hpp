@@ -32,7 +32,7 @@ namespace tinyutils
     public :
 
         /// Buffer-type used for storing times used in averaging-window
-        typedef std::array<double, NUM_FRAMES_FOR_AVG> BufferArray;
+        typedef std::array<float, NUM_FRAMES_FOR_AVG> BufferArray;
 
         /// Initialize the clock module(singleton)
         static void Init();
@@ -50,19 +50,22 @@ namespace tinyutils
         static ClockEvent GetEvent( const std::string& event_name );
 
         /// Returns the current time (in seconds) since the initialization of the clock module
-        static double GetWallTime();
+        static float GetWallTime();
 
         /// Returns the time-step (delta-time in seconds) in between the last tick-tock request
-        static double GetTimeStep();
+        static float GetTimeStep();
 
         /// Returns the average time-step (average delta-time in seconds) so far (since the clock module initialization)
-        static double GetAvgTimeStep();
+        static float GetAvgTimeStep();
 
         /// Returns the fps computed for the last tick-tock request
-        static double GetFps();
+        static float GetFps();
 
         /// Returns the average fps recorded since the initialization of the clock module
-        static double GetAvgFps();
+        static float GetAvgFps();
+
+        /// Returns the index of the current time-step in the times-buffer
+        static ssize_t GetTimeIndex();
 
         /// Returns all elements currently being processed in the time-steps window
         static BufferArray GetTimesBuffer();
@@ -92,11 +95,11 @@ namespace tinyutils
         /// Handle to instance of clock module (singleton)
         static std::unique_ptr<Clock> s_Instance;
         /// Current wall time (in seconds)
-        double m_TimeCurrent;
+        float m_TimeCurrent;
         /// Delta-time in between tick-tock calls (in seconds)
-        double m_TimeStep;
+        float m_TimeStep;
         /// Average delta-time in between tick-tock calls (in seconds)
-        double m_TimeStepAvg;
+        float m_TimeStepAvg;
         /// Index used for average calculation and indexing in the times and fps buffers
         ssize_t m_TimeIndex;
         /// Buffer of time values in the averaging window
