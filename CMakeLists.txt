@@ -1,76 +1,47 @@
-cmake_minimum_required( VERSION 3.0.0 FATAL_ERROR )
+cmake_minimum_required(VERSION 3.15..3.19)
 
-project( TinyUtils )
+project(
+  TinyUtils
+  VERSION 0.1.0
+  DESCRIPTION "A library of common functionality used alongside my projects"
+  HOMEPAGE_URL "https://github.com/wpumacay/tiny_utils"
+  LANGUAGES CXX)
 
-set( CMAKE_CXX_STANDARD 11 )
-set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -fPIC" )
+# Include some helper functions that we will need later
+include(${PROJECT_SOURCE_DIR}/cmake/Common.cmake)
+include(${PROJECT_SOURCE_DIR}/cmake/Utils.cmake)
 
-# In case nobody set the project type, set it (parent project might have set it for all)
-if ( NOT CMAKE_BUILD_TYPE )
-    set( CMAKE_BUILD_TYPE Debug )
-endif()
+# Include some internal tools we might need to use
+include(FetchContent)
+include(GNUInstallDirs)
 
-# Compile everything as shared libraries
-set( BUILD_SHARED_LIBS ON CACHE BOOL "Build libraries as shared" )
+# Check if we're currently working as the root project. If so, configure some
+# common settings that we might need later during configuration
+tuInitializeProject()
 
-# Outputs of the build should be sent accordingly
-if ( NOT CMAKE_LIBRARY_OUTPUT_DIRECTORY )
-    message( "TINYUTILS >>> Sending generated libs to OWN build directory" )
-    set( CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/libs" )
-else()
-    message( "TINYUTILS >>> Sending generated libs to EXTERNAL build directory" )
-endif()
-message( "TINYUTILS >>> LIBRARY_OUT_DIR: ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}" )
+option(TINYUTILS_BUILD_PYTHON_BINDINGS "Build bindings (requires Pybind11)" ON)
+option(TINYUTILS_BUILD_EXAMPLES "Build C++ examples ON")
+option(TINYUTILS_BUILD_DOCS "Build documentation (requires Doxygen)" OFF)
 
-if( CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR )
-    message( "TINYUTILS >>> Configuring as MASTER project" )
-    set( TINYUTILS_IS_MASTER_PROJECT ON )
-else()
-    message( "TINYUTILS >>> Configuring as CHILD project" )
-    set( TINYUTILS_IS_MASTER_PROJECT OFF )
-endif()
+# Add some external dependencies we need to link against
+add_subdirectory(third_party)
 
-option( TINYUTILS_BUILD_EXAMPLES "Build c/c++ examples" ON )
-option( TINYUTILS_BUILD_PYTHON_BINDINGS "Build python bindings" ON )
+add_library(
+  TinyUtilsCpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/tinyutils/common.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/tinyutils/logging.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/tinyutils/timing.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/tinyutils/profiling.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/tinyutils/path_handling.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/tinyutils/perlin_noise.cpp)
+target_include_directories(TinyUtilsCpp
+                           PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
+target_link_libraries(TinyUtilsCpp spdlog::spdlog)
+target_compile_features(TinyUtilsCpp PUBLIC cxx_std_11)
 
-# Add external dependencies only if master project. If child project, root adds the dependencies
-if ( TINYUTILS_IS_MASTER_PROJECT )
-    add_subdirectory( ext )
-endif()
+# ~~~
+# add_subdirectory(examples)
+# add_subdirectory(python/tinyutils/bindings)
+# ~~~
 
-set( TINYUTILS_INCLUDES_DIR
-     "${CMAKE_CURRENT_SOURCE_DIR}/include"
-     "${CMAKE_CURRENT_SOURCE_DIR}/ext/spdlog/include" )
-set( TINYUTILS_SRCS
-     "${CMAKE_CURRENT_SOURCE_DIR}/src/tinyutils/common.cpp"
-     "${CMAKE_CURRENT_SOURCE_DIR}/src/tinyutils/logging.cpp"
-     "${CMAKE_CURRENT_SOURCE_DIR}/src/tinyutils/timing.cpp"
-     "${CMAKE_CURRENT_SOURCE_DIR}/src/tinyutils/profiling.cpp"
-     "${CMAKE_CURRENT_SOURCE_DIR}/src/tinyutils/path_handling.cpp"
-     "${CMAKE_CURRENT_SOURCE_DIR}/src/tinyutils/perlin_noise.cpp" )
-
-add_library( tinyutils_cpp_lib SHARED ${TINYUTILS_SRCS} )
-target_include_directories( tinyutils_cpp_lib PRIVATE
-                            ${TINYUTILS_INCLUDES_DIR} )
-target_link_libraries( tinyutils_cpp_lib
-                       spdlog
-                       dl )
-
-if ( TINYUTILS_BUILD_PYTHON_BINDINGS )
-    add_subdirectory( python/tinyutils/bindings )
-endif()
-
-if ( TINYUTILS_BUILD_EXAMPLES )
-    add_subdirectory( examples )
-endif()
-
-message( "***************************************************************************************" )
-message( "TINYUTILS >>> BUILD-OPTIONS SUMMARY:" )
-message( "CMAKE_BUILD_TYPE                      : ${CMAKE_BUILD_TYPE}" )
-message( "CMAKE_LIBRARY_OUTPUT_DIRECTORY        : ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}" )
-message( "CMAKE_BUILD_RPATH                     : ${CMAKE_BUILD_RPATH}" )
-message( "CMAKE_CXX_FLAGS                       : ${CMAKE_CXX_FLAGS}" )
-message( "TINYUTILS_IS_MASTER_PROJECT           : ${TINYUTILS_IS_MASTER_PROJECT}" )
-message( "TINYUTILS_BUILD_EXAMPLES              : ${TINYUTILS_BUILD_EXAMPLES}" )
-message( "TINYUTILS_BUILD_PYTHON_BINDINGS       : ${TINYUTILS_BUILD_PYTHON_BINDINGS}" )
-message( "***************************************************************************************" )
+tuPrintSummary()
