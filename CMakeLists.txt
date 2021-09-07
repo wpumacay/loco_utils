@@ -20,7 +20,7 @@ include(GNUInstallDirs)
 tuInitializeProject()
 
 option(TINYUTILS_BUILD_PYTHON_BINDINGS "Build bindings (requires Pybind11)" ON)
-option(TINYUTILS_BUILD_EXAMPLES "Build C++ examples ON")
+option(TINYUTILS_BUILD_EXAMPLES "Build C++ examples" ON)
 option(TINYUTILS_BUILD_DOCS "Build documentation (requires Doxygen)" OFF)
 
 # Add some external dependencies we need to link against
@@ -39,9 +39,8 @@ target_include_directories(TinyUtilsCpp
 target_link_libraries(TinyUtilsCpp spdlog::spdlog)
 target_compile_features(TinyUtilsCpp PUBLIC cxx_std_11)
 
-# ~~~
-# add_subdirectory(examples)
+add_subdirectory(examples)
+
 # add_subdirectory(python/tinyutils/bindings)
-# ~~~
 
 tuPrintSummary()

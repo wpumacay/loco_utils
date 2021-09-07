@@ -241,13 +241,13 @@ class Profiler {
 }  // namespace tiny
 
 #define PROFILE_SCOPE(name) \
-    tinyutils::ProfilerTimer prof_timer##__LINE__(name, DEFAULT_SESSION)
+    tiny::utils::ProfilerTimer prof_timer##__LINE__(name, DEFAULT_SESSION)
 #define PROFILE_SCOPE_IN_SESSION(name, session_name) \
-    tinyutils::ProfilerTimer prof_timer##__LINE__(name, session_name)
+    tiny::utils::ProfilerTimer prof_timer##__LINE__(name, session_name)
 
-#define PROFILE_FUNCTION()                                           \
-    tinyutils::ProfilerTimer prof_timer##__LINE__(__FUNCTION_NAME__, \
-                                                  DEFAULT_SESSION)
-#define PROFILE_FUNCTION_IN_SESSION(session_name)                    \
-    tinyutils::ProfilerTimer prof_timer##__LINE__(__FUNCTION_NAME__, \
-                                                  session_name)
+#define PROFILE_FUNCTION()                                             \
+    tiny::utils::ProfilerTimer prof_timer##__LINE__(__FUNCTION_NAME__, \
+                                                    DEFAULT_SESSION)
+#define PROFILE_FUNCTION_IN_SESSION(session_name)                      \
+    tiny::utils::ProfilerTimer prof_timer##__LINE__(__FUNCTION_NAME__, \
+                                                    session_name)
