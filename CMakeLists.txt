@@ -40,7 +40,6 @@ target_link_libraries(TinyUtilsCpp spdlog::spdlog)
 target_compile_features(TinyUtilsCpp PUBLIC cxx_std_11)
 
 add_subdirectory(examples)
-
-# add_subdirectory(python/tinyutils/bindings)
+add_subdirectory(python/tinyutils/bindings)
 
 tuPrintSummary()

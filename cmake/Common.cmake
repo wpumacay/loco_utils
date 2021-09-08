@@ -53,17 +53,48 @@ function(tuInitializeProject)
           PARENT_SCOPE)
       tuMessage("Added .cmake files for project ${PROJECT_NAME}")
     endif()
-    # Configure the output-directory (where libs/binaries go) accordingly
+    # Configure the output-directory for SHARED libraries. For more information:
+    # https://cmake.org/cmake/help/latest/manual/cmake-buildsystem.7.html, and
+    # go to the section on library-output-artifacts for the details
     if(NOT CMAKE_LIBRARY_OUTPUT_DIRECTORY)
       # If used as root project, then send all to this path
       set(CMAKE_LIBRARY_OUTPUT_DIRECTORY
           "${CMAKE_BINARY_DIR}/libs"
           PARENT_SCOPE)
-      tuMessage("Sending generated libs/binaries to OWN build directory")
+      tuMessage("Sending generated SHARED libraries to OWN build directory")
     else()
       # If it's not the root project, then use the user-defined output
       # directory. This might be required for installation by the user
-      tuMessage("Sending generated libs/binaries to USER-DEFINED directory")
+      tuMessage("Sending generated SHARED libraries to USER-DEFINED directory")
+    endif()
+    # Configure the output-directory for STATIC libraries. For more information:
+    # https://cmake.org/cmake/help/latest/manual/cmake-buildsystem.7.html, and
+    # go to the section on archive-output-artifacts for the details
+    if(NOT CMAKE_ARCHIVE_OUTPUT_DIRECTORY)
+      # If used as root project, then send all to this path
+      set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY
+          "${CMAKE_BINARY_DIR}/libs"
+          PARENT_SCOPE)
+      tuMessage("Sending generated STATIC libraries to OWN build directory")
+    else()
+      # If it's not the root project, then use the user-defined output
+      # directory. This might be required for installation by the user
+      tuMessage("Sending generated STATIC libraries to USER-DEFINED directory")
+    endif()
+    # Generate Position Independent Code (-fPIC), as bindings will need this.
+    # Note that this is only set by the root-project (propagate from the root)
+    if(NOT CMAKE_POSITION_INDEPENDENT_CODE)
+      tuMessage("Setting up -fPIC (Position Independent Code generation)")
+      set(CMAKE_POSITION_INDEPENDENT_CODE
+          ON
+          PARENT_SCOPE)
+    endif()
+    # Export compile commands (used by clangd and other static analysis tools)
+    if(NOT CMAKE_EXPORT_COMPILE_COMMANDS)
+      tuMessage("Generating compile commands for static analysis tools")
+      set(CMAKE_EXPORT_COMPILE_COMMANDS
+          ON
+          PARENT_SCOPE)
     endif()
     # Make sure that if the user doesn't provide CMAKE_INSTALL_PREFIX, we then
     # use a default path for installation (relative to build). We only make sure
@@ -112,6 +143,8 @@ function(tuPrintSummary)
   # General settings from cmake
   message("CMAKE_GENERATOR                : ${CMAKE_GENERATOR}")
   message("CMAKE_MODULE_PATH              : ${CMAKE_MODULE_PATH}")
+  message("CMAKE_EXPORT_COMPILE_COMMANDS  : ${CMAKE_EXPORT_COMPILE_COMMANDS}")
+  message("CMAKE_POSITION_INDEPENDENT_CODE: ${CMAKE_POSITION_INDEPENDENT_CODE}")
   message("CMAKE_C_COMPILER               : ${CMAKE_C_COMPILER}")
   message("CMAKE_CXX_COMPILER             : ${CMAKE_CXX_COMPILER}")
   message("CMAKE_BUILD_TYPE               : ${CMAKE_BUILD_TYPE}")
