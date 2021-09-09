@@ -170,34 +170,6 @@ class CMakeBuild(build_ext):
         )
 
 
-# @todo(wilbert): remove in case $ORIGIN and the new way of handling RPATH works
-# def get_installation_dir():
-#     """
-#     Gets the installation directory in which to install the built targets.
-#     Adapted from https://tinyurl.com/yytrft4u
-#
-#     @todo(wilbert): Check that this works for Windows as well
-#     @todo(wilbert): Check if there's a general way to get the installation dir
-#     """
-#     py_version = "%s.%s" % (sys.version_info[0], sys.version_info[1])
-#     install_path_candidates = (
-#         path % (py_version)
-#         for path in (
-#             os.path.join(sys.prefix, "/lib/python%s/dist-packages/"),
-#             os.path.join(sys.prefix, "/lib/python%s/site-packages/"),
-#             os.path.join(sys.prefix, "/local/lib/python%s/dist-packages/"),
-#             os.path.join(sys.prefix, "/local/lib/python%s/site-packages/"),
-#             "/Library/Python/%s/site-packages/",
-#         )
-#     )
-#
-#     for path_candidate in install_path_candidates:
-#         if os.path.exists(path_candidate):
-#             return path_candidate
-#
-#     print("ERROR >>> No installation path found", file=sys.stderr)
-#     return None
-
 long_description = ""
 if os.path.exists("README.md"):
     with open("README.md", "r", encoding="utf-8") as fh:
