@@ -110,7 +110,7 @@ class CMakeBuild(build_ext):
             cmake_args += [
                 "-DCMAKE_LIBRARY_OUTPUT_DIRECTORY={}".format(library_outdir),
                 "-DCMAKE_ARCHIVE_OUTPUT_DIRECTORY={}".format(archive_outdir),
-                "-DCMAKE_RUNTIME_OUTPUT_DIRECTOROY={}".format(runtime_outdir),
+                "-DCMAKE_RUNTIME_OUTPUT_DIRECTORY={}".format(runtime_outdir),
             ]
         else:
             # Single config generators are handled "normally"
