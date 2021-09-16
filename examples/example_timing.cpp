@@ -20,8 +20,8 @@ int main() {
                      .count();
     LOG_WARN("now: {0}", time_stamp);
 
-    const ssize_t num_steps = 1000;
-    for (ssize_t i = 0; i < num_steps; i++) {
+    const size_t num_steps = 1000;
+    for (size_t i = 0; i < num_steps; i++) {
         tiny::utils::Clock::Tick();
         tiny::utils::Clock::Tick("lapse_1");
         std::this_thread::sleep_for(std::chrono::microseconds(11000));

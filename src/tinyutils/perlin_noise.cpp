@@ -16,7 +16,7 @@ void PerlinNoise::Init() {
     s_Instance->m_NoiseScale = DEFAULT_NOISE_SCALE;
 
     s_Instance->m_OctavesOffsets.clear();
-    for (ssize_t o = 0; o < s_Instance->m_NumOctaves; o++)
+    for (size_t o = 0; o < s_Instance->m_NumOctaves; o++)
         s_Instance->m_OctavesOffsets.push_back(
             std::make_pair(UNIF_RANDOM(-10000.0f, 10000.0f),
                            UNIF_RANDOM(-10000.0f, 10000.0f)));
@@ -50,7 +50,7 @@ void PerlinNoise::Init() {
 
 void PerlinNoise::Release() { s_Instance = nullptr; }
 
-void PerlinNoise::Config(ssize_t num_octaves, float persistance,
+void PerlinNoise::Config(size_t num_octaves, float persistance,
                          float lacunarity, float noise_scale) {
     LOG_CORE_ASSERT(s_Instance,
                     "PerlinNoise::Config >>> Must initialize perlin-noise "
@@ -72,7 +72,7 @@ float PerlinNoise::Sample2d(float x, float y) {
     return s_Instance->_Sample2d(x, y);
 }
 
-void PerlinNoise::_Config(ssize_t num_octaves, float persistance,
+void PerlinNoise::_Config(size_t num_octaves, float persistance,
                           float lacunarity, float noise_scale) {
     m_NumOctaves = num_octaves;
     m_Persistance = persistance;
@@ -80,7 +80,7 @@ void PerlinNoise::_Config(ssize_t num_octaves, float persistance,
     m_NoiseScale = noise_scale;
 
     m_OctavesOffsets.clear();
-    for (ssize_t o = 0; o < m_NumOctaves; o++)
+    for (size_t o = 0; o < m_NumOctaves; o++)
         m_OctavesOffsets.push_back(
             std::make_pair(UNIF_RANDOM(-10000.0f, 10000.0f),
                            UNIF_RANDOM(-10000.0f, 10000.0f)));
@@ -93,7 +93,7 @@ float PerlinNoise::_Sample2d(float x, float y) {
     float freq = 1.0f;
     float noise_value = 0.0f;
 
-    for (ssize_t i = 0; i < m_NumOctaves; i++) {
+    for (size_t i = 0; i < m_NumOctaves; i++) {
         float sample_x = freq * (x / m_NoiseScale) + m_OctavesOffsets[i].first;
         float sample_y = freq * (y / m_NoiseScale) + m_OctavesOffsets[i].second;
         noise_value += ampl * _Perlin(sample_x, sample_y);
@@ -111,7 +111,7 @@ float PerlinNoise::_Lerp(float a, float b, float t) {
     return (1 - t) * a + t * b;
 }
 
-float PerlinNoise::_DotGrad(ssize_t hash, float x, float y) {
+float PerlinNoise::_DotGrad(size_t hash, float x, float y) {
     // Because we are in 2d, there are just 4 options for the gradient vectors
     // and so, just 4 options for the dot product
     switch (hash & 0xf) {
@@ -154,8 +154,8 @@ float PerlinNoise::_DotGrad(ssize_t hash, float x, float y) {
 
 float PerlinNoise::_Perlin(float x, float y) {
     // Calculate unit square position in grid (wrap around by 256)
-    ssize_t X = (ssize_t)floor(x) & 255;
-    ssize_t Y = (ssize_t)floor(y) & 255;
+    size_t X = (size_t)floor(x) & 255;
+    size_t Y = (size_t)floor(y) & 255;
 
     // Calculate relative position [0-1] inside unit-square
     float x_f = x - floor(x);
@@ -165,10 +165,10 @@ float PerlinNoise::_Perlin(float x, float y) {
     float u = _Fade(x_f);
     float v = _Fade(y_f);
 
-    ssize_t hash_00 = m_Permutations[m_Permutations[X] + Y];
-    ssize_t hash_01 = m_Permutations[m_Permutations[X] + Y + 1];
-    ssize_t hash_10 = m_Permutations[m_Permutations[X + 1] + Y];
-    ssize_t hash_11 = m_Permutations[m_Permutations[X + 1] + Y + 1];
+    size_t hash_00 = m_Permutations[m_Permutations[X] + Y];
+    size_t hash_01 = m_Permutations[m_Permutations[X] + Y + 1];
+    size_t hash_10 = m_Permutations[m_Permutations[X + 1] + Y];
+    size_t hash_11 = m_Permutations[m_Permutations[X + 1] + Y + 1];
 
     float d_00 = _DotGrad(hash_00, x_f, y_f);
     float d_01 = _DotGrad(hash_01, x_f, y_f - 1.0f);

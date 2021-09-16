@@ -24,7 +24,7 @@ void Clock::Init() {
     s_Instance->m_TimeStep = 0.0;
     s_Instance->m_TimeStepAvg = 0.0;
     s_Instance->m_TimeIndex = 0;
-    for (ssize_t i = 0; i < NUM_FRAMES_FOR_AVG; i++) {
+    for (size_t i = 0; i < NUM_FRAMES_FOR_AVG; i++) {
         s_Instance->m_TimesBuffer[i] = 0.0;
         s_Instance->m_FpsBuffer[i] = 0.0;
     }
@@ -106,7 +106,7 @@ float Clock::GetAvgFps() {
     return 1.0 / s_Instance->m_TimeStepAvg;
 }
 
-ssize_t Clock::GetTimeIndex() {
+size_t Clock::GetTimeIndex() {
     LOG_CORE_ASSERT(
         s_Instance,
         "Clock::GetTimeIndex >>> Must initialize clock-module before using it");

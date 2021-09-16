@@ -68,7 +68,7 @@ class Clock {
     static float GetAvgFps();
 
     /// Returns the index of the current time-step in the times-buffer
-    static ssize_t GetTimeIndex();
+    static size_t GetTimeIndex();
 
     /// Returns all elements currently being processed in the time-steps window
     static BufferArray GetTimesBuffer();
@@ -104,7 +104,7 @@ class Clock {
     float m_TimeStepAvg;
     /// Index used for average calculation and indexing in the times and fps
     /// buffers
-    ssize_t m_TimeIndex;
+    size_t m_TimeIndex;
     /// Buffer of time values in the averaging window
     BufferArray m_TimesBuffer;
     /// Buffer of fps-values in the averaging window

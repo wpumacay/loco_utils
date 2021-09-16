@@ -13,7 +13,7 @@ int main() {
     {
         LOG_CORE_TRACE("This is a core log-trace sample");
         LOG_CORE_INFO("Just an address: {0}", address);
-        for (ssize_t i = 0; i < vec_str.size(); i++)
+        for (size_t i = 0; i < vec_str.size(); i++)
             LOG_CORE_WARN("comp: {0}", vec_str[i]);
     }
 
@@ -21,7 +21,7 @@ int main() {
     {
         LOG_TRACE("This is an user log-trace sample");
         LOG_INFO("Just an address: {0}", address);
-        for (ssize_t i = 0; i < vec_str.size(); i++)
+        for (size_t i = 0; i < vec_str.size(); i++)
             LOG_WARN("comp: {0}", vec_str[i]);
     }
 

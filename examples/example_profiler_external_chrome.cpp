@@ -9,8 +9,8 @@ int main() {
         tiny::utils::IProfilerSession::eType::EXTERNAL_CHROME);
 
     tiny::utils::Profiler::BeginSession("session_timing");
-    const ssize_t num_steps = 10;
-    for (ssize_t i = 0; i < num_steps; i++) {
+    const size_t num_steps = 10;
+    for (size_t i = 0; i < num_steps; i++) {
         {
             PROFILE_SCOPE_IN_SESSION("part-1", "session_timing");
             std::this_thread::sleep_for(std::chrono::microseconds(11000));
