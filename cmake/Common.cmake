@@ -160,6 +160,10 @@ function(tuPrintSummary)
   message("CMAKE_INSTALL_BINDIR           : ${CMAKE_INSTALL_BINDIR}")
   message("CMAKE_PREFIX_PATH              : ${CMAKE_PREFIX_PATH}")
   message("CMAKE_BUILD_RPATH              : ${CMAKE_BUILD_RPATH}")
+  # Some messages from the msvc compiler
+  if(MSVC)
+    message("MSVC_VERSION                   : ${MSVC_VERSION}")
+  endif()
 
   # Project-specific settings
   message("${PROJECT_IS_ROOT_VARNAME} > ${${PROJECT_IS_ROOT_VARNAME}}")

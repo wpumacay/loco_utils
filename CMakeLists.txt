@@ -36,8 +36,12 @@ add_library(
   ${CMAKE_CURRENT_SOURCE_DIR}/src/tinyutils/perlin_noise.cpp)
 target_include_directories(TinyUtilsCpp
                            PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
-target_link_libraries(TinyUtilsCpp spdlog::spdlog)
+target_link_libraries(TinyUtilsCpp PUBLIC spdlog::spdlog)
 target_compile_features(TinyUtilsCpp PUBLIC cxx_std_11)
+# Make sure that we don't re-define the make_unique if it's already exposed
+if(MSVC)
+  target_compile_options(TinyUtilsCpp PUBLIC "/Zc:__cplusplus")
+endif()
 
 add_subdirectory(examples)
 add_subdirectory(python/tinyutils/bindings)
