@@ -1,4 +1,4 @@
-name: CI-CMake
+name: ci-linux
 
 on:
   push:
@@ -12,9 +12,12 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest]
-        build-type: [Debug]
+        build-type: [Release, Debug, RelWithDebInfo]
         python:
           - 3.6
+          - 3.7
+          - 3.8
+          - 3.9
 
     name: "Build: ${{matrix.os}} • ${{matrix.python}} • ${{matrix.build-type}}"
     runs-on: ${{matrix.os}}
