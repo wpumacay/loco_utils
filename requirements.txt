@@ -1,2 +1,3 @@
 setuptools
+ninja
 pytest
