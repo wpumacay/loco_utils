@@ -11,11 +11,10 @@
 
 # folder-exclusions
 build/
-tmp/
-.vscode/
-build/
 dist/
 tmp/
+.vscode/
+.cache/
 *.egg-info/
 *.ipynb_checkpoints/
 
