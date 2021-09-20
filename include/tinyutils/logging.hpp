@@ -4,13 +4,14 @@
 #include <spdlog/sinks/stdout_color_sinks.h>
 #include <spdlog/spdlog.h>
 
+#include <memory>
 #include <tinyutils/common.hpp>
 
 namespace tiny {
 namespace utils {
 
 class Logger {
-   public:
+ public:
     enum class eType : uint8_t { CONSOLE_LOGGER, FILE_LOGGER };
 
     /// Initialized logging module to a specific mode
@@ -26,7 +27,7 @@ class Logger {
     /// File-logger
     static eType GetType() { return Logger::s_Type; }
 
-   public:
+ public:
     // Core logging functionality (exposed to core-devs for internals and other
     // checks)
 
@@ -141,7 +142,7 @@ class Logger {
         exit(EXIT_FAILURE);
     }
 
-   private:
+ private:
     /// spdlog Core logger (used for devs-related logging calls)
     static std::shared_ptr<spdlog::logger> s_CoreLogger;
     /// spdlog Client logger (used for devs-related logging calls)

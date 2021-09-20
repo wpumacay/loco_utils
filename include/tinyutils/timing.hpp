@@ -2,6 +2,8 @@
 
 #include <array>
 #include <cstdint>
+#include <memory>
+#include <string>
 #include <tinyutils/logging.hpp>
 #include <unordered_map>
 
@@ -28,7 +30,7 @@ struct ClockEvent {
 };
 
 class Clock {
-   public:
+ public:
     /// Buffer-type used for storing times used in averaging-window
     typedef std::array<float, NUM_FRAMES_FOR_AVG> BufferArray;
 
@@ -79,7 +81,7 @@ class Clock {
     /// Releases clock's module allocated resources
     ~Clock() = default;
 
-   private:
+ private:
     /// Creates a clock and allocates required resources
     Clock() = default;
 
@@ -93,7 +95,7 @@ class Clock {
     /// Returns the time-stamp in seconds since the start of the epoch
     double _TimeStampNow();
 
-   private:
+ private:
     /// Handle to instance of clock module (singleton)
     static std::unique_ptr<Clock> s_Instance;
     /// Current wall time (in seconds)

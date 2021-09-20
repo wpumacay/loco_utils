@@ -1,10 +1,14 @@
 #pragma once
 
 #include <chrono>
+#include <cstdint>
 #include <cstring>
 #include <fstream>
+#include <memory>
+#include <string>
 #include <tinyutils/logging.hpp>
 #include <unordered_map>
+#include <vector>
 
 // Adapted from TheCherno's tutorial on profiling:
 // video    : https://youtu.be/xlAH4dbMVnU
@@ -20,16 +24,16 @@ struct ProfilerResult {
     /// Unique identifier for this profiling result
     std::string name;
     /// Starting timestamp (in microseconds)
-    long long time_start;
+    int64_t time_start;
     /// Finishing timestamp (in microseconds)
-    long long time_end;
+    int64_t time_end;
     /// Time duration (in milliseconds)
     double time_duration;
 };
 
 /// Scoped profiling timer (tracks time of a function scope)
 class ProfilerTimer {
-   public:
+ public:
     /// Creates and initializes a scoped-timer
     ProfilerTimer(const std::string& name, const std::string& session,
                   const bool& verbose = false);
@@ -37,11 +41,11 @@ class ProfilerTimer {
     /// Stops timer execution and releases scoped-timer resources
     ~ProfilerTimer();
 
-   private:
+ private:
     /// Stops the timer execution
     void _Stop();
 
-   private:
+ private:
     /// Unique identifier of the timer
     std::string m_Name;
     /// Session identifier (to which session is associated)
@@ -58,7 +62,7 @@ class ProfilerTimer {
 /// Interface for profiling sessions, which are used to handle profiling
 /// results (saving to disk, etc.)
 class IProfilerSession {
-   public:
+ public:
     /// Available types of sessions
     enum class eType : uint8_t {
         /// Internal type of session, stores all sessions results in a
@@ -82,8 +86,8 @@ class IProfilerSession {
     };
 
     /// Creates a profiler session with given name
-    IProfilerSession(const std::string& name)
-        : m_Name(name), m_State(eState::IDLE){};
+    explicit IProfilerSession(const std::string& name)
+        : m_Name(name), m_State(eState::IDLE) {}
 
     /// Releases resources allocated by the session
     virtual ~IProfilerSession() = default;
@@ -109,7 +113,7 @@ class IProfilerSession {
     /// Gets the name of this session
     std::string name() const { return m_Name; }
 
-   protected:
+ protected:
     /// Unique identifier of this session
     std::string m_Name;
     /// Type of this profiling session
@@ -121,10 +125,10 @@ class IProfilerSession {
 /// Profiling session that stores results for later usage of internal
 /// tooling
 class ProfilerSessionInternal : public IProfilerSession {
-   public:
+ public:
     /// Creates a session that stores profiling results for usage with
     /// internal tooling
-    ProfilerSessionInternal(const std::string& name);
+    explicit ProfilerSessionInternal(const std::string& name);
 
     // Documentation inherited
     ~ProfilerSessionInternal() = default;
@@ -141,7 +145,7 @@ class ProfilerSessionInternal : public IProfilerSession {
     /// Returns the profiler-results stored so far
     std::vector<ProfilerResult> results() const { return m_Results; }
 
-   private:
+ private:
     /// Container used to store sessino results for later usage
     std::vector<ProfilerResult> m_Results;
 };
@@ -149,10 +153,10 @@ class ProfilerSessionInternal : public IProfilerSession {
 /// Profiling session that saves the results to disk in the chrome-tracing
 /// tool required format
 class ProfilerSessionExtChrome : public IProfilerSession {
-   public:
+ public:
     /// Creates a session that saves its results to disk in the
     /// chrome-tracing tool format (.json)
-    ProfilerSessionExtChrome(const std::string& name);
+    explicit ProfilerSessionExtChrome(const std::string& name);
 
     // Documentation inherited
     ~ProfilerSessionExtChrome() = default;
@@ -167,21 +171,21 @@ class ProfilerSessionExtChrome : public IProfilerSession {
     // Documentation inherited
     void End() override;
 
-   private:
+ private:
     /// Writes header-part of the required chrome-tracing tool format
     void _WriteHeader();
 
     /// Writes footer-part of the required chrome-tracing tool format
     void _WriteFooter();
 
-   private:
+ private:
     /// File handle used to save results to disk
     std::ofstream m_FileWriter;
 };
 
 /// Profiler module(singleton) with support for multiple sessions
 class Profiler {
-   public:
+ public:
     /// Initializes profiler module(singleton)
     static void Init(const IProfilerSession::eType& type =
                          IProfilerSession::eType::EXTERNAL_CHROME);
@@ -206,9 +210,10 @@ class Profiler {
     /// Releases all resources allocated by this profiler
     ~Profiler() = default;
 
-   private:
+ private:
     /// Creates a profiler and allocates all required resources
-    Profiler(const IProfilerSession::eType& type) : m_ProfilerType(type) {}
+    explicit Profiler(const IProfilerSession::eType& type)
+        : m_ProfilerType(type) {}
 
     /// Start a session with a given name
     void _BeginSession(const std::string& session_name);
@@ -223,7 +228,7 @@ class Profiler {
     /// Returns all sessions currently being tracked
     std::vector<IProfilerSession*> _GetSessions();
 
-   private:
+ private:
     /// Handle to instance of profiler module(singleton)
     static std::unique_ptr<Profiler> s_Instance;
 

@@ -1,15 +1,19 @@
 #pragma once
 
+#include <memory>
+#include <random>
 #include <tinyutils/logging.hpp>
 #include <utility>
+#include <vector>
 
-#define UNIF_RANDOM(a, b) (a + (b - a) * (rand() / (float)RAND_MAX))
+constexpr float PERLIN_NOISE_RAND_MIN = -10000.0f;
+constexpr float PERLIN_NOISE_RAND_MAX = 10000.0f;
 
 namespace tiny {
 namespace utils {
 
 class PerlinNoise {
-   public:
+ public:
     /// Initializes the perlin-noise generator module(singleton)
     static void Init();
 
@@ -38,7 +42,7 @@ class PerlinNoise {
     /// Default noise-scale setting of the noise generator
     static constexpr float DEFAULT_NOISE_SCALE = 10.0f;
 
-   private:
+ private:
     /// Creates a noise-generator and allocates the required resources
     PerlinNoise() = default;
 
@@ -65,7 +69,7 @@ class PerlinNoise {
     /// Computes the perlin-function at a given 2d position
     float _Perlin(float x, float y);
 
-   private:
+ private:
     /// Handle to instance of the noise-generator module(singleton)
     static std::unique_ptr<PerlinNoise> s_Instance;
     /// Number of octaves used for the noise generator
@@ -80,6 +84,10 @@ class PerlinNoise {
     std::vector<size_t> m_Permutations;
     /// Random offsets used for noise generation
     std::vector<std::pair<float, float>> m_OctavesOffsets;
+    /// Create C++ random-engine
+    std::default_random_engine m_RandEngine;
+    /// Create C++ uniform real distribution
+    std::uniform_real_distribution<float> m_RandUnifDist;
 };
 
 }  // namespace utils

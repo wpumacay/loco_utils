@@ -7,6 +7,7 @@ namespace py = pybind11;
 namespace tiny {
 namespace utils {
 
+// NOLINTNEXTLINE(runtime/references)
 void bindings_timing_module(py::module& m) {
     // Bindings for ClockEvent struct
     {

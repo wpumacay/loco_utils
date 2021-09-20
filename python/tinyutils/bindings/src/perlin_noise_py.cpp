@@ -7,6 +7,7 @@ namespace py = pybind11;
 namespace tiny {
 namespace utils {
 
+// NOLINTNEXTLINE(runtime/references)
 void bindings_perlin_noise_module(py::module& m) {
     py::class_<PerlinNoise>(m, "PerlinNoise")
         .def_static("Init", &PerlinNoise::Init)

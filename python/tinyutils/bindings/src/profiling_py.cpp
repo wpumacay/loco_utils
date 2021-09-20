@@ -7,6 +7,7 @@ namespace py = pybind11;
 namespace tiny {
 namespace utils {
 
+// NOLINTNEXTLINE(runtime/references)
 void bindings_profiling_module(py::module& m) {
     py::class_<ProfilerTimer>(m, "ProfilerTimer")
         .def(py::init([](const std::string& timer_name,

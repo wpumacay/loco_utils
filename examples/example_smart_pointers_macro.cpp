@@ -2,7 +2,7 @@
 #include <tinyutils/common.hpp>
 
 class Foo {
-   public:
+ public:
     Foo(const std::string& name, const float& pos_x, const float& pos_y)
         : m_Name(name), m_X(pos_x), m_Y(pos_y) {}
 
@@ -14,7 +14,7 @@ class Foo {
 
     float y() const { return m_Y; }
 
-   private:
+ private:
     std::string m_Name;
     float m_X, m_Y;
 

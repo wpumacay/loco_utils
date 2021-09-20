@@ -91,7 +91,7 @@ typename _Unique_if<T>::_Known_bound make_unique(Args &&...) = delete;
 // snippet-url:
 // https://github.com/facebookresearch/habitat-sim/blob/3d810b9c006976be8bd15b4ca8cf5170c5ad398d/src/esp/core/esp.h#L108
 #define ADD_CLASS_SMART_POINTERS(T)                               \
-   public:                                                        \
+ public:                                                          \
     typedef std::shared_ptr<T> ptr;                               \
     typedef std::unique_ptr<T> uptr;                              \
     typedef std::shared_ptr<const T> cptr;                        \

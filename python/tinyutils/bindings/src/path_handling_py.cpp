@@ -8,6 +8,7 @@ namespace py = pybind11;
 namespace tiny {
 namespace utils {
 
+// NOLINTNEXTLINE(runtime/references)
 void bindings_path_handling_module(py::module& m) {
     m.def("GetFilename", &GetFilename);
     m.def("GetFoldername", &GetFoldername);

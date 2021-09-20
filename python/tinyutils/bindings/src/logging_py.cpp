@@ -7,6 +7,7 @@ namespace py = pybind11;
 namespace tiny {
 namespace utils {
 
+// NOLINTNEXTLINE(runtime/references)
 void bindings_logging_module(py::module& m) {
     py::enum_<Logger::eType>(m, "LoggerType", py::arithmetic())
         .value("CONSOLE_LOGGER", Logger::eType::CONSOLE_LOGGER)

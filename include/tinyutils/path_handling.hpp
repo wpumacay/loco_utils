@@ -1,5 +1,6 @@
 #pragma once
 
+#include <string>
 #include <tinyutils/common.hpp>
 
 namespace tiny {
@@ -31,5 +32,5 @@ std::string GetFolderpath(const std::string &filepath);
 /// the given fullpath
 std::string GetFilenameNoExtension(const std::string &filepath);
 
-} // namespace utils
-} // namespace tiny
+}  // namespace utils
+}  // namespace tiny

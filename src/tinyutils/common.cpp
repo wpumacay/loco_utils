@@ -22,8 +22,8 @@ std::vector<std::string> Split(const std::string &txt, char separator) {
         pos = txt.find(separator, initpos);
     }
 
-    strres.push_back(
-        txt.substr(initpos, std::min(pos, (int)txt.size()) - initpos));
+    strres.push_back(txt.substr(
+        initpos, std::min(pos, static_cast<int>(txt.size())) - initpos));
 
     return strres;
 }

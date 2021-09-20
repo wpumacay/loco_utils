@@ -9,5 +9,12 @@ BasedOnStyle : Google
 
 # Ruler set to a width of 80 spaces
 ColumnLimit : 80
+
 # Make sure we indent to 4 spaces
 IndentWidth : 4
+
+# Offset for public/private/protected labels, as GSG based (cpplint)
+AccessModifierOffset: -3
+
+# Keep C++11 as target
+Standard: Cpp11

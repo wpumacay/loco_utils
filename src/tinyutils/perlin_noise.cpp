@@ -7,8 +7,13 @@ namespace utils {
 std::unique_ptr<PerlinNoise> PerlinNoise::s_Instance = nullptr;
 
 void PerlinNoise::Init() {
+    // Initialize singleton (can't use make_unique for now, as const is private)
     if (!s_Instance)
         s_Instance = std::unique_ptr<PerlinNoise>(new PerlinNoise());
+
+    // Initialize uniform distribution
+    s_Instance->m_RandUnifDist = std::uniform_real_distribution<float>(
+        PERLIN_NOISE_RAND_MIN, PERLIN_NOISE_RAND_MAX);
 
     s_Instance->m_NumOctaves = DEFAULT_NUM_OCTAVES;
     s_Instance->m_Persistance = DEFAULT_PERSISTANCE;
@@ -17,9 +22,9 @@ void PerlinNoise::Init() {
 
     s_Instance->m_OctavesOffsets.clear();
     for (size_t o = 0; o < s_Instance->m_NumOctaves; o++)
-        s_Instance->m_OctavesOffsets.push_back(
-            std::make_pair(UNIF_RANDOM(-10000.0f, 10000.0f),
-                           UNIF_RANDOM(-10000.0f, 10000.0f)));
+        s_Instance->m_OctavesOffsets.push_back(std::make_pair(
+            s_Instance->m_RandUnifDist(s_Instance->m_RandEngine),
+            s_Instance->m_RandUnifDist(s_Instance->m_RandEngine)));
 
     // Initialize the permutation vector with ken perlin's reference permutation
     // and double it to avoid overflow
@@ -81,9 +86,9 @@ void PerlinNoise::_Config(size_t num_octaves, float persistance,
 
     m_OctavesOffsets.clear();
     for (size_t o = 0; o < m_NumOctaves; o++)
-        m_OctavesOffsets.push_back(
-            std::make_pair(UNIF_RANDOM(-10000.0f, 10000.0f),
-                           UNIF_RANDOM(-10000.0f, 10000.0f)));
+        m_OctavesOffsets.push_back(std::make_pair(
+            s_Instance->m_RandUnifDist(s_Instance->m_RandEngine),
+            s_Instance->m_RandUnifDist(s_Instance->m_RandEngine)));
 }
 
 float PerlinNoise::_Sample1d(float x) { return _Sample2d(x, 0.0f); }
@@ -154,8 +159,8 @@ float PerlinNoise::_DotGrad(size_t hash, float x, float y) {
 
 float PerlinNoise::_Perlin(float x, float y) {
     // Calculate unit square position in grid (wrap around by 256)
-    size_t X = (size_t)floor(x) & 255;
-    size_t Y = (size_t)floor(y) & 255;
+    size_t X = static_cast<size_t>(floor(x)) & 255;
+    size_t Y = static_cast<size_t>(floor(y)) & 255;
 
     // Calculate relative position [0-1] inside unit-square
     float x_f = x - floor(x);

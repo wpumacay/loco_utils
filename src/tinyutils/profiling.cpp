@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <cstdint>
 #include <sstream>
 #include <tinyutils/profiling.hpp>
 
@@ -24,12 +25,12 @@ ProfilerTimer::~ProfilerTimer() {
 void ProfilerTimer::_Stop() {
     auto time_point_end = std::chrono::high_resolution_clock::now();
 
-    long long time_start =
+    int64_t time_start =
         std::chrono::time_point_cast<std::chrono::microseconds>(
             m_TimePointStart)
             .time_since_epoch()
             .count();
-    long long time_end =
+    int64_t time_end =
         std::chrono::time_point_cast<std::chrono::microseconds>(time_point_end)
             .time_since_epoch()
             .count();
@@ -125,9 +126,9 @@ void ProfilerSessionExtChrome::_WriteFooter() {
     m_FileWriter.flush();
 }
 
-/**********************************************************************************************/
-/*                                    Profiler module */
-/**********************************************************************************************/
+/******************************************************************************/
+/*                             Profiler module                                */
+/******************************************************************************/
 
 std::unique_ptr<Profiler> Profiler::s_Instance = nullptr;
 
