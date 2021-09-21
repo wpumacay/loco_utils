@@ -26,13 +26,13 @@ struct ClockEvent {
     double time_duration;
 
     /// Returns the string representation of the event
-    std::string ToString() const;
+    auto ToString() const -> std::string;
 };
 
 class Clock {
  public:
     /// Buffer-type used for storing times used in averaging-window
-    typedef std::array<float, NUM_FRAMES_FOR_AVG> BufferArray;
+    using BufferArray = std::array<float, NUM_FRAMES_FOR_AVG>;
 
     /// Initialize the clock module(singleton)
     static void Init();
@@ -48,43 +48,37 @@ class Clock {
     static void Tock(const std::string& event_name = MAIN_EVENT);
 
     /// Returns a given event by its name
-    static ClockEvent GetEvent(const std::string& event_name);
+    static auto GetEvent(const std::string& event_name) -> ClockEvent;
 
     /// Returns the current time (in seconds) since the initialization of the
     /// clock module
-    static float GetWallTime();
+    static auto GetWallTime() -> float;
 
     /// Returns the time-step (delta-time in seconds) in between the last
     /// tick-tock request
-    static float GetTimeStep();
+    static auto GetTimeStep() -> float;
 
     /// Returns the average time-step (average delta-time in seconds) so far
     /// (since the clock module initialization)
-    static float GetAvgTimeStep();
+    static auto GetAvgTimeStep() -> float;
 
     /// Returns the fps computed for the last tick-tock request
-    static float GetFps();
+    static auto GetFps() -> float;
 
     /// Returns the average fps recorded since the initialization of the clock
     /// module
-    static float GetAvgFps();
+    static auto GetAvgFps() -> float;
 
     /// Returns the index of the current time-step in the times-buffer
-    static size_t GetTimeIndex();
+    static auto GetTimeIndex() -> size_t;
 
     /// Returns all elements currently being processed in the time-steps window
-    static BufferArray GetTimesBuffer();
+    static auto GetTimesBuffer() -> BufferArray;
 
     /// Returns all elements currently being processed in the fps window
-    static BufferArray GetFpsBuffer();
-
-    /// Releases clock's module allocated resources
-    ~Clock() = default;
+    static auto GetFpsBuffer() -> BufferArray;
 
  private:
-    /// Creates a clock and allocates required resources
-    Clock() = default;
-
     /// Starts tracking the time of a step
     void _Tick(const std::string& event);
 
@@ -93,11 +87,14 @@ class Clock {
     void _Tock(const std::string& event);
 
     /// Returns the time-stamp in seconds since the start of the epoch
-    double _TimeStampNow();
+    static auto _TimeStampNow() -> double;
 
  private:
+    // @todo(wilbert): The static-var below are not actually accessible, but
+    // could should think about it making it const? (will disable lint for now)
+
     /// Handle to instance of clock module (singleton)
-    static std::unique_ptr<Clock> s_Instance;
+    static std::unique_ptr<Clock> s_Instance;  // NOLINT
     /// Current wall time (in seconds)
     float m_TimeCurrent;
     /// Delta-time in between tick-tock calls (in seconds)

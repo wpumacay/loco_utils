@@ -8,6 +8,7 @@
 #include <string>
 #include <tinyutils/logging.hpp>
 #include <unordered_map>
+#include <utility>
 #include <vector>
 
 // Adapted from TheCherno's tutorial on profiling:
@@ -35,8 +36,21 @@ struct ProfilerResult {
 class ProfilerTimer {
  public:
     /// Creates and initializes a scoped-timer
-    ProfilerTimer(const std::string& name, const std::string& session,
-                  const bool& verbose = false);
+    ProfilerTimer(std::string name, std::string session, bool verbose = false);
+
+    // @todo(wilbert): Check RAII again, we might be breaking something here
+
+    /// Copy constructor is disabled for this class
+    ProfilerTimer(const ProfilerTimer& other) = delete;
+
+    /// Copy assignment operator is disabled for this class
+    auto operator=(const ProfilerTimer& other) -> ProfilerTimer& = delete;
+
+    // Move constructor is disabled for this class
+    ProfilerTimer(ProfilerTimer&& other) = delete;
+
+    // Move assignment operator is disabled for this class
+    auto operator=(ProfilerTimer&& other) -> ProfilerTimer& = delete;
 
     /// Stops timer execution and releases scoped-timer resources
     ~ProfilerTimer();
@@ -66,12 +80,10 @@ class IProfilerSession {
     /// Available types of sessions
     enum class eType : uint8_t {
         /// Internal type of session, stores all sessions results in a
-        /// buffer
-        /// for internal tools to use
+        /// buffer for internal tools to use
         INTERNAL,
         /// External-chrome type of session, saves to disk (.json) all
-        /// session
-        /// results in a format for the chrome-tracing tool to read
+        /// session results in a format for the chrome-tracing tool to read
         EXTERNAL_CHROME
     };
 
@@ -79,15 +91,26 @@ class IProfilerSession {
     enum class eState : uint8_t {
         /// Idle state, session is not waiting for any result at the moment
         IDLE,
-        /// Running state, session is waiting and saving|storing the
-        /// provided
-        /// results
+        /// Running state, session is waiting and saving|storing for results
         RUNNING
     };
 
     /// Creates a profiler session with given name
-    explicit IProfilerSession(const std::string& name)
-        : m_Name(name), m_State(eState::IDLE) {}
+    explicit IProfilerSession(std::string name) : m_Name(std::move(name)) {}
+
+    // @todo(wilbert): Check RAII again, we might be breaking something here
+
+    /// Copy constructor is disabled for this class
+    IProfilerSession(const IProfilerSession& other) = delete;
+
+    /// Copy assignment operator is disabled for this class
+    auto operator=(const IProfilerSession& other) -> IProfilerSession& = delete;
+
+    /// Move constructor is disabled for this class
+    IProfilerSession(IProfilerSession&& other) = delete;
+
+    /// Move assignment operator is disabled for this class
+    auto operator=(IProfilerSession&& other) -> IProfilerSession& = delete;
 
     /// Releases resources allocated by the session
     virtual ~IProfilerSession() = default;
@@ -105,21 +128,21 @@ class IProfilerSession {
     virtual void End() = 0;
 
     /// Gets the type of this session
-    eType type() const { return m_Type; }
+    auto type() const -> eType { return m_Type; }
 
     /// Gets the current state of this session
-    eState state() const { return m_State; }
+    auto state() const -> eState { return m_State; }
 
     /// Gets the name of this session
-    std::string name() const { return m_Name; }
+    auto name() const -> std::string { return m_Name; }
 
  protected:
     /// Unique identifier of this session
-    std::string m_Name;
+    std::string m_Name = DEFAULT_SESSION;  // NOLINT @todo(wilbert): check later
     /// Type of this profiling session
-    eType m_Type;
+    eType m_Type = eType::INTERNAL;  // NOLINT @todo(wilbert): check later
     /// Current state of the profiling session
-    eState m_State;
+    eState m_State = eState::IDLE;  // NOLINT @todo(wilbert): check later
 };
 
 /// Profiling session that stores results for later usage of internal
@@ -130,8 +153,22 @@ class ProfilerSessionInternal : public IProfilerSession {
     /// internal tooling
     explicit ProfilerSessionInternal(const std::string& name);
 
+    /// Copy constructor (not available). Can only use first constructor
+    ProfilerSessionInternal(const ProfilerSessionInternal& other) = delete;
+
+    /// Copy assignment operator (not available). Can only use first constructor
+    auto operator=(const ProfilerSessionInternal& other)
+        -> ProfilerSessionInternal& = delete;
+
+    /// Move constructor (not available). Can only use first constructor
+    ProfilerSessionInternal(ProfilerSessionInternal&& other) = delete;
+
+    /// Move assignment operator (not available). Can only use first constructor
+    auto operator=(ProfilerSessionInternal&& other)
+        -> ProfilerSessionInternal& = delete;
+
     // Documentation inherited
-    ~ProfilerSessionInternal() = default;
+    ~ProfilerSessionInternal() override = default;
 
     // Documentation inherited
     void Begin() override;
@@ -143,7 +180,7 @@ class ProfilerSessionInternal : public IProfilerSession {
     void End() override;
 
     /// Returns the profiler-results stored so far
-    std::vector<ProfilerResult> results() const { return m_Results; }
+    auto results() const -> std::vector<ProfilerResult> { return m_Results; }
 
  private:
     /// Container used to store sessino results for later usage
@@ -158,8 +195,22 @@ class ProfilerSessionExtChrome : public IProfilerSession {
     /// chrome-tracing tool format (.json)
     explicit ProfilerSessionExtChrome(const std::string& name);
 
+    /// Copy constructor (not available). Can only use first constructor
+    ProfilerSessionExtChrome(const ProfilerSessionExtChrome& other) = delete;
+
+    /// Copy assignment operator (not available). Can only use first constructor
+    auto operator=(const ProfilerSessionExtChrome& other)
+        -> ProfilerSessionExtChrome& = delete;
+
+    /// Move constructor (not available). Can only use first constructor
+    ProfilerSessionExtChrome(ProfilerSessionExtChrome&& other) = delete;
+
+    /// Move assignment operator (not available). Can only use first constructor
+    auto operator=(ProfilerSessionExtChrome&& other)
+        -> ProfilerSessionExtChrome& = delete;
+
     // Documentation inherited
-    ~ProfilerSessionExtChrome() = default;
+    ~ProfilerSessionExtChrome() override = default;
 
     // Documentation inherited
     void Begin() override;
@@ -205,10 +256,7 @@ class Profiler {
         const std::string& session_name = DEFAULT_SESSION);
 
     /// Returns all sessions currently being tracked by the profiler module
-    static std::vector<IProfilerSession*> GetSessions();
-
-    /// Releases all resources allocated by this profiler
-    ~Profiler() = default;
+    static auto GetSessions() -> std::vector<IProfilerSession*>;
 
  private:
     /// Creates a profiler and allocates all required resources
@@ -226,10 +274,11 @@ class Profiler {
                              const std::string& session_name);
 
     /// Returns all sessions currently being tracked
-    std::vector<IProfilerSession*> _GetSessions();
+    auto _GetSessions() -> std::vector<IProfilerSession*>;
 
  private:
     /// Handle to instance of profiler module(singleton)
+    // NOLINTNEXTLINE @todo(wilbert): replace singleton pattern?
     static std::unique_ptr<Profiler> s_Instance;
 
     /// Dictionary container for all sessions created during the module's
@@ -245,14 +294,19 @@ class Profiler {
 }  // namespace utils
 }  // namespace tiny
 
+// @todo(wilbert): Should consider changing macro to constexpr template function
+
+// NOLINTNEXTLINE : @todo(wilbert) check usage of constexpr template function
 #define PROFILE_SCOPE(name) \
     tiny::utils::ProfilerTimer prof_timer##__LINE__(name, DEFAULT_SESSION)
+// NOLINTNEXTLINE : @todo(wilbert) check usage of constexpr template function
 #define PROFILE_SCOPE_IN_SESSION(name, session_name) \
     tiny::utils::ProfilerTimer prof_timer##__LINE__(name, session_name)
-
+// NOLINTNEXTLINE : @todo(wilbert) check usage of constexpr template function
 #define PROFILE_FUNCTION()                                             \
     tiny::utils::ProfilerTimer prof_timer##__LINE__(__FUNCTION_NAME__, \
                                                     DEFAULT_SESSION)
+// NOLINTNEXTLINE : @todo(wilbert) check usage of constexpr template function
 #define PROFILE_FUNCTION_IN_SESSION(session_name)                      \
     tiny::utils::ProfilerTimer prof_timer##__LINE__(__FUNCTION_NAME__, \
                                                     session_name)

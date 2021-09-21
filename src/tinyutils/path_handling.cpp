@@ -4,33 +4,34 @@
 namespace tiny {
 namespace utils {
 
-std::string GetFilename(const std::string &filepath) {
+auto GetFilename(const std::string &filepath) -> std::string {
     return Split(filepath, '/').back();
 }
 
-std::string GetFoldername(const std::string &filepath) {
-    auto _pathParts = Split(filepath, '/');
-    if (_pathParts.size() < 2) {
+auto GetFoldername(const std::string &filepath) -> std::string {
+    auto path_parts = Split(filepath, '/');
+    if (path_parts.size() < 2) {
         return "./";
     }
 
-    return _pathParts[_pathParts.size() - 2];
+    return path_parts[path_parts.size() - 2];
 }
 
-std::string GetFolderpath(const std::string &filepath) {
-    auto _pathParts = Split(filepath, '/');
-    if (_pathParts.size() < 2) {
+auto GetFolderpath(const std::string &filepath) -> std::string {
+    auto path_parts = Split(filepath, '/');
+    if (path_parts.size() < 2) {
         return "./";
     }
 
-    std::stringstream _ss;
-    for (size_t i = 0; i < _pathParts.size() - 1; ++i)
-        _ss << _pathParts[i] << "/";
+    std::stringstream ss;
+    for (size_t i = 0; i < path_parts.size() - 1; ++i) {
+        ss << path_parts[i] << "/";
+    }
 
-    return _ss.str();
+    return ss.str();
 }
 
-std::string GetFilenameNoExtension(const std::string &filepath) {
+auto GetFilenameNoExtension(const std::string &filepath) -> std::string {
     return Split(Split(filepath, '/').back(), '.').front();
 }
 

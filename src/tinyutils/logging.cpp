@@ -1,19 +1,24 @@
-#include <cstdio>
+#include <iostream>
 #include <tinyutils/logging.hpp>
 
 namespace tiny {
 namespace utils {
+// @todo(wilbert): The variables below are not actually accessible, but
+// could should think about it making it const? (will disable lint for now)
 
+// NOLINTNEXTLINE
 std::shared_ptr<spdlog::logger> Logger::s_CoreLogger = nullptr;
-
+// NOLINTNEXTLINE
 std::shared_ptr<spdlog::logger> Logger::s_ClientLogger = nullptr;
-
+// NOLINTNEXTLINE
 bool Logger::s_IsActive = false;
-
+// NOLINTNEXTLINE
 Logger::eType Logger::s_Type = Logger::eType::CONSOLE_LOGGER;
 
 void Logger::Init(const Logger::eType &logger_type) {
-    if (s_IsActive) return;
+    if (s_IsActive) {
+        return;
+    }
 
     s_IsActive = true;
     s_Type = logger_type;
@@ -31,7 +36,7 @@ void Logger::Init(const Logger::eType &logger_type) {
             s_ClientLogger = spdlog::basic_logger_mt("USER", "./user_logs.txt");
             s_ClientLogger->set_level(spdlog::level::trace);
         } catch (const spdlog::spdlog_ex &ex) {
-            printf("Logger initialization FAILED: %s\n", ex.what());
+            std::cerr << "Logger initialization FAILED: " << ex.what() << "\n";
         }
     }
 }

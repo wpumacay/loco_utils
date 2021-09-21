@@ -1,11 +1,12 @@
 
 #include <chrono>
+#include <memory>
 #include <tinyutils/timing.hpp>
 
 namespace tiny {
 namespace utils {
 
-std::string ClockEvent::ToString() const {
+auto ClockEvent::ToString() const -> std::string {
     std::string str_rep;
     str_rep += "event   : " + name + "\n\r";
     str_rep += "start   : " + std::to_string(time_start) + "\n\r";
@@ -14,10 +15,13 @@ std::string ClockEvent::ToString() const {
     return str_rep;
 }
 
+// NOLINTNEXTLINE : using singleton here (instance is not publicly available)
 std::unique_ptr<Clock> Clock::s_Instance = nullptr;
 
 void Clock::Init() {
-    if (!s_Instance) s_Instance = std::unique_ptr<Clock>(new Clock());
+    if (!s_Instance) {
+        s_Instance = std::make_unique<Clock>();
+    }
 
     // All these book-keeping variables are associated with the main event
     s_Instance->m_TimeCurrent = 0.0;
@@ -56,7 +60,7 @@ void Clock::Tock(const std::string& event_name) {
     s_Instance->_Tock(event_name);
 }
 
-ClockEvent Clock::GetEvent(const std::string& event_name) {
+auto Clock::GetEvent(const std::string& event_name) -> ClockEvent {
     LOG_CORE_ASSERT(
         s_Instance,
         "Clock::GetEvent >>> Must initialize clock-module before using it");
@@ -71,56 +75,56 @@ ClockEvent Clock::GetEvent(const std::string& event_name) {
     return s_Instance->m_ClockEvents.at(event_name);
 }
 
-float Clock::GetWallTime() {
+auto Clock::GetWallTime() -> float {
     LOG_CORE_ASSERT(
         s_Instance,
         "Clock::GetWallTime >>> Must initialize clock-module before using it");
     return s_Instance->m_TimeCurrent;
 }
 
-float Clock::GetTimeStep() {
+auto Clock::GetTimeStep() -> float {
     LOG_CORE_ASSERT(
         s_Instance,
         "Clock::GetTimeStep >>> Must initialize clock-module before using it");
     return s_Instance->m_TimeStep;
 }
 
-float Clock::GetAvgTimeStep() {
+auto Clock::GetAvgTimeStep() -> float {
     LOG_CORE_ASSERT(s_Instance,
                     "Clock::GetAvgTimeStep >>> Must initialize clock-module "
                     "before using it");
     return s_Instance->m_TimeStepAvg;
 }
 
-float Clock::GetFps() {
+auto Clock::GetFps() -> float {
     LOG_CORE_ASSERT(
         s_Instance,
         "Clock::GetFps >>> Must initialize clock-module before using it");
-    return 1.0 / s_Instance->m_TimeStep;
+    return 1.0F / s_Instance->m_TimeStep;
 }
 
-float Clock::GetAvgFps() {
+auto Clock::GetAvgFps() -> float {
     LOG_CORE_ASSERT(
         s_Instance,
         "Clock::GetAvgFps >>> Must initialize clock-module before using it");
-    return 1.0 / s_Instance->m_TimeStepAvg;
+    return 1.0F / s_Instance->m_TimeStepAvg;
 }
 
-size_t Clock::GetTimeIndex() {
+auto Clock::GetTimeIndex() -> size_t {
     LOG_CORE_ASSERT(
         s_Instance,
         "Clock::GetTimeIndex >>> Must initialize clock-module before using it");
     return s_Instance->m_TimeIndex;
 }
 
-Clock::BufferArray Clock::GetTimesBuffer() {
+auto Clock::GetTimesBuffer() -> Clock::BufferArray {
     LOG_CORE_ASSERT(s_Instance,
                     "Clock::GetTimesBuffer >>> Must initialize clock-module "
                     "before using it");
     return s_Instance->m_TimesBuffer;
 }
 
-Clock::BufferArray Clock::GetFpsBuffer() {
+auto Clock::GetFpsBuffer() -> Clock::BufferArray {
     LOG_CORE_ASSERT(
         s_Instance,
         "Clock::GetFpsBuffer >>> Must initialize clock-module before using it");
@@ -148,24 +152,29 @@ void Clock::_Tock(const std::string& event_name) {
         m_ClockEvents[event_name].time_stop -
         m_ClockEvents[event_name].time_start;
     if (event_name == MAIN_EVENT) {
-        m_TimeStep = m_ClockEvents[MAIN_EVENT].time_duration;
+        // @todo(wilbert): check why we couldn't use double in all sides here
+        m_TimeStep =
+            static_cast<float>(m_ClockEvents[MAIN_EVENT].time_duration);
         m_TimeCurrent += m_TimeStep;
         m_TimeStepAvg =
             m_TimeStepAvg +
             (m_TimeStep - m_TimesBuffer[m_TimeIndex]) / NUM_FRAMES_FOR_AVG;
         m_TimesBuffer[m_TimeIndex] = m_TimeStep;
-        m_FpsBuffer[m_TimeIndex] = 1.0 / m_TimeStep;
+        m_FpsBuffer[m_TimeIndex] = 1.0F / m_TimeStep;
         m_TimeIndex = (m_TimeIndex + 1) % NUM_FRAMES_FOR_AVG;
     }
 }
 
-double Clock::_TimeStampNow() {
+auto Clock::_TimeStampNow() -> double {
+    constexpr auto TO_SECONDS = 0.001;
     auto time_stamp_chrono = std::chrono::high_resolution_clock::now();
-    auto time_stamp = std::chrono::time_point_cast<std::chrono::milliseconds>(
-                          time_stamp_chrono)
-                          .time_since_epoch()
-                          .count() *
-                      0.001;
+    auto time_stamp =
+        static_cast<double>(
+            std::chrono::time_point_cast<std::chrono::milliseconds>(
+                time_stamp_chrono)
+                .time_since_epoch()
+                .count()) *
+        TO_SECONDS;
     return time_stamp;
 }
 

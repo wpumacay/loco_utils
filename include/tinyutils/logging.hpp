@@ -21,15 +21,14 @@ class Logger {
     static void Release();
 
     /// Returns whether or not the logger has been properly initialized
-    static bool IsActive() { return Logger::s_IsActive; }
+    static auto IsActive() -> bool { return Logger::s_IsActive; }
 
     /// Returns the type of logger being used, either Console-logger or
     /// File-logger
-    static eType GetType() { return Logger::s_Type; }
+    static auto GetType() -> eType { return Logger::s_Type; }
 
  public:
-    // Core logging functionality (exposed to core-devs for internals and other
-    // checks)
+    // Core logging fcn calls (exposed to devs for internals and other checks)
 
     template <typename... Args>
     static void CoreTrace(fmt::basic_string_view<char> fmt,
@@ -143,33 +142,51 @@ class Logger {
     }
 
  private:
+    // @todo(wilbert): The variables below are not actually accessible, but
+    // could should think about it making it const? (will disable lint for now)
+
     /// spdlog Core logger (used for devs-related logging calls)
-    static std::shared_ptr<spdlog::logger> s_CoreLogger;
+    static std::shared_ptr<spdlog::logger> s_CoreLogger;  // NOLINT
     /// spdlog Client logger (used for devs-related logging calls)
-    static std::shared_ptr<spdlog::logger> s_ClientLogger;
+    static std::shared_ptr<spdlog::logger> s_ClientLogger;  // NOLINT
     /// Flags used to indicate that the logging module has been properly
     /// initialized
-    static bool s_IsActive;
+    static bool s_IsActive;  // NOLINT
     /// Type of logger being used by the logging module, either Console-logger
     /// or File-logger
-    static eType s_Type;
+    static eType s_Type;  // NOLINT
 };
 
 }  // namespace utils
 }  // namespace tiny
 
+// @todo(wilbert): Should actually try to change these variadic macros to
+// constexpr variadic template functions (for now will just disable linting)
+
+// NOLINTNEXTLINE
 #define LOG_CORE_TRACE(...) ::tiny::utils::Logger::CoreTrace(__VA_ARGS__)
+// NOLINTNEXTLINE
 #define LOG_CORE_INFO(...) ::tiny::utils::Logger::CoreInfo(__VA_ARGS__)
+// NOLINTNEXTLINE
 #define LOG_CORE_WARN(...) ::tiny::utils::Logger::CoreWarn(__VA_ARGS__)
+// NOLINTNEXTLINE
 #define LOG_CORE_ERROR(...) ::tiny::utils::Logger::CoreError(__VA_ARGS__)
+// NOLINTNEXTLINE
 #define LOG_CORE_CRITICAL(...) ::tiny::utils::Logger::CoreCritical(__VA_ARGS__)
+// NOLINTNEXTLINE
 #define LOG_CORE_ASSERT(x, ...) \
     ::tiny::utils::Logger::CoreAssert(!(x), __VA_ARGS__)
 
+// NOLINTNEXTLINE
 #define LOG_TRACE(...) ::tiny::utils::Logger::ClientTrace(__VA_ARGS__)
+// NOLINTNEXTLINE
 #define LOG_INFO(...) ::tiny::utils::Logger::ClientInfo(__VA_ARGS__)
+// NOLINTNEXTLINE
 #define LOG_WARN(...) ::tiny::utils::Logger::ClientWarn(__VA_ARGS__)
+// NOLINTNEXTLINE
 #define LOG_ERROR(...) ::tiny::utils::Logger::ClientError(__VA_ARGS__)
+// NOLINTNEXTLINE
 #define LOG_CRITICAL(...) ::tiny::utils::Logger::ClientCritical(__VA_ARGS__)
+// NOLINTNEXTLINE
 #define LOG_ASSERT(x, ...) \
     ::tiny::utils::Logger::ClientAssert(!(x), __VA_ARGS__)
