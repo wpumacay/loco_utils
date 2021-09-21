@@ -25,6 +25,7 @@ extern void bindings_profiling_module(py::module& m);
 }  // namespace utils
 }  // namespace tiny
 
+// NOLINTNEXTLINE @todo(wilbert): check how other projects handle this part
 PYBIND11_MODULE(tinyutils, m) {
     tiny::utils::bindings_logging_module(m);
     tiny::utils::bindings_path_handling_module(m);
