@@ -1,49 +1,72 @@
-cmake_minimum_required(VERSION 3.15..3.19)
+cmake_minimum_required(VERSION 3.15 FATAL_ERROR)
 
+# -------------------------------------
+# Get loco_cmake to help us configure our CMake based project
+include(FetchContent)
+FetchContent_Declare(
+  loco_cmake
+  GIT_REPOSITORY https://github.com/wpumacay/loco_cmake.git
+  GIT_TAG main
+  GIT_PROGRESS TRUE
+  GIT_SHALLOW TRUE)
+FetchContent_MakeAvailable(loco_cmake)
+include(${loco_cmake_SOURCE_DIR}/Index.cmake)
+
+# -------------------------------------
+# Define our project :)
 project(
   TinyUtils
   VERSION 0.1.0
   DESCRIPTION "A library of common functionality used alongside my projects"
   HOMEPAGE_URL "https://github.com/wpumacay/tiny_utils"
-  LANGUAGES CXX)
+  LANGUAGES C CXX)
 
-# Include some helper functions that we will need later
-include(${PROJECT_SOURCE_DIR}/cmake/Common.cmake)
-include(${PROJECT_SOURCE_DIR}/cmake/Utils.cmake)
-
-# Include some internal tools we might need to use
-include(FetchContent)
-include(GNUInstallDirs)
-
-# Check if we're currently working as the root project. If so, configure some
-# common settings that we might need later during configuration
-tuInitializeProject()
-
+# -------------------------------------
+# Define some options the user can set before|while configuring the project
 option(TINYUTILS_BUILD_PYTHON_BINDINGS "Build bindings (requires Pybind11)" ON)
 option(TINYUTILS_BUILD_EXAMPLES "Build C++ examples" ON)
 option(TINYUTILS_BUILD_DOCS "Build documentation (requires Doxygen)" OFF)
 
-# Add some external dependencies we need to link against
+# -------------------------------------
+# Initialize the project using our helper modules :D
+loco_initialize_project()
+
+# -------------------------------------
+# Get the required third-party dependencies
 add_subdirectory(third_party)
 
-add_library(
+# cmake-format: off
+# -------------------------------------
+# Setup the main C++ target `TinyUtilsCpp`
+add_library(TinyUtilsCpp)
+loco_setup_target(
   TinyUtilsCpp
-  ${CMAKE_CURRENT_SOURCE_DIR}/src/tinyutils/common.cpp
-  ${CMAKE_CURRENT_SOURCE_DIR}/src/tinyutils/logging.cpp
-  ${CMAKE_CURRENT_SOURCE_DIR}/src/tinyutils/timing.cpp
-  ${CMAKE_CURRENT_SOURCE_DIR}/src/tinyutils/profiling.cpp
-  ${CMAKE_CURRENT_SOURCE_DIR}/src/tinyutils/path_handling.cpp
-  ${CMAKE_CURRENT_SOURCE_DIR}/src/tinyutils/perlin_noise.cpp)
-target_include_directories(TinyUtilsCpp
-                           PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
-target_link_libraries(TinyUtilsCpp PUBLIC spdlog::spdlog)
-target_compile_features(TinyUtilsCpp PUBLIC cxx_std_11)
-# Make sure that we don't re-define the make_unique if it's already exposed
-if(MSVC)
-  target_compile_options(TinyUtilsCpp PUBLIC "/Zc:__cplusplus")
-endif()
+  SOURCES
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/tinyutils/common.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/tinyutils/logging.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/tinyutils/timing.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/tinyutils/profiling.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/tinyutils/path_handling.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/tinyutils/perlin_noise.cpp
+  INCLUDE_DIRECTORIES
+    ${CMAKE_CURRENT_SOURCE_DIR}/include
+  TARGET_DEPENDENCIES
+    spdlog::spdlog
+  WARNINGS_AS_ERRORS FALSE)
+# cmake-format: on
 
+# -------------------------------------
+# Show the properties of our main target
+loco_print_target_properties(TinyUtilsCpp)
+
+# -------------------------------------
+# Show some info of the this project
+loco_print_project_info()
+
+# -------------------------------------
+# Add the set of examples created along this project
 add_subdirectory(examples)
-add_subdirectory(python/tinyutils/bindings)
 
-tuPrintSummary()
+# -------------------------------------
+# Add the set of Python bindings created for TinyUtilsCpp
+add_subdirectory(python/tinyutils/bindings)
