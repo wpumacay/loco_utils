@@ -3,7 +3,7 @@
 # ~~~
 
 if(NOT TINYUTILS_BUILD_PYTHON_BINDINGS)
-  tuMessage("Bindings are not required for the current build" LOG_LEVEL TRACE)
+  loco_message("Bindings are not required for the current build")
   return()
 endif()
 

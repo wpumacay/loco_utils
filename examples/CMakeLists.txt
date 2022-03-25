@@ -3,7 +3,7 @@
 # ~~~
 
 if(NOT TINYUTILS_BUILD_EXAMPLES)
-  tuMessage("Examples are not required for the current build" LOG_LEVEL TRACE)
+  loco_message("Examples are not required for the current build")
   return()
 endif()
 
