@@ -2,28 +2,32 @@
 #include <tinyutils/common.hpp>
 
 class Foo {
+    ADD_CLASS_SMART_POINTERS(Foo)
+
  public:
-    Foo(const std::string& name, const float& pos_x, const float& pos_y)
-        : m_Name(name), m_X(pos_x), m_Y(pos_y) {}
+    Foo(std::string&& name, const float& pos_x, const float& pos_y)
+        : m_Name(std::move(name)), m_X(pos_x), m_Y(pos_y) {}
 
-    ~Foo() = default;
+    auto name() const -> std::string { return m_Name; }
 
-    std::string name() const { return m_Name; }
+    auto x() const -> float { return m_X; }
 
-    float x() const { return m_X; }
-
-    float y() const { return m_Y; }
+    auto y() const -> float { return m_Y; }
 
  private:
     std::string m_Name;
     float m_X, m_Y;
-
-    ADD_CLASS_SMART_POINTERS(Foo);
 };
 
-int main() {
-    Foo::ptr foo_obj_1 = Foo::Create("foo_obj_1", 10.0f, 10.0f);
-    Foo::uptr foo_obj_2 = Foo::CreateUnique("foo_obj_2", 20.0f, 20.0f);
+auto main() -> int {
+    constexpr float X_1 = 10.0F;
+    constexpr float Y_1 = 10.0F;
+
+    Foo::ptr foo_obj_1 = Foo::Create("foo_obj_1", X_1, Y_1);
+
+    constexpr float X_2 = 20.0F;
+    constexpr float Y_2 = 20.0F;
+    Foo::uptr foo_obj_2 = Foo::CreateUnique("foo_obj_2", X_2, Y_2);
 
     std::cout << "foo(1).name   : " << foo_obj_1->name() << std::endl;
     std::cout << "foo(1).x      : " << foo_obj_1->x() << std::endl;

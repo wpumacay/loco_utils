@@ -100,10 +100,10 @@ typename _Unique_if<T>::_Known_bound make_unique(Args &&...) = delete;
     typedef std::shared_ptr<const T> cptr;                        \
     typedef std::unique_ptr<const T> ucptr;                       \
     template <typename... Targs>                                  \
-    static inline ptr Create(Targs &&...args) {                   \
+    static inline auto Create(Targs &&...args)->ptr {             \
         return std::make_shared<T>(std::forward<Targs>(args)...); \
     }                                                             \
     template <typename... Targs>                                  \
-    static inline uptr CreateUnique(Targs &&...args) {            \
+    static inline auto CreateUnique(Targs &&...args)->uptr {      \
         return std::make_unique<T>(std::forward<Targs>(args)...); \
     }

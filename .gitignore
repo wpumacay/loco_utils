@@ -8,6 +8,7 @@
 *.a
 *.ini
 *.log
+*.ppm
 
 # folder-exclusions
 build/

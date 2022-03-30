@@ -1,3 +1,4 @@
+#include <cassert>
 #include <sstream>
 #include <tinyutils/common.hpp>
 
@@ -5,26 +6,41 @@ namespace tiny {
 namespace utils {
 
 auto Split(const std::string &txt, char separator) -> std::vector<std::string> {
-    std::vector<std::string> strres;
+    std::vector<std::string> vec_str;
 
-    auto pos = static_cast<int32_t>(txt.find(separator));
-    if (pos == std::string::npos) {
-        strres.push_back(txt);
-        return strres;
+    // --------------------------------
+    // Just in case, if the separator was not found, just return vec[txt]
+    size_t curr_pos = txt.find(separator);
+    if (curr_pos == std::string::npos) {
+        vec_str.push_back(txt);
+        return vec_str;
     }
 
-    int32_t initpos = 0;
-    while (pos != std::string::npos) {
-        strres.push_back(txt.substr(initpos, pos - initpos));
-        initpos = pos + 1;
+    // --------------------------------
+    // If found the separator, there might be various occurrences, so look for
+    // it one by one iteratively, until all occurrences are accounted for
+    size_t last_pos = 0;
+    while (curr_pos != std::string::npos) {
+        // The 'curr_pos' index is always bigger than the 'last_pos' index
+        assert(curr_pos > last_pos);
 
-        pos = static_cast<int32_t>(txt.find(separator, initpos));
+        // Grab the last occurrence and place it into our results vector
+        vec_str.push_back(txt.substr(last_pos, curr_pos - last_pos));
+
+        // Continue looking for the separator in the next portion of the string
+        last_pos = curr_pos + 1;
+
+        // Find the next occurrence of the separator in the remainder string
+        curr_pos = txt.find(separator, last_pos);
     }
 
-    strres.push_back(txt.substr(
-        initpos, std::min(pos, static_cast<int>(txt.size())) - initpos));
+    // --------------------------------
+    // Process the remainder (word leftover, or empty string)
+    if (last_pos < txt.size()) {
+        vec_str.push_back(txt.substr(last_pos, txt.size() - last_pos));
+    }
 
-    return strres;
+    return vec_str;
 }
 
 auto PointerToHexAddress(const void *ptr) -> std::string {
