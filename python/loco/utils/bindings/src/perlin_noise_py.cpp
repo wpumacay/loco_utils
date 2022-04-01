@@ -1,10 +1,10 @@
 #include <pybind11/pybind11.h>
 
-#include <tinyutils/perlin_noise.hpp>
+#include <loco/utils/perlin_noise.hpp>
 
 namespace py = pybind11;
 
-namespace tiny {
+namespace loco {
 namespace utils {
 
 // NOLINTNEXTLINE(runtime/references)
@@ -21,4 +21,4 @@ void bindings_perlin_noise_module(py::module& m) {
 }
 
 }  // namespace utils
-}  // namespace tiny
+}  // namespace loco

@@ -1,10 +1,10 @@
 #include <pybind11/pybind11.h>
 
-#include <tinyutils/timing.hpp>
+#include <loco/utils/timing.hpp>
 
 namespace py = pybind11;
 
-namespace tiny {
+namespace loco {
 namespace utils {
 
 // NOLINTNEXTLINE(runtime/references)
@@ -37,4 +37,4 @@ void bindings_timing_module(py::module& m) {
 }
 
 }  // namespace utils
-}  // namespace tiny
+}  // namespace loco

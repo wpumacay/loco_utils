@@ -1,12 +1,15 @@
 #pragma once
 
+// clang-format off
 #include <memory>
 #include <random>
-#include <tinyutils/logging.hpp>
 #include <utility>
 #include <vector>
 
-namespace tiny {
+#include <loco/utils/logging.hpp>
+// clang-format on
+
+namespace loco {
 namespace utils {
 
 class PerlinNoise {
@@ -89,4 +92,4 @@ class PerlinNoise {
 };
 
 }  // namespace utils
-}  // namespace tiny
+}  // namespace loco

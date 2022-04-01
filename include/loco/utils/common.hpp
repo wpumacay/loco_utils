@@ -6,7 +6,7 @@
 #include <string>
 #include <vector>
 
-namespace tiny {
+namespace loco {
 namespace utils {
 
 /// Divides a given string into substrings using the given character separator
@@ -25,7 +25,7 @@ auto Split(const std::string &txt, char separator = '/')
 auto PointerToHexAddress(const void *ptr) -> std::string;
 
 }  // namespace utils
-}  // namespace tiny
+}  // namespace loco
 
 //----------------------------------------------------------------------------//
 //       Use make_unique extension if the compiler is c++11 or older          //
@@ -42,32 +42,32 @@ auto PointerToHexAddress(const void *ptr) -> std::string;
 
 namespace std {
 template <class T>
-struct _Unique_if {
-    typedef unique_ptr<T> _Single_object;
+struct _Unique_if {                        // NOLINT
+    typedef unique_ptr<T> _Single_object;  // NOLINT
 };
 
 template <class T>
-struct _Unique_if<T[]> {
-    typedef unique_ptr<T[]> _Unknown_bound;
+struct _Unique_if<T[]> {                     // NOLINT
+    typedef unique_ptr<T[]> _Unknown_bound;  // NOLINT
 };
 
 template <class T, size_t N>
-struct _Unique_if<T[N]> {
-    typedef void _Known_bound;
+struct _Unique_if<T[N]> {       // NOLINT
+    typedef void _Known_bound;  // NOLINT
 };
 
-template <class T, class... Args>
+template <class T, class... Args>  // NOLINTNEXTLINE
 typename _Unique_if<T>::_Single_object make_unique(Args &&...args) {
     return unique_ptr<T>(new T(std::forward<Args>(args)...));
 }
 
 template <class T>
-typename _Unique_if<T>::_Unknown_bound make_unique(size_t n) {
-    typedef typename remove_extent<T>::type U;
+typename _Unique_if<T>::_Unknown_bound make_unique(size_t n) {  // NOLINT
+    typedef typename remove_extent<T>::type U;                  // NOLINT
     return unique_ptr<T>(new U[n]());
 }
 
-template <class T, class... Args>
+template <class T, class... Args>  // NOLINTNEXTLINE
 typename _Unique_if<T>::_Known_bound make_unique(Args &&...) = delete;
 }  // namespace std
 

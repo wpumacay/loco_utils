@@ -1,15 +1,18 @@
 #pragma once
 
+// clang-format off
 #include <chrono>
 #include <cstdint>
 #include <cstring>
 #include <fstream>
 #include <memory>
 #include <string>
-#include <tinyutils/logging.hpp>
-#include <unordered_map>
 #include <utility>
 #include <vector>
+#include <unordered_map>
+
+#include <loco/utils/logging.hpp>
+// clang-format on
 
 // Adapted from TheCherno's tutorial on profiling:
 // video    : https://youtu.be/xlAH4dbMVnU
@@ -17,7 +20,7 @@
 
 constexpr const char* DEFAULT_SESSION = "session_default";
 
-namespace tiny {
+namespace loco {
 namespace utils {
 
 /// Result object returned by profiling functions
@@ -34,9 +37,11 @@ struct ProfilerResult {
 
 /// Scoped profiling timer (tracks time of a function scope)
 class ProfilerTimer {
+    ADD_CLASS_SMART_POINTERS(ProfilerTimer)
+
  public:
     /// Creates and initializes a scoped-timer
-    ProfilerTimer(std::string name, std::string session, bool verbose = false);
+    ProfilerTimer(std::string name, std::string session);
 
     // @todo(wilbert): Check RAII again, we might be breaking something here
 
@@ -63,11 +68,9 @@ class ProfilerTimer {
     /// Unique identifier of the timer
     std::string m_Name;
     /// Session identifier (to which session is associated)
-    std::string m_Session;
+    std::string m_Session = DEFAULT_SESSION;
     /// Flag used to check if timer has stopped
-    bool m_Stopped;
-    /// Flag used to check if in verbose mode (prints results to stdout)
-    bool m_Verbose;
+    bool m_Stopped = false;
     /// Time stamp of the start of the timer
     std::chrono::time_point<std::chrono::high_resolution_clock>
         m_TimePointStart;
@@ -292,21 +295,19 @@ class Profiler {
 };
 
 }  // namespace utils
-}  // namespace tiny
+}  // namespace loco
 
-// @todo(wilbert): Should consider changing macro to constexpr template function
-
-// NOLINTNEXTLINE : @todo(wilbert) check usage of constexpr template function
+// NOLINTNEXTLINE
 #define PROFILE_SCOPE(name) \
-    tiny::utils::ProfilerTimer prof_timer##__LINE__(name, DEFAULT_SESSION)
+    loco::utils::ProfilerTimer prof_timer##__LINE__(name, DEFAULT_SESSION)
 // NOLINTNEXTLINE : @todo(wilbert) check usage of constexpr template function
 #define PROFILE_SCOPE_IN_SESSION(name, session_name) \
-    tiny::utils::ProfilerTimer prof_timer##__LINE__(name, session_name)
+    loco::utils::ProfilerTimer prof_timer##__LINE__(name, session_name)
 // NOLINTNEXTLINE : @todo(wilbert) check usage of constexpr template function
 #define PROFILE_FUNCTION()                                             \
-    tiny::utils::ProfilerTimer prof_timer##__LINE__(__FUNCTION_NAME__, \
+    loco::utils::ProfilerTimer prof_timer##__LINE__(__FUNCTION_NAME__, \
                                                     DEFAULT_SESSION)
 // NOLINTNEXTLINE : @todo(wilbert) check usage of constexpr template function
 #define PROFILE_FUNCTION_IN_SESSION(session_name)                      \
-    tiny::utils::ProfilerTimer prof_timer##__LINE__(__FUNCTION_NAME__, \
+    loco::utils::ProfilerTimer prof_timer##__LINE__(__FUNCTION_NAME__, \
                                                     session_name)

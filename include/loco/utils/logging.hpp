@@ -1,13 +1,14 @@
 #pragma once
 
+// clang-format off
+#include <loco/utils/common.hpp>
+
 #include <spdlog/sinks/basic_file_sink.h>
 #include <spdlog/sinks/stdout_color_sinks.h>
 #include <spdlog/spdlog.h>
+// clang-format on
 
-#include <memory>
-#include <tinyutils/common.hpp>
-
-namespace tiny {
+namespace loco {
 namespace utils {
 
 class Logger {
@@ -158,35 +159,35 @@ class Logger {
 };
 
 }  // namespace utils
-}  // namespace tiny
+}  // namespace loco
 
 // @todo(wilbert): Should actually try to change these variadic macros to
 // constexpr variadic template functions (for now will just disable linting)
 
 // NOLINTNEXTLINE
-#define LOG_CORE_TRACE(...) ::tiny::utils::Logger::CoreTrace(__VA_ARGS__)
+#define LOG_CORE_TRACE(...) ::loco::utils::Logger::CoreTrace(__VA_ARGS__)
 // NOLINTNEXTLINE
-#define LOG_CORE_INFO(...) ::tiny::utils::Logger::CoreInfo(__VA_ARGS__)
+#define LOG_CORE_INFO(...) ::loco::utils::Logger::CoreInfo(__VA_ARGS__)
 // NOLINTNEXTLINE
-#define LOG_CORE_WARN(...) ::tiny::utils::Logger::CoreWarn(__VA_ARGS__)
+#define LOG_CORE_WARN(...) ::loco::utils::Logger::CoreWarn(__VA_ARGS__)
 // NOLINTNEXTLINE
-#define LOG_CORE_ERROR(...) ::tiny::utils::Logger::CoreError(__VA_ARGS__)
+#define LOG_CORE_ERROR(...) ::loco::utils::Logger::CoreError(__VA_ARGS__)
 // NOLINTNEXTLINE
-#define LOG_CORE_CRITICAL(...) ::tiny::utils::Logger::CoreCritical(__VA_ARGS__)
+#define LOG_CORE_CRITICAL(...) ::loco::utils::Logger::CoreCritical(__VA_ARGS__)
 // NOLINTNEXTLINE
 #define LOG_CORE_ASSERT(x, ...) \
-    ::tiny::utils::Logger::CoreAssert(!(x), __VA_ARGS__)
+    ::loco::utils::Logger::CoreAssert(!(x), __VA_ARGS__)
 
 // NOLINTNEXTLINE
-#define LOG_TRACE(...) ::tiny::utils::Logger::ClientTrace(__VA_ARGS__)
+#define LOG_TRACE(...) ::loco::utils::Logger::ClientTrace(__VA_ARGS__)
 // NOLINTNEXTLINE
-#define LOG_INFO(...) ::tiny::utils::Logger::ClientInfo(__VA_ARGS__)
+#define LOG_INFO(...) ::loco::utils::Logger::ClientInfo(__VA_ARGS__)
 // NOLINTNEXTLINE
-#define LOG_WARN(...) ::tiny::utils::Logger::ClientWarn(__VA_ARGS__)
+#define LOG_WARN(...) ::loco::utils::Logger::ClientWarn(__VA_ARGS__)
 // NOLINTNEXTLINE
-#define LOG_ERROR(...) ::tiny::utils::Logger::ClientError(__VA_ARGS__)
+#define LOG_ERROR(...) ::loco::utils::Logger::ClientError(__VA_ARGS__)
 // NOLINTNEXTLINE
-#define LOG_CRITICAL(...) ::tiny::utils::Logger::ClientCritical(__VA_ARGS__)
+#define LOG_CRITICAL(...) ::loco::utils::Logger::ClientCritical(__VA_ARGS__)
 // NOLINTNEXTLINE
 #define LOG_ASSERT(x, ...) \
-    ::tiny::utils::Logger::ClientAssert(!(x), __VA_ARGS__)
+    ::loco::utils::Logger::ClientAssert(!(x), __VA_ARGS__)

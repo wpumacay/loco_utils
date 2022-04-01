@@ -1,9 +1,12 @@
 #pragma once
 
+// clang-format off
 #include <string>
-#include <tinyutils/common.hpp>
 
-namespace tiny {
+#include <loco/utils/common.hpp>
+// clang-format on
+
+namespace loco {
 namespace utils {
 
 /// Gets the stripped filename from an absolute full-path
@@ -33,4 +36,4 @@ auto GetFolderpath(const std::string &filepath) -> std::string;
 auto GetFilenameNoExtension(const std::string &filepath) -> std::string;
 
 }  // namespace utils
-}  // namespace tiny
+}  // namespace loco
