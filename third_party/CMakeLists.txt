@@ -9,7 +9,7 @@
 # https://github.com/jeffamstutz/superbuild_ospray/blob/main/macros.cmake
 # ~~~
 
-if(NOT TINYUTILS_IS_ROOT_PROJECT)
+if(NOT LOCOUTILS_IS_ROOT_PROJECT)
   return()
 endif()
 
@@ -22,7 +22,7 @@ loco_configure_git_dependency(
     TARGET spdlog
     REPO https://github.com/gabime/spdlog.git
     TAG v1.9.2
-    BUILD_MODE Release
+    BUILD_MODE ${CMAKE_BUILD_TYPE}
     BUILD_ARGS
       -DSPDLOG_BUILD_SHARED=OFF
       -DSPDLOG_BUILD_EXAMPLE=OFF
@@ -30,6 +30,11 @@ loco_configure_git_dependency(
       -DSPDLOG_BUILD_TESTS=OFF
       -DSPDLOG_BUILD_TESTS_HO=OFF
       -DSPDLOG_BUILD_BENCH=OFF)
+
+if(NOT TARGET spdlog::spdlog)
+  loco_message("We require [spdlog] as a dependency, but couldn't be retrieved
+    from their repo" LOG_LEVEL FATAL_ERROR)
+endif()
 
 # ------------------------------------------------------------------------------
 # Pybind11 is used for generating Python bindings for this project's C++ API.
@@ -40,9 +45,14 @@ loco_configure_git_dependency(
     TARGET pybind11
     REPO https://github.com/pybind/pybind11.git
     TAG v2.9.1
-    BUILD_MODE Release
+    BUILD_MODE ${CMAKE_BUILD_TYPE}
     BUILD_ARGS
       -DPYBIND11_TEST=OFF
-    DISCARD_UNLESS TINYUTILS_BUILD_PYTHON_BINDINGS)
+    DISCARD_UNLESS LOCOUTILS_BUILD_PYTHON_BINDINGS)
+
+if(NOT pybind11_FOUND)
+  loco_message("Requested Python bindings, but couldn't find Pybind11 :("
+               LOG_LEVEL FATAL_ERROR)
+endif()
 
 # cmake-format: on

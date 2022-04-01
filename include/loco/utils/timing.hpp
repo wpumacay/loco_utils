@@ -1,18 +1,21 @@
 #pragma once
 
+// clang-format off
 #include <array>
 #include <cstdint>
 #include <memory>
 #include <string>
-#include <tinyutils/logging.hpp>
 #include <unordered_map>
+
+#include <loco/utils/logging.hpp>
+// clang-format on
 
 /// Number of frames used for averaging-window
 constexpr size_t NUM_FRAMES_FOR_AVG = 100;
 /// Name of the default event to keep track of (wall-time)
 constexpr const char* MAIN_EVENT = "walltime";
 
-namespace tiny {
+namespace loco {
 namespace utils {
 
 struct ClockEvent {
@@ -113,4 +116,4 @@ class Clock {
 };
 
 }  // namespace utils
-}  // namespace tiny
+}  // namespace loco

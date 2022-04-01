@@ -15,17 +15,17 @@ include(${loco_cmake_SOURCE_DIR}/Index.cmake)
 # -------------------------------------
 # Define our project :)
 project(
-  TinyUtils
+  LocoUtils
   VERSION 0.1.0
   DESCRIPTION "A library of common functionality used alongside my projects"
-  HOMEPAGE_URL "https://github.com/wpumacay/tiny_utils"
+  HOMEPAGE_URL "https://github.com/wpumacay/loco_utils"
   LANGUAGES C CXX)
 
 # -------------------------------------
 # Define some options the user can set before|while configuring the project
-option(TINYUTILS_BUILD_PYTHON_BINDINGS "Build bindings (requires Pybind11)" ON)
-option(TINYUTILS_BUILD_EXAMPLES "Build C++ examples" ON)
-option(TINYUTILS_BUILD_DOCS "Build documentation (requires Doxygen)" OFF)
+option(LOCOUTILS_BUILD_PYTHON_BINDINGS "Build bindings (requires Pybind11)" ON)
+option(LOCOUTILS_BUILD_EXAMPLES "Build C++ examples" ON)
+option(LOCOUTILS_BUILD_DOCS "Build documentation (requires Doxygen)" OFF)
 
 # -------------------------------------
 # Initialize the project using our helper modules :D
@@ -37,17 +37,17 @@ add_subdirectory(third_party)
 
 # cmake-format: off
 # -------------------------------------
-# Setup the main C++ target `TinyUtilsCpp`
-add_library(TinyUtilsCpp)
+# Setup the main C++ target `LocoUtilsCpp`
+add_library(LocoUtilsCpp)
 loco_setup_target(
-  TinyUtilsCpp
+  LocoUtilsCpp
   SOURCES
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/tinyutils/common.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/tinyutils/logging.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/tinyutils/timing.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/tinyutils/profiling.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/tinyutils/path_handling.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/tinyutils/perlin_noise.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/loco/utils/common.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/loco/utils/logging.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/loco/utils/timing.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/loco/utils/profiling.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/loco/utils/path_handling.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/loco/utils/perlin_noise.cpp
   INCLUDE_DIRECTORIES
     ${CMAKE_CURRENT_SOURCE_DIR}/include
   TARGET_DEPENDENCIES
@@ -56,8 +56,12 @@ loco_setup_target(
 # cmake-format: on
 
 # -------------------------------------
+# Expose an alias for the library (CMake namespace convention)
+add_library(loco::utils ALIAS LocoUtilsCpp)
+
+# -------------------------------------
 # Show the properties of our main target
-loco_print_target_properties(TinyUtilsCpp)
+loco_print_target_properties(LocoUtilsCpp)
 
 # -------------------------------------
 # Show some info of the this project
@@ -68,5 +72,5 @@ loco_print_project_info()
 add_subdirectory(examples)
 
 # -------------------------------------
-# Add the set of Python bindings created for TinyUtilsCpp
-add_subdirectory(python/tinyutils/bindings)
+# Add the set of Python bindings created for LocoUtilsCpp
+add_subdirectory(python/loco/utils/bindings)

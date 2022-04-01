@@ -1,20 +1,19 @@
+// clang-format off
 #include <algorithm>
 #include <cstdint>
 #include <sstream>
-#include <tinyutils/profiling.hpp>
 
-namespace tiny {
+#include <loco/utils/profiling.hpp>
+// clang-format on
+
+namespace loco {
 namespace utils {
 /******************************************************************************/
 /*                           Scoped Profiling Timer                           */
 /******************************************************************************/
 
-ProfilerTimer::ProfilerTimer(std::string name, std::string session,
-                             bool verbose) {
-    m_Name = std::move(name);
-    m_Session = std::move(session);
-    m_Verbose = verbose;
-    m_Stopped = false;
+ProfilerTimer::ProfilerTimer(std::string name, std::string session)
+    : m_Name(std::move(name)), m_Session(std::move(session)) {
     m_TimePointStart = std::chrono::high_resolution_clock::now();
 }
 
@@ -227,4 +226,4 @@ auto Profiler::_GetSessions() -> std::vector<IProfilerSession*> {
 }
 
 }  // namespace utils
-}  // namespace tiny
+}  // namespace loco

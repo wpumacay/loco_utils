@@ -1,8 +1,11 @@
+// clang-format off
 #include <cassert>
 #include <sstream>
-#include <tinyutils/common.hpp>
 
-namespace tiny {
+#include <loco/utils/common.hpp>
+// clang-format on
+
+namespace loco {
 namespace utils {
 
 auto Split(const std::string &txt, char separator) -> std::vector<std::string> {
@@ -51,4 +54,4 @@ auto PointerToHexAddress(const void *ptr) -> std::string {
 }
 
 }  // namespace utils
-}  // namespace tiny
+}  // namespace loco

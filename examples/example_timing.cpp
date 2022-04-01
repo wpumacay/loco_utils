@@ -1,10 +1,11 @@
-#include <thread>
-#include <tinyutils/common.hpp>
-#include <tinyutils/timing.hpp>
 
-int main() {
-    tiny::utils::Logger::Init();
-    tiny::utils::Clock::Init();
+#include <loco/utils/common.hpp>
+#include <loco/utils/timing.hpp>
+#include <thread>
+
+auto main() -> int {
+    loco::utils::Logger::Init();
+    loco::utils::Clock::Init();
 
     auto time_stamp_chrono = std::chrono::high_resolution_clock::now();
     auto time_stamp = std::chrono::time_point_cast<std::chrono::microseconds>(
@@ -20,42 +21,42 @@ int main() {
                      .count();
     LOG_WARN("now: {0}", time_stamp);
 
-    const size_t num_steps = 1000;
-    for (size_t i = 0; i < num_steps; i++) {
-        tiny::utils::Clock::Tick();
-        tiny::utils::Clock::Tick("lapse_1");
+    constexpr size_t NUM_STEPS = 1000;
+    for (size_t i = 0; i < NUM_STEPS; i++) {
+        loco::utils::Clock::Tick();
+        loco::utils::Clock::Tick("lapse_1");
         std::this_thread::sleep_for(std::chrono::microseconds(11000));
-        tiny::utils::Clock::Tock("lapse_1");
+        loco::utils::Clock::Tock("lapse_1");
 
-        tiny::utils::Clock::Tick("lapse_2");
-        tiny::utils::Clock::Tick("lapse_3");
-        tiny::utils::Clock::Tick("lapse_4");
+        loco::utils::Clock::Tick("lapse_2");
+        loco::utils::Clock::Tick("lapse_3");
+        loco::utils::Clock::Tick("lapse_4");
         std::this_thread::sleep_for(std::chrono::microseconds(4000));
-        tiny::utils::Clock::Tock("lapse_2");
+        loco::utils::Clock::Tock("lapse_2");
 
         std::this_thread::sleep_for(std::chrono::microseconds(3000));
-        tiny::utils::Clock::Tock("lapse_3");
+        loco::utils::Clock::Tock("lapse_3");
 
         std::this_thread::sleep_for(std::chrono::microseconds(2000));
-        tiny::utils::Clock::Tock("lapse_4");
-        tiny::utils::Clock::Tock();
+        loco::utils::Clock::Tock("lapse_4");
+        loco::utils::Clock::Tock();
 
-        LOG_TRACE("wall-time      : {0}", tiny::utils::Clock::GetWallTime());
-        LOG_TRACE("time-step      : {0}", tiny::utils::Clock::GetTimeStep());
-        LOG_TRACE("avg-time-step  : {0}", tiny::utils::Clock::GetAvgTimeStep());
-        LOG_TRACE("fps            : {0}", tiny::utils::Clock::GetFps());
-        LOG_TRACE("avg-fps        : {0}", tiny::utils::Clock::GetAvgFps());
+        LOG_TRACE("wall-time      : {0}", loco::utils::Clock::GetWallTime());
+        LOG_TRACE("time-step      : {0}", loco::utils::Clock::GetTimeStep());
+        LOG_TRACE("avg-time-step  : {0}", loco::utils::Clock::GetAvgTimeStep());
+        LOG_TRACE("fps            : {0}", loco::utils::Clock::GetFps());
+        LOG_TRACE("avg-fps        : {0}", loco::utils::Clock::GetAvgFps());
         LOG_TRACE("lapse_1.step   : {0}",
-                  tiny::utils::Clock::GetEvent("lapse_1").time_duration);
+                  loco::utils::Clock::GetEvent("lapse_1").time_duration);
         LOG_TRACE("lapse_2.step   : {0}",
-                  tiny::utils::Clock::GetEvent("lapse_2").time_duration);
+                  loco::utils::Clock::GetEvent("lapse_2").time_duration);
         LOG_TRACE("lapse_3.step   : {0}",
-                  tiny::utils::Clock::GetEvent("lapse_3").time_duration);
+                  loco::utils::Clock::GetEvent("lapse_3").time_duration);
         LOG_TRACE("lapse_4.step   : {0}",
-                  tiny::utils::Clock::GetEvent("lapse_4").time_duration);
+                  loco::utils::Clock::GetEvent("lapse_4").time_duration);
     }
 
-    tiny::utils::Logger::Release();
-    tiny::utils::Clock::Release();
+    loco::utils::Logger::Release();
+    loco::utils::Clock::Release();
     return 0;
 }

@@ -1,9 +1,11 @@
-
+// clang-format off
 #include <chrono>
 #include <memory>
-#include <tinyutils/timing.hpp>
 
-namespace tiny {
+#include <loco/utils/timing.hpp>
+// clang-format on
+
+namespace loco {
 namespace utils {
 
 auto ClockEvent::ToString() const -> std::string {
@@ -179,4 +181,4 @@ auto Clock::_TimeStampNow() -> double {
 }
 
 }  // namespace utils
-}  // namespace tiny
+}  // namespace loco

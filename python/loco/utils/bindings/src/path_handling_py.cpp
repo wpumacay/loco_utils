@@ -1,11 +1,11 @@
 
 #include <pybind11/pybind11.h>
 
-#include <tinyutils/path_handling.hpp>
+#include <loco/utils/path_handling.hpp>
 
 namespace py = pybind11;
 
-namespace tiny {
+namespace loco {
 namespace utils {
 
 // NOLINTNEXTLINE(runtime/references)
@@ -17,4 +17,4 @@ void bindings_path_handling_module(py::module& m) {
 }
 
 }  // namespace utils
-}  // namespace tiny
+}  // namespace loco

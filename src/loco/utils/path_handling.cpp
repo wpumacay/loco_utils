@@ -1,7 +1,10 @@
+// clang-format off
 #include <sstream>
-#include <tinyutils/path_handling.hpp>
 
-namespace tiny {
+#include <loco/utils/path_handling.hpp>
+// clang-format on
+
+namespace loco {
 namespace utils {
 
 auto GetFilename(const std::string &filepath) -> std::string {
@@ -36,4 +39,4 @@ auto GetFilenameNoExtension(const std::string &filepath) -> std::string {
 }
 
 }  // namespace utils
-}  // namespace tiny
+}  // namespace loco

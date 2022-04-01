@@ -1,5 +1,5 @@
 #include <iostream>
-#include <tinyutils/common.hpp>
+#include <loco/utils/common.hpp>
 
 class Foo {
     ADD_CLASS_SMART_POINTERS(Foo)

@@ -1,7 +1,7 @@
 
-#include <tinyutils/perlin_noise.hpp>
+#include <loco/utils/perlin_noise.hpp>
 
-namespace tiny {
+namespace loco {
 namespace utils {
 
 // @todo(wilbert): The variables below are not actually accessible, but
@@ -206,4 +206,4 @@ auto PerlinNoise::_Perlin(float x, float y) -> float {
 }
 
 }  // namespace utils
-}  // namespace tiny
+}  // namespace loco

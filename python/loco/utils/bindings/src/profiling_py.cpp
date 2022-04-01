@@ -1,20 +1,21 @@
 #include <pybind11/pybind11.h>
 
-#include <tinyutils/profiling.hpp>
+#include <loco/utils/profiling.hpp>
 
 namespace py = pybind11;
 
-namespace tiny {
+namespace loco {
 namespace utils {
 
 // NOLINTNEXTLINE(runtime/references)
 void bindings_profiling_module(py::module& m) {
     py::class_<ProfilerTimer>(m, "ProfilerTimer")
-        .def(py::init([](const std::string& timer_name,
-                         const std::string& session_name, const bool& verbose) {
-            return std::make_unique<ProfilerTimer>(
-                timer_name.c_str(), session_name.c_str(), verbose);
-        }));
+        .def(py::init(
+            [](const std::string& timer_name,
+               const std::string& session_name) -> ProfilerTimer::uptr {
+                return std::make_unique<ProfilerTimer>(timer_name.c_str(),
+                                                       session_name.c_str());
+            }));
 
     py::enum_<IProfilerSession::eType>(m, "SessionType", py::arithmetic())
         .value("INTERNAL", IProfilerSession::eType::INTERNAL)
@@ -26,12 +27,13 @@ void bindings_profiling_module(py::module& m) {
         .def_static("Release", &Profiler::Release)
         .def_static("BeginSession", &Profiler::BeginSession)
         .def_static("EndSession", &Profiler::EndSession)
-        .def_static("CreateTimer", [](const std::string& timer_name,
-                                      const std::string& session_name) {
-            return std::make_unique<ProfilerTimer>(timer_name.c_str(),
-                                                   session_name.c_str());
-        });
+        .def_static("CreateTimer",
+                    [](const std::string& timer_name,
+                       const std::string& session_name) -> ProfilerTimer::uptr {
+                        return std::make_unique<ProfilerTimer>(
+                            timer_name.c_str(), session_name.c_str());
+                    });
 }
 
 }  // namespace utils
-}  // namespace tiny
+}  // namespace loco

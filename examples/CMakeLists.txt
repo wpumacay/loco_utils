@@ -1,25 +1,31 @@
 # ~~~
-# CMake configuration for examples of this project's usage
+# CMake configuration for C++ examples
 # ~~~
 
-if(NOT TINYUTILS_BUILD_EXAMPLES)
-  loco_message("Examples are not required for the current build")
+if(NOT LOCOUTILS_BUILD_EXAMPLES)
   return()
 endif()
 
-set(TINYUTILS_EXAMPLE_FILES
-    "${CMAKE_CURRENT_SOURCE_DIR}/example_logger_console.cpp"
-    "${CMAKE_CURRENT_SOURCE_DIR}/example_logger_file.cpp"
-    "${CMAKE_CURRENT_SOURCE_DIR}/example_path_handling.cpp"
-    "${CMAKE_CURRENT_SOURCE_DIR}/example_perlin_noise.cpp"
-    "${CMAKE_CURRENT_SOURCE_DIR}/example_profiler_external_chrome.cpp"
-    "${CMAKE_CURRENT_SOURCE_DIR}/example_smart_pointers_macro.cpp"
-    "${CMAKE_CURRENT_SOURCE_DIR}/example_timing.cpp")
+if(NOT TARGET loco::utils)
+  loco_message("Examples require the [loco::utils] target to be defined"
+               LOG_LEVEL WARNING)
+  return()
+endif()
 
-foreach(ex_file IN LISTS TINYUTILS_EXAMPLE_FILES)
-  # Get the name of the target for the current example
-  get_filename_component(ex_target_name ${ex_file} NAME_WLE)
-  # Create the example target for the current example file
-  add_executable(${ex_target_name} ${ex_file})
-  target_link_libraries(${ex_target_name} PRIVATE TinyUtilsCpp)
+# -------------------------------------
+# List of all examples to be built
+set(LOCOUTILS_EXAMPLES_LIST
+    ${CMAKE_CURRENT_SOURCE_DIR}/example_logger_console.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/example_logger_file.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/example_path_handling.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/example_perlin_noise.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/example_profiler_external_chrome.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/example_smart_pointers_macro.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/example_timing.cpp)
+
+# -------------------------------------
+# Create all the examples targets
+foreach(example_filepath IN LISTS LOCOUTILS_EXAMPLES_LIST)
+  loco_setup_single_file_example(${example_filepath} TARGET_DEPENDENCIES
+                                 loco::utils)
 endforeach()

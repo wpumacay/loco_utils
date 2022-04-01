@@ -1,10 +1,10 @@
 #include <pybind11/pybind11.h>
 
-#include <tinyutils/logging.hpp>
+#include <loco/utils/logging.hpp>
 
 namespace py = pybind11;
 
-namespace tiny {
+namespace loco {
 namespace utils {
 
 // NOLINTNEXTLINE(runtime/references)
@@ -51,4 +51,4 @@ void bindings_logging_module(py::module& m) {
 }
 
 }  // namespace utils
-}  // namespace tiny
+}  // namespace loco
