@@ -7,17 +7,21 @@ namespace py = pybind11;
 namespace loco {
 namespace utils {
 
-// NOLINTNEXTLINE(runtime/references)
-void bindings_perlin_noise_module(py::module& m) {
-    py::class_<PerlinNoise>(m, "PerlinNoise")
-        .def_static("Init", &PerlinNoise::Init)
-        .def_static("Release", &PerlinNoise::Release)
-        .def_static("Config", &PerlinNoise::Config, py::arg("num_octaves"),
-                    py::arg("persistance"), py::arg("lacunarity"),
-                    py::arg("noise_scale"))
-        .def_static("Sample1d", &PerlinNoise::Sample1d, py::arg("x"))
-        .def_static("Sample2d", &PerlinNoise::Sample2d, py::arg("x"),
-                    py::arg("y"));
+// NOLINTNEXTLINE
+void bindings_perlin_noise_module(py::module m) {
+    {
+        using Class = PerlinNoise;
+        // NOLINTNEXTLINE
+        py::class_<Class>(m, "PerlinNoise")
+            .def_static("Init", &Class::Init)
+            .def_static("Release", &Class::Release)
+            .def_static("Config", &Class::Config, py::arg("num_octaves"),
+                        py::arg("persistance"), py::arg("lacunarity"),
+                        py::arg("noise_scale"))
+            .def_static("Sample1d", &Class::Sample1d, py::arg("x"))
+            .def_static("Sample2d", &Class::Sample2d, py::arg("x"),
+                        py::arg("y"));
+    }
 }
 
 }  // namespace utils

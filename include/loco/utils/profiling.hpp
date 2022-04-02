@@ -79,6 +79,8 @@ class ProfilerTimer {
 /// Interface for profiling sessions, which are used to handle profiling
 /// results (saving to disk, etc.)
 class IProfilerSession {
+    ADD_CLASS_SMART_POINTERS(IProfilerSession)
+
  public:
     /// Available types of sessions
     enum class eType : uint8_t {
@@ -151,6 +153,8 @@ class IProfilerSession {
 /// Profiling session that stores results for later usage of internal
 /// tooling
 class ProfilerSessionInternal : public IProfilerSession {
+    ADD_CLASS_SMART_POINTERS(ProfilerSessionInternal)
+
  public:
     /// Creates a session that stores profiling results for usage with
     /// internal tooling
@@ -193,6 +197,8 @@ class ProfilerSessionInternal : public IProfilerSession {
 /// Profiling session that saves the results to disk in the chrome-tracing
 /// tool required format
 class ProfilerSessionExtChrome : public IProfilerSession {
+    ADD_CLASS_SMART_POINTERS(ProfilerSessionInternal)
+
  public:
     /// Creates a session that saves its results to disk in the
     /// chrome-tracing tool format (.json)
@@ -239,6 +245,8 @@ class ProfilerSessionExtChrome : public IProfilerSession {
 
 /// Profiler module(singleton) with support for multiple sessions
 class Profiler {
+    ADD_CLASS_SMART_POINTERS(Profiler)
+
  public:
     /// Initializes profiler module(singleton)
     static void Init(const IProfilerSession::eType& type =

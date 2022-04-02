@@ -7,32 +7,32 @@ namespace py = pybind11;
 namespace loco {
 namespace utils {
 
-// NOLINTNEXTLINE(runtime/references)
-void bindings_profiling_module(py::module& m) {
-    py::class_<ProfilerTimer>(m, "ProfilerTimer")
-        .def(py::init(
-            [](const std::string& timer_name,
-               const std::string& session_name) -> ProfilerTimer::uptr {
-                return std::make_unique<ProfilerTimer>(timer_name.c_str(),
-                                                       session_name.c_str());
+// NOLINTNEXTLINE
+void bindings_profiling_module(py::module m) {
+    {
+        using Enum = IProfilerSession::eType;
+        py::enum_<Enum>(m, "SessionType", py::arithmetic())
+            .value("INTERNAL", Enum::INTERNAL)
+            .value("EXTERNAL_CHROME", Enum::EXTERNAL_CHROME);
+    }
+
+    {
+        using Class = ProfilerTimer;
+        py::class_<Class>(m, "ProfilerTimer")
+            .def(py::init([](const std::string& timer_name,
+                             const std::string& session_name) -> Class::uptr {
+                return Class::CreateUnique(timer_name, session_name);
             }));
+    }
 
-    py::enum_<IProfilerSession::eType>(m, "SessionType", py::arithmetic())
-        .value("INTERNAL", IProfilerSession::eType::INTERNAL)
-        .value("EXTERNAL_CHROME", IProfilerSession::eType::EXTERNAL_CHROME);
-
-    py::class_<Profiler>(m, "Profiler")
-        .def_static("Init", &Profiler::Init,
-                    py::arg("type") = IProfilerSession::eType::EXTERNAL_CHROME)
-        .def_static("Release", &Profiler::Release)
-        .def_static("BeginSession", &Profiler::BeginSession)
-        .def_static("EndSession", &Profiler::EndSession)
-        .def_static("CreateTimer",
-                    [](const std::string& timer_name,
-                       const std::string& session_name) -> ProfilerTimer::uptr {
-                        return std::make_unique<ProfilerTimer>(
-                            timer_name.c_str(), session_name.c_str());
-                    });
+    {
+        using Class = Profiler;
+        py::class_<Class>(m, "Profiler")
+            .def_static("Init", &Class::Init, py::arg("type"))
+            .def_static("Release", &Class::Release)
+            .def_static("BeginSession", &Class::BeginSession, py::arg("name"))
+            .def_static("EndSession", &Class::EndSession, py::arg("name"));
+    }
 }
 
 }  // namespace utils

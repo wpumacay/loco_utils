@@ -41,6 +41,10 @@ endif()
 # Notice that we're using a forked version in which usage of unique-ptr is
 # allowed, as we use this functionality in some other parent projects
 # ------------------------------------------------------------------------------
+
+# Hint to Pybind11 that we want to use the newer FindPython module from CMake
+set(PYBIND11_FINDPYTHON ON CACHE BOOL "Use newer FindPython (CMake 3.15+)")
+
 loco_configure_git_dependency(
     TARGET pybind11
     REPO https://github.com/pybind/pybind11.git
@@ -50,7 +54,7 @@ loco_configure_git_dependency(
       -DPYBIND11_TEST=OFF
     DISCARD_UNLESS LOCOUTILS_BUILD_PYTHON_BINDINGS)
 
-if(NOT pybind11_FOUND)
+if(LOCOUTILS_BUILD_PYTHON_BINDINGS AND (NOT pybind11_FOUND))
   loco_message("Requested Python bindings, but couldn't find Pybind11 :("
                LOG_LEVEL FATAL_ERROR)
 endif()
