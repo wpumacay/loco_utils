@@ -14,6 +14,7 @@
 build/
 dist/
 tmp/
+.clangd/
 .vscode/
 .cache/
 *.egg-info/
