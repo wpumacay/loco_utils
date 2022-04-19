@@ -1,4 +1,3 @@
-#include <loco/utils/common.hpp>
 #include <loco/utils/logging.hpp>
 #include <loco/utils/profiling.hpp>
 #include <thread>

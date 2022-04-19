@@ -1,5 +1,4 @@
 #include <fstream>
-#include <loco/utils/common.hpp>
 #include <loco/utils/logging.hpp>
 #include <loco/utils/perlin_noise.hpp>
 

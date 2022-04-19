@@ -1,7 +1,11 @@
 
-#include <loco/utils/common.hpp>
 #include <loco/utils/timing.hpp>
 #include <thread>
+
+// --------------------------------
+// @todo(wilbert): check/validate generated JSON file for profiling session
+// @todo(wilbert): potentially update profiling after watching cppcon lec.
+// --------------------------------
 
 auto main() -> int {
     loco::utils::Logger::Init();
@@ -21,7 +25,7 @@ auto main() -> int {
                      .count();
     LOG_WARN("now: {0}", time_stamp);
 
-    constexpr size_t NUM_STEPS = 1000;
+    constexpr size_t NUM_STEPS = 10;
     for (size_t i = 0; i < NUM_STEPS; i++) {
         loco::utils::Clock::Tick();
         loco::utils::Clock::Tick("lapse_1");
@@ -41,6 +45,7 @@ auto main() -> int {
         loco::utils::Clock::Tock("lapse_4");
         loco::utils::Clock::Tock();
 
+        LOG_TRACE("step           : {0}", i);
         LOG_TRACE("wall-time      : {0}", loco::utils::Clock::GetWallTime());
         LOG_TRACE("time-step      : {0}", loco::utils::Clock::GetTimeStep());
         LOG_TRACE("avg-time-step  : {0}", loco::utils::Clock::GetAvgTimeStep());

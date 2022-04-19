@@ -13,12 +13,13 @@ jobs:
       fail-fast: false
       matrix:
         os: [windows-latest]
-        build-type: [Release, Debug, RelWithDebInfo]
+        build-type: [Release, Debug, RelWithDebInfo,MinSizeRel]
         python:
           - 3.6
           - 3.7
           - 3.8
           - 3.9
+          - 3.10
 
     name: "Build: ${{matrix.os}} • ${{matrix.python}} • ${{matrix.build-type}}"
     runs-on: ${{matrix.os}}
@@ -32,7 +33,7 @@ jobs:
         python-version: ${{matrix.python}}
 
     - name: Prepare Python Environment
-      run: python -m pip install -r requirements.txt
+      run: python -m pip install -r requirements-dev.txt
 
     - name: Update CMake
       uses: jwlawson/actions-setup-cmake@v1.10
@@ -42,3 +43,6 @@ jobs:
 
     - name: Build C++ Project
       run: cmake --build ${{github.workspace}}/build --config ${{matrix.build-type}}
+
+    - name: Run examples (sanity-check)
+      run: .\scripts\run_examples.bat
