@@ -1,7 +1,7 @@
 repos:
 # Some generally used hooks for sanity-check
 -   repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.0.1
+    rev: v4.2.0
     hooks:
     -   id: check-added-large-files
     -   id: check-case-conflict
@@ -11,13 +11,15 @@ repos:
     -   id: end-of-file-fixer
     -   id: trailing-whitespace
     -   id: mixed-line-ending
+        args: [--fix=lf]
+    -   id: no-commit-to-branch
+        args: [--branch, main]
 
 # Applies formating and linting to CMake files
 -   repo: https://github.com/cheshirekow/cmake-format-precommit
     rev: v0.6.13
     hooks:
     -   id: cmake-format
-        additional_dependencies: [pyyaml]
         types: [file]
         files: (\.cmake|CMakeLists.txt)(.in)?$
     -   id: cmake-lint
@@ -38,3 +40,8 @@ repos:
         args: [-i]
     -   id: clang-tidy
     -   id: cpplint
+    -   id: cppcheck
+        args: [--template=gcc, --std=c++11,
+               --enable=style,performance,warning,portability, --inline-suppr,
+               --suppress=internalAstError, --suppress=unmatchedSuppression,
+               --inconclusive, -ithird_party]

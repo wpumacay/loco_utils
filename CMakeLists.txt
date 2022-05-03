@@ -6,7 +6,7 @@ include(FetchContent)
 FetchContent_Declare(
   loco_cmake
   GIT_REPOSITORY https://github.com/wpumacay/loco_cmake.git
-  GIT_TAG main
+  GIT_TAG dev
   GIT_PROGRESS TRUE
   GIT_SHALLOW TRUE)
 FetchContent_MakeAvailable(loco_cmake)
@@ -30,6 +30,14 @@ option(LOCOUTILS_BUILD_DOCS "Build documentation (requires Doxygen)" OFF)
 # -------------------------------------
 # Initialize the project using our helper modules :D
 loco_initialize_project()
+
+# -------------------------------------
+# Setup C/C++ static-analyzers
+if(LOCOUTILS_IS_ROOT_PROJECT)
+  loco_setup_cppcheck()
+  loco_setup_cpplint()
+  loco_setup_clang_tidy()
+endif()
 
 # -------------------------------------
 # Get the required third-party dependencies
