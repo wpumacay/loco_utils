@@ -1,14 +1,15 @@
-# Tiny-Utils
+# Loco-Utils
 
-A small set of C/C++ helper functionality that is used alongside various of my projects
+A small set of C/C++ helper functions and macros that I used alongside various
+projects related to the `Loco` framework I'm currently developing.
 
 ## Build Status
 
-| Build   | Status                                                                                                                                                                      |
-| ------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Ubuntu  | [![ci-linux](https://github.com/wpumacay/tiny_utils/actions/workflows/ci-linux.yml/badge.svg)](https://github.com/wpumacay/tiny_utils/actions/workflows/ci-linux.yml)       |
-| Windows | [![ci-windows](https://github.com/wpumacay/tiny_utils/actions/workflows/ci-windows.yml/badge.svg)](https://github.com/wpumacay/tiny_utils/actions/workflows/ci-windows.yml) |
-| MacOS   | [![ci-macos](https://github.com/wpumacay/tiny_utils/actions/workflows/ci-macos.yml/badge.svg)](https://github.com/wpumacay/tiny_utils/actions/workflows/ci-macos.yml)       |
+| Build   | Status
+| ------- | ------------------------------
+| Ubuntu  | [![ci-linux][0]][1]       |
+| Windows | [![ci-windows][2]][3]     |
+| MacOS   | [![ci-macos][4]][5]       |
 
 ## How to Use
 
@@ -19,12 +20,12 @@ to be installed. So, there are two ways you can use this project alongside yours
 * Include via `add_subdirectory`: This is the quickest way to integrate the
   project alongside yours. You'll have to download the source code to some folder
   either by cloning the repo, or by adding it as a `git-submodule`. Either way,
-  let's say you placed the source into `SOME_FOLDER/tiny_utils`. Then you'll just
+  let's say you placed the source into `SOME_FOLDER/loco_utils`. Then you'll just
   have to do the following in some part of your CMake setup:
 
   ```cmake
     # On some part of your CMake configuration rules
-    add_subdirectory(SOME_FOLDER/tiny_utils)
+    add_subdirectory(SOME_FOLDER/loco_utils)
   ```
 
 * Get it via `FetchContent`: This is an option that doesn't require for you to
@@ -35,19 +36,19 @@ to be installed. So, there are two ways you can use this project alongside yours
     # Set where to place source-code and where to place binaries/logs
     set(SOME_SRC_PATH "Some-source-path-here")
     set(SOME_BUILD_PATH "Some-build-path-here")
-    # Define some extra cmake-args to pass to this project (tiny_utils)
-    set(SOME_CMAKE_ARGS "-DTINYUTILS_BUILD_EXAMPLES=OFF -DTINY_UTILS_BUILD_DOCS=OFF")
+    # Define some extra cmake-args to pass to this project (loco_utils)
+    set(SOME_CMAKE_ARGS "-DLOCOUTILS_BUILD_EXAMPLES=OFF -DLOCOUTILS_BUILD_DOCS=OFF")
     # On some part where you setup third-party dependencies
-    FetchContent(tiny_utils
-        GIT_REPOSITORY "https://github.com/wpumacay/tiny_utils.git"
+    FetchContent(loco_utils
+        GIT_REPOSITORY "https://github.com/wpumacay/loco_utils.git"
         GIT_PROGRESS TRUE
         USES_TERMINAL_DOWNLOAD TRUE
-        PREFIX "${SOME_SRC_PATH}/tiny_utils"
-        DOWNLOAD_DIR "${SOME_SRC_PATH}/tiny_utils"
-        SOURCE_DIR "${SOME_SRC_PATH}/tiny_utils/source"
-        BINARY_DIR "${SOME_BUILD_PATH}/tiny_utils/build"
-        STAMP_DIR "${SOME_BUILD_PATH}/tiny_utils/stamp"
-        TMP_DIR "${SOME_BUILD_PATH}/tiny_utils/tmp"
+        PREFIX "${SOME_SRC_PATH}/loco_utils"
+        DOWNLOAD_DIR "${SOME_SRC_PATH}/loco_utils"
+        SOURCE_DIR "${SOME_SRC_PATH}/loco_utils/source"
+        BINARY_DIR "${SOME_BUILD_PATH}/loco_utils/build"
+        STAMP_DIR "${SOME_BUILD_PATH}/loco_utils/stamp"
+        TMP_DIR "${SOME_BUILD_PATH}/loco_utils/tmp"
         CMAKE_ARGS -DCMAKE_BUILD_TYPE=Release
                    -DCMAKE_GENERATOR=${CMAKE_GENERATOR}
                    -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER}
@@ -64,7 +65,7 @@ to be installed. So, there are two ways you can use this project alongside yours
 * Install and use `find_package`: This last option is not available yet, but once
   we add the install rules for the CMake project, you'll be able to just **install**
   the library into your system, import it using **find_package**, and **linking**
-  using the exposed `TinyUtilsCpp` target, as shown below:
+  using the exposed `LocoUtilsCpp` target, as shown below:
 
   * *Installing the project*
 
@@ -79,7 +80,7 @@ to be installed. So, there are two ways you can use this project alongside yours
 
   ```cmake
     # Locate the installed project using find_package()
-    find_package(TinyUtils REQUIRED)
+    find_package(LocoUtils REQUIRED)
   ```
 
 ## Install the Python bindings
@@ -95,3 +96,12 @@ or `pip install --verbose .` (add verbose just to check if everything went well)
   # Option-2
   pip install --verbose .
 ```
+
+---
+
+[0]: <https://github.com/wpumacay/loco_utils/actions/workflows/ci-linux.yml/badge.svg> (ci-linux-badge)
+[1]: <https://github.com/wpumacay/loco_utils/actions/workflows/ci-linux.yml> (ci-linux-status)
+[2]: <https://github.com/wpumacay/loco_utils/actions/workflows/ci-windows.yml/badge.svg> (ci-windows-badge)
+[3]: <https://github.com/wpumacay/loco_utils/actions/workflows/ci-windows.yml> (ci-windows-status)
+[4]: <https://github.com/wpumacay/loco_utils/actions/workflows/ci-macos.yml/badge.svg> (ci-macos-badge)
+[5]: <https://github.com/wpumacay/loco_utils/actions/workflows/ci-macos.yml> (ci-macos-status)
