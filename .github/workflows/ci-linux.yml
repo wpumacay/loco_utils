@@ -13,7 +13,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest]
-        build-type: [Release, Debug, RelWithDebInfo]
+        build-type: [Release, Debug]
         python:
           - 3.6
           - 3.7

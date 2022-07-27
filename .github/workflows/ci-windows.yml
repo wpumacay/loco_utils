@@ -13,13 +13,12 @@ jobs:
       fail-fast: false
       matrix:
         os: [windows-latest]
-        build-type: [Release, Debug, RelWithDebInfo,MinSizeRel]
+        build-type: [Release, Debug]
         python:
           - 3.6
           - 3.7
           - 3.8
           - 3.9
-          - 3.10
 
     name: "Build: ${{matrix.os}} • ${{matrix.python}} • ${{matrix.build-type}}"
     runs-on: ${{matrix.os}}
