@@ -42,6 +42,3 @@ jobs:
 
     - name: Build C++ Project
       run: cmake --build ${{github.workspace}}/build --config ${{matrix.build-type}}
-
-    - name: Run examples (sanity-check)
-      run: .\scripts\run_examples.bat
