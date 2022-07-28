@@ -32,14 +32,6 @@ option(LOCOUTILS_BUILD_DOCS "Build documentation (requires Doxygen)" OFF)
 loco_initialize_project()
 
 # -------------------------------------
-# Setup C/C++ static-analyzers
-if(LOCOUTILS_IS_ROOT_PROJECT)
-  loco_setup_cppcheck()
-  loco_setup_cpplint()
-  loco_setup_clang_tidy()
-endif()
-
-# -------------------------------------
 # Get the required third-party dependencies
 add_subdirectory(third_party)
 
