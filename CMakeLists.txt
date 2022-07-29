@@ -74,3 +74,19 @@ add_subdirectory(examples)
 # -------------------------------------
 # Add the set of Python bindings created for LocoUtilsCpp
 add_subdirectory(python/loco/utils/bindings)
+
+# cmake-format: off
+# -------------------------------------
+# Setup documentation for our target
+loco_setup_cppdocs(LocoUtilsCpp
+  DOXYGEN_FILE_IN ${CMAKE_CURRENT_SOURCE_DIR}/docs/Doxyfile.in
+  DOXYGEN_OUTPUT_DIR ${CMAKE_CURRENT_BINARY_DIR}/docs/Doxygen
+  DOXYGEN_GENERATE_HTML FALSE
+  DOXYGEN_GENERATE_LATEX FALSE
+  DOXYGEN_GENERATE_XML TRUE
+  DOXYGEN_QUIET TRUE
+  SPHINX_FILE_IN ${CMAKE_CURRENT_SOURCE_DIR}/docs/conf.py.in
+  SPHINX_OUTPUT_DIR ${CMAKE_CURRENT_BINARY_DIR}/docs/Sphinx
+  SPHINX_BREATHE_PROJECT LocoUtilsCpp
+  SPHINX_DOXYGEN_XML_OUTDIR ${CMAKE_CURRENT_BINARY_DIR}/docs/Doxygen/xml)
+# cmake-format: on
