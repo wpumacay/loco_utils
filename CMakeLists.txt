@@ -16,7 +16,7 @@ include(${loco_cmake_SOURCE_DIR}/Index.cmake)
 # Define our project :)
 project(
   LocoUtils
-  VERSION 0.1.0
+  VERSION 0.1.2
   DESCRIPTION "A library of common functionality used alongside my projects"
   HOMEPAGE_URL "https://github.com/wpumacay/loco_utils"
   LANGUAGES C CXX)
@@ -32,27 +32,29 @@ option(LOCOUTILS_BUILD_DOCS "Build documentation (requires Doxygen)" OFF)
 loco_initialize_project()
 
 # -------------------------------------
-# Get the required third-party dependencies
-add_subdirectory(third_party)
+# Allow the usage of our helper macros and functions
+list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")
+
+# -------------------------------------
+# Bring our dependencies accordingly
+include(LocoUtilsDependencies)
 
 # cmake-format: off
 # -------------------------------------
 # Setup the main C++ target `LocoUtilsCpp`
-add_library(LocoUtilsCpp)
-loco_setup_target(
-  LocoUtilsCpp
-  SOURCES
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/loco/utils/common.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/loco/utils/logging.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/loco/utils/timing.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/loco/utils/profiling.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/loco/utils/path_handling.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/loco/utils/perlin_noise.cpp
-  INCLUDE_DIRECTORIES
-    ${CMAKE_CURRENT_SOURCE_DIR}/include
-  TARGET_DEPENDENCIES
-    spdlog::spdlog
-  WARNINGS_AS_ERRORS FALSE)
+loco_create_target(LocoUtilsCpp STATIC
+ SOURCES
+   ${CMAKE_CURRENT_SOURCE_DIR}/src/loco/utils/common.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/src/loco/utils/logging.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/src/loco/utils/timing.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/src/loco/utils/profiling.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/src/loco/utils/path_handling.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/src/loco/utils/perlin_noise.cpp
+ INCLUDE_DIRECTORIES
+   ${CMAKE_CURRENT_SOURCE_DIR}/include
+ TARGET_DEPENDENCIES
+   spdlog::spdlog
+ WARNINGS_AS_ERRORS FALSE)
 # cmake-format: on
 
 # -------------------------------------
@@ -73,20 +75,22 @@ add_subdirectory(examples)
 
 # -------------------------------------
 # Add the set of Python bindings created for LocoUtilsCpp
-add_subdirectory(python/loco/utils/bindings)
+# add_subdirectory(python/loco/utils/bindings)
 
-# cmake-format: off
-# -------------------------------------
-# Setup documentation for our target
-loco_setup_cppdocs(LocoUtilsCpp
-  DOXYGEN_FILE_IN ${CMAKE_CURRENT_SOURCE_DIR}/docs/Doxyfile.in
-  DOXYGEN_OUTPUT_DIR ${CMAKE_CURRENT_BINARY_DIR}/docs/Doxygen
-  DOXYGEN_GENERATE_HTML FALSE
-  DOXYGEN_GENERATE_LATEX FALSE
-  DOXYGEN_GENERATE_XML TRUE
-  DOXYGEN_QUIET TRUE
-  SPHINX_FILE_IN ${CMAKE_CURRENT_SOURCE_DIR}/docs/conf.py.in
-  SPHINX_OUTPUT_DIR ${CMAKE_CURRENT_BINARY_DIR}/docs/Sphinx
-  SPHINX_BREATHE_PROJECT LocoUtilsCpp
-  SPHINX_DOXYGEN_XML_OUTDIR ${CMAKE_CURRENT_BINARY_DIR}/docs/Doxygen/xml)
-# cmake-format: on
+if(LOCOUTILS_BUILD_DOCS)
+  # cmake-format: off
+  # -------------------------------------
+  # Setup documentation for our target
+  loco_setup_cppdocs(LocoUtilsCpp
+    DOXYGEN_FILE_IN ${CMAKE_CURRENT_SOURCE_DIR}/docs/Doxyfile.in
+    DOXYGEN_OUTPUT_DIR ${CMAKE_CURRENT_BINARY_DIR}/docs/Doxygen
+    DOXYGEN_GENERATE_HTML FALSE
+    DOXYGEN_GENERATE_LATEX FALSE
+    DOXYGEN_GENERATE_XML TRUE
+    DOXYGEN_QUIET TRUE
+    SPHINX_FILE_IN ${CMAKE_CURRENT_SOURCE_DIR}/docs/conf.py.in
+    SPHINX_OUTPUT_DIR ${CMAKE_CURRENT_BINARY_DIR}/docs/Sphinx
+    SPHINX_BREATHE_PROJECT LocoUtilsCpp
+    SPHINX_DOXYGEN_XML_OUTDIR ${CMAKE_CURRENT_BINARY_DIR}/docs/Doxygen/xml)
+  # cmake-format: on
+endif()

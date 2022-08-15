@@ -26,8 +26,3 @@ tmp/
 
 # logging files
 *.json
-
-# Don't include anything from the third_party folder, but keep it, as CMake
-# handles dependencies and expects this folder to place the downloaded sources
-third_party/*
-!third_party/CMakeLists.txt
