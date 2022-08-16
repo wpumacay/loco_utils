@@ -93,17 +93,37 @@ typename _Unique_if<T>::_Known_bound make_unique(Args &&...) = delete;
 // snippet-url:
 // https://github.com/facebookresearch/habitat-sim/blob/3d810b9c006976be8bd15b4ca8cf5170c5ad398d/src/esp/core/esp.h#L108
 // NOLINTNEXTLINE @todo(wilbert) might be possible to change to contexpr?
-#define ADD_CLASS_SMART_POINTERS(T)                               \
- public:                                                          \
-    typedef std::shared_ptr<T> ptr;                               \
-    typedef std::unique_ptr<T> uptr;                              \
-    typedef std::shared_ptr<const T> cptr;                        \
-    typedef std::unique_ptr<const T> ucptr;                       \
-    template <typename... Targs>                                  \
-    static inline auto Create(Targs &&...args)->ptr {             \
-        return std::make_shared<T>(std::forward<Targs>(args)...); \
-    }                                                             \
-    template <typename... Targs>                                  \
-    static inline auto CreateUnique(Targs &&...args)->uptr {      \
-        return std::make_unique<T>(std::forward<Targs>(args)...); \
+#define LOCO_DEFINE_SMART_POINTERS(Classname)                             \
+ public:                                                                  \
+    using ptr = std::shared_ptr<Classname>;                               \
+    using cptr = std::shared_ptr<const Classname>;                        \
+    using uptr = std::unique_ptr<Classname>;                              \
+    using cuptr = std::unique_ptr<Classname>;                             \
+    template <typename... Targs>                                          \
+    static inline auto Create(Targs &&...args)->ptr {                     \
+        return std::make_shared<Classname>(std::forward<Targs>(args)...); \
+    }                                                                     \
+    template <typename... Targs>                                          \
+    static inline auto CreateUnique(Targs &&...args)->uptr {              \
+        return std::make_unique<Classname>(std::forward<Targs>(args)...); \
     }
+
+//----------------------------------------------------------------------------//
+//                    RAII Rule of five helper-macro                          //
+//----------------------------------------------------------------------------//
+// Macro based on helper macro from drake repo:
+// https://github.com/RobotLocomotion/drake/blob/master/common/drake_copyable.h
+// NOLINTNEXTLINE
+#define LOCO_NO_COPY_NO_MOVE_NO_ASSIGN(Classname)            \
+ public:                                                     \
+    Classname(const Classname &) = delete;                   \
+    auto operator=(const Classname &)->Classname & = delete; \
+    Classname(Classname &&) = delete;                        \
+    auto operator=(Classname &&)->Classname & = delete;
+
+// NOLINTNEXTLINE
+#define LOCO_DEFAULT_COPY_AND_MOVE_AND_ASSIGN(Classname)      \
+    Classname(const Classname &) = default;                   \
+    auto operator=(const Classname &)->Classname & = default; \
+    Classname(Classname &&) = default;                        \
+    auto operator=(Classname &&)->Classname & = default;

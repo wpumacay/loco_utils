@@ -21,6 +21,7 @@ set(LOCOUTILS_EXAMPLES_LIST
     ${CMAKE_CURRENT_SOURCE_DIR}/example_perlin_noise.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/example_profiler_external_chrome.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/example_smart_pointers_macro.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/example_raii_helper_macros.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/example_timing.cpp)
 
 # -------------------------------------

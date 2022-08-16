@@ -2,7 +2,7 @@
 #include <loco/utils/common.hpp>
 
 class Foo {
-    ADD_CLASS_SMART_POINTERS(Foo)
+    LOCO_DEFINE_SMART_POINTERS(Foo)
 
  public:
     Foo(std::string&& name, const float& pos_x, const float& pos_y)
