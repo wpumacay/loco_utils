@@ -62,21 +62,19 @@ loco_create_target(LocoUtilsCpp STATIC
 add_library(loco::utils ALIAS LocoUtilsCpp)
 
 # -------------------------------------
-# Show the properties of our main target
-loco_print_target_properties(LocoUtilsCpp)
-
-# -------------------------------------
-# Show some info of the this project
-loco_print_project_info()
-
-# -------------------------------------
 # Add the set of examples created along this project
-add_subdirectory(examples)
+if(NOT LOCOUTILS_BUILD_EXAMPLES)
+  add_subdirectory(examples)
+endif()
 
 # -------------------------------------
 # Add the set of Python bindings created for LocoUtilsCpp
-# add_subdirectory(python/loco/utils/bindings)
+if(NOT LOCOUTILS_BUILD_PYTHON_BINDINGS)
+  add_subdirectory(python/loco/utils/bindings)
+endif()
 
+# -------------------------------------
+# Build the required documentation accordingly
 if(LOCOUTILS_BUILD_DOCS)
   # cmake-format: off
   # -------------------------------------
@@ -94,3 +92,11 @@ if(LOCOUTILS_BUILD_DOCS)
     SPHINX_DOXYGEN_XML_OUTDIR ${CMAKE_CURRENT_BINARY_DIR}/docs/Doxygen/xml)
   # cmake-format: on
 endif()
+
+# -------------------------------------
+# Show the properties of our main target
+loco_print_target_properties(LocoUtilsCpp)
+
+# -------------------------------------
+# Show some info of the this project
+loco_print_project_info()

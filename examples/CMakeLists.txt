@@ -2,10 +2,6 @@
 # CMake configuration for C++ examples
 # ~~~
 
-if(NOT LOCOUTILS_BUILD_EXAMPLES)
-  return()
-endif()
-
 if(NOT TARGET loco::utils)
   loco_message("Examples require the [loco::utils] target to be defined"
                LOG_LEVEL WARNING)

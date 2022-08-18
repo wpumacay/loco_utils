@@ -12,6 +12,7 @@
 #include <unordered_map>
 
 #include <loco/utils/logging.hpp>
+#include "loco/utils/common.hpp"
 // clang-format on
 
 // Adapted from TheCherno's tutorial on profiling:
@@ -26,36 +27,25 @@ namespace utils {
 /// Result object returned by profiling functions
 struct ProfilerResult {
     /// Unique identifier for this profiling result
-    std::string name;
+    std::string name = "result";
     /// Starting timestamp (in microseconds)
-    int64_t time_start;
+    int64_t time_start = 0;
     /// Finishing timestamp (in microseconds)
-    int64_t time_end;
+    int64_t time_end = 0;
     /// Time duration (in milliseconds)
-    double time_duration;
+    double time_duration = 0.0;
 };
 
 /// Scoped profiling timer (tracks time of a function scope)
 class ProfilerTimer {
-    ADD_CLASS_SMART_POINTERS(ProfilerTimer)
+    // cppcheck-suppress unknownMacro
+    LOCO_DEFINE_SMART_POINTERS(ProfilerTimer)
+
+    LOCO_NO_COPY_NO_MOVE_NO_ASSIGN(ProfilerTimer);
 
  public:
     /// Creates and initializes a scoped-timer
     ProfilerTimer(std::string name, std::string session);
-
-    // @todo(wilbert): Check RAII again, we might be breaking something here
-
-    /// Copy constructor is disabled for this class
-    ProfilerTimer(const ProfilerTimer& other) = delete;
-
-    /// Copy assignment operator is disabled for this class
-    auto operator=(const ProfilerTimer& other) -> ProfilerTimer& = delete;
-
-    // Move constructor is disabled for this class
-    ProfilerTimer(ProfilerTimer&& other) = delete;
-
-    // Move assignment operator is disabled for this class
-    auto operator=(ProfilerTimer&& other) -> ProfilerTimer& = delete;
 
     /// Stops timer execution and releases scoped-timer resources
     ~ProfilerTimer();
@@ -79,7 +69,10 @@ class ProfilerTimer {
 /// Interface for profiling sessions, which are used to handle profiling
 /// results (saving to disk, etc.)
 class IProfilerSession {
-    ADD_CLASS_SMART_POINTERS(IProfilerSession)
+    // cppcheck-suppress unknownMacro
+    LOCO_DEFINE_SMART_POINTERS(IProfilerSession)
+
+    LOCO_NO_COPY_NO_MOVE_NO_ASSIGN(IProfilerSession);
 
  public:
     /// Available types of sessions
@@ -102,20 +95,6 @@ class IProfilerSession {
 
     /// Creates a profiler session with given name
     explicit IProfilerSession(std::string name) : m_Name(std::move(name)) {}
-
-    // @todo(wilbert): Check RAII again, we might be breaking something here
-
-    /// Copy constructor is disabled for this class
-    IProfilerSession(const IProfilerSession& other) = delete;
-
-    /// Copy assignment operator is disabled for this class
-    auto operator=(const IProfilerSession& other) -> IProfilerSession& = delete;
-
-    /// Move constructor is disabled for this class
-    IProfilerSession(IProfilerSession&& other) = delete;
-
-    /// Move assignment operator is disabled for this class
-    auto operator=(IProfilerSession&& other) -> IProfilerSession& = delete;
 
     /// Releases resources allocated by the session
     virtual ~IProfilerSession() = default;
@@ -153,26 +132,15 @@ class IProfilerSession {
 /// Profiling session that stores results for later usage of internal
 /// tooling
 class ProfilerSessionInternal : public IProfilerSession {
-    ADD_CLASS_SMART_POINTERS(ProfilerSessionInternal)
+    // cppcheck-suppress unknownMacro
+    LOCO_DEFINE_SMART_POINTERS(ProfilerSessionInternal)
+
+    LOCO_NO_COPY_NO_MOVE_NO_ASSIGN(ProfilerSessionInternal);
 
  public:
     /// Creates a session that stores profiling results for usage with
     /// internal tooling
     explicit ProfilerSessionInternal(const std::string& name);
-
-    /// Copy constructor (not available). Can only use first constructor
-    ProfilerSessionInternal(const ProfilerSessionInternal& other) = delete;
-
-    /// Copy assignment operator (not available). Can only use first constructor
-    auto operator=(const ProfilerSessionInternal& other)
-        -> ProfilerSessionInternal& = delete;
-
-    /// Move constructor (not available). Can only use first constructor
-    ProfilerSessionInternal(ProfilerSessionInternal&& other) = delete;
-
-    /// Move assignment operator (not available). Can only use first constructor
-    auto operator=(ProfilerSessionInternal&& other)
-        -> ProfilerSessionInternal& = delete;
 
     // Documentation inherited
     ~ProfilerSessionInternal() override = default;
@@ -197,26 +165,15 @@ class ProfilerSessionInternal : public IProfilerSession {
 /// Profiling session that saves the results to disk in the chrome-tracing
 /// tool required format
 class ProfilerSessionExtChrome : public IProfilerSession {
-    ADD_CLASS_SMART_POINTERS(ProfilerSessionInternal)
+    // cppcheck-suppress unknownMacro
+    LOCO_DEFINE_SMART_POINTERS(ProfilerSessionExtChrome)
+
+    LOCO_NO_COPY_NO_MOVE_NO_ASSIGN(ProfilerSessionExtChrome);
 
  public:
     /// Creates a session that saves its results to disk in the
     /// chrome-tracing tool format (.json)
     explicit ProfilerSessionExtChrome(const std::string& name);
-
-    /// Copy constructor (not available). Can only use first constructor
-    ProfilerSessionExtChrome(const ProfilerSessionExtChrome& other) = delete;
-
-    /// Copy assignment operator (not available). Can only use first constructor
-    auto operator=(const ProfilerSessionExtChrome& other)
-        -> ProfilerSessionExtChrome& = delete;
-
-    /// Move constructor (not available). Can only use first constructor
-    ProfilerSessionExtChrome(ProfilerSessionExtChrome&& other) = delete;
-
-    /// Move assignment operator (not available). Can only use first constructor
-    auto operator=(ProfilerSessionExtChrome&& other)
-        -> ProfilerSessionExtChrome& = delete;
 
     // Documentation inherited
     ~ProfilerSessionExtChrome() override = default;
@@ -245,7 +202,7 @@ class ProfilerSessionExtChrome : public IProfilerSession {
 
 /// Profiler module(singleton) with support for multiple sessions
 class Profiler {
-    ADD_CLASS_SMART_POINTERS(Profiler)
+    LOCO_DEFINE_SMART_POINTERS(ProfilerSessionExtChrome)
 
  public:
     /// Initializes profiler module(singleton)

@@ -2,11 +2,6 @@
 # CMake configuration rules used to generate Python Bindings via Pybind11
 # ~~~
 
-if(NOT LOCOUTILS_BUILD_PYTHON_BINDINGS)
-  loco_message("Bindings are not required for the current build")
-  return()
-endif()
-
 if(NOT TARGET loco::utils)
   loco_message("Bindings require the [loco::utils] target to be defined"
                LOG_LEVEL WARNING)

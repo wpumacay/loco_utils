@@ -39,8 +39,13 @@ void ProfilerTimer::_Stop() {
     double time_duration =
         static_cast<double>(time_end - time_start) * TO_SECONDS;
 
-    Profiler::WriteProfileResult({m_Name, time_start, time_end, time_duration},
-                                 m_Session);
+    ProfilerResult result;
+    result.name = m_Name;
+    result.time_start = time_start;
+    result.time_end = time_end;
+    result.time_duration = time_duration;
+
+    Profiler::WriteProfileResult(result, m_Session);
     m_Stopped = true;
 }
 

@@ -19,10 +19,6 @@ bool Logger::s_IsActive = false;
 Logger::eType Logger::s_Type = Logger::eType::CONSOLE_LOGGER;
 
 void Logger::Init(const Logger::eType &logger_type) {
-    if (s_IsActive) {
-        return;
-    }
-
     s_IsActive = true;
     s_Type = logger_type;
 

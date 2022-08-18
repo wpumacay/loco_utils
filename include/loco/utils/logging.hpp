@@ -34,6 +34,9 @@ class Logger {
     template <typename... Args>
     static void CoreTrace(fmt::basic_string_view<char> fmt,
                           const Args&... args) {
+        if (!Logger::s_IsActive) {
+            Logger::Init();
+        }
         if (s_CoreLogger) {
             s_CoreLogger->trace(fmt, args...);
         }
@@ -42,6 +45,9 @@ class Logger {
     template <typename... Args>
     static void CoreInfo(fmt::basic_string_view<char> fmt,
                          const Args&... args) {
+        if (!Logger::s_IsActive) {
+            Logger::Init();
+        }
         if (s_CoreLogger) {
             s_CoreLogger->info(fmt, args...);
         }
@@ -50,6 +56,9 @@ class Logger {
     template <typename... Args>
     static void CoreWarn(fmt::basic_string_view<char> fmt,
                          const Args&... args) {
+        if (!Logger::s_IsActive) {
+            Logger::Init();
+        }
         if (s_CoreLogger) {
             s_CoreLogger->warn(fmt, args...);
         }
@@ -58,6 +67,9 @@ class Logger {
     template <typename... Args>
     static void CoreError(fmt::basic_string_view<char> fmt,
                           const Args&... args) {
+        if (!Logger::s_IsActive) {
+            Logger::Init();
+        }
         if (s_CoreLogger) {
             s_CoreLogger->error(fmt, args...);
         }
@@ -66,6 +78,9 @@ class Logger {
     template <typename... Args>
     static void CoreCritical(fmt::basic_string_view<char> fmt,
                              const Args&... args) {
+        if (!Logger::s_IsActive) {
+            Logger::Init();
+        }
         if (s_CoreLogger) {
             s_CoreLogger->critical(fmt, args...);
         }
@@ -79,6 +94,9 @@ class Logger {
             return;
         }
 
+        if (!Logger::s_IsActive) {
+            Logger::Init();
+        }
         if (s_CoreLogger) {
             s_CoreLogger->critical(fmt, args...);
         }
@@ -91,6 +109,9 @@ class Logger {
     template <typename... Args>
     static void ClientTrace(fmt::basic_string_view<char> fmt,
                             const Args&... args) {
+        if (!Logger::s_IsActive) {
+            Logger::Init();
+        }
         if (s_ClientLogger) {
             s_ClientLogger->trace(fmt, args...);
         }
@@ -99,6 +120,9 @@ class Logger {
     template <typename... Args>
     static void ClientInfo(fmt::basic_string_view<char> fmt,
                            const Args&... args) {
+        if (!Logger::s_IsActive) {
+            Logger::Init();
+        }
         if (s_ClientLogger) {
             s_ClientLogger->info(fmt, args...);
         }
@@ -107,6 +131,9 @@ class Logger {
     template <typename... Args>
     static void ClientWarn(fmt::basic_string_view<char> fmt,
                            const Args&... args) {
+        if (!Logger::s_IsActive) {
+            Logger::Init();
+        }
         if (s_ClientLogger) {
             s_ClientLogger->warn(fmt, args...);
         }
@@ -115,6 +142,9 @@ class Logger {
     template <typename... Args>
     static void ClientError(fmt::basic_string_view<char> fmt,
                             const Args&... args) {
+        if (!Logger::s_IsActive) {
+            Logger::Init();
+        }
         if (s_ClientLogger) {
             s_ClientLogger->error(fmt, args...);
         }
@@ -123,6 +153,9 @@ class Logger {
     template <typename... Args>
     static void ClientCritical(fmt::basic_string_view<char> fmt,
                                const Args&... args) {
+        if (!Logger::s_IsActive) {
+            Logger::Init();
+        }
         if (s_ClientLogger) {
             s_ClientLogger->critical(fmt, args...);
         }
@@ -136,6 +169,9 @@ class Logger {
             return;
         }
 
+        if (!Logger::s_IsActive) {
+            Logger::Init();
+        }
         if (s_ClientLogger) {
             s_ClientLogger->critical(fmt, args...);
         }
