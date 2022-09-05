@@ -37,15 +37,12 @@ loco_find_or_fetch_dependency(
 # allowed, as we use this functionality in some other parent projects
 # ------------------------------------------------------------------------------
 
-# Hint to Pybind11 that we want to use the newer FindPython module from CMake
-set(PYBIND11_FINDPYTHON ON CACHE BOOL "Use newer FindPython (CMake 3.15+)")
-
 loco_find_or_fetch_dependency(
   USE_SYSTEM_PACKAGE FALSE
   PACKAGE_NAME pybind11
   LIBRARY_NAME pybind11
-  GIT_REPO https://github.com/pybind/pybind11.git
-  GIT_TAG v2.10.0
+  GIT_REPO https://github.com/RobotLocomotion/pybind11.git
+  GIT_TAG drake
   TARGETS pybind11::headers
   BUILD_ARGS
     -DPYBIND11_TEST=OFF

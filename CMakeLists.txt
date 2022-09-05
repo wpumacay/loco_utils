@@ -63,13 +63,13 @@ add_library(loco::utils ALIAS LocoUtilsCpp)
 
 # -------------------------------------
 # Add the set of examples created along this project
-if(NOT LOCOUTILS_BUILD_EXAMPLES)
+if(LOCOUTILS_BUILD_EXAMPLES)
   add_subdirectory(examples)
 endif()
 
 # -------------------------------------
 # Add the set of Python bindings created for LocoUtilsCpp
-if(NOT LOCOUTILS_BUILD_PYTHON_BINDINGS)
+if(LOCOUTILS_BUILD_PYTHON_BINDINGS)
   add_subdirectory(python/loco/utils/bindings)
 endif()
 
