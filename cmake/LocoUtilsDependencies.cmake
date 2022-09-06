@@ -37,6 +37,8 @@ loco_find_or_fetch_dependency(
 # allowed, as we use this functionality in some other parent projects
 # ------------------------------------------------------------------------------
 
+find_package(Git REQUIRED)
+
 loco_find_or_fetch_dependency(
   USE_SYSTEM_PACKAGE FALSE
   PACKAGE_NAME pybind11
@@ -46,6 +48,15 @@ loco_find_or_fetch_dependency(
   TARGETS pybind11::headers
   BUILD_ARGS
     -DPYBIND11_TEST=OFF
+  PATCH_COMMAND
+    "${GIT_EXECUTABLE}"
+    "apply"
+    "-q"
+    "${CMAKE_CURRENT_SOURCE_DIR}/cmake/pybind11-fix-vs2022.patch"
+    "||"
+    "${CMAKE_COMMAND}"
+    "-E"
+    "true"
   EXCLUDE_FROM_ALL)
 
 # cmake-format: on
