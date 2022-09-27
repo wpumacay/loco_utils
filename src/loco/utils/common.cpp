@@ -1,6 +1,8 @@
 // clang-format off
 #include <cassert>
 #include <sstream>
+#include <fstream>
+#include <iostream>
 
 #include <loco/utils/common.hpp>
 // clang-format on
@@ -47,10 +49,28 @@ auto Split(const std::string &txt, char separator) -> std::vector<std::string> {
 }
 
 auto PointerToHexAddress(const void *ptr) -> std::string {
-    std::stringstream ss;
+    std::stringstream hex_stream;
     // NOLINTNEXTLINE : allow reinterpret_cast just for this
-    ss << "0x" << std::hex << reinterpret_cast<std::intptr_t>(ptr);
-    return ss.str();
+    hex_stream << "0x" << std::hex << reinterpret_cast<std::intptr_t>(ptr);
+    return hex_stream.str();
+}
+
+auto GetFileContents(const char *filepath) -> std::string {
+    std::string file_contents;
+    std::stringstream file_stream;
+
+    std::ifstream file_handle;
+    file_handle.exceptions(std::ifstream::badbit);
+    try {
+        file_handle.open(filepath);
+        file_stream << file_handle.rdbuf();
+        file_handle.close();
+        file_contents = file_stream.str();
+    } catch (...) {
+        std::cout << "GetFileContents >>> couldn't read the contents of file "
+                  << filepath << '\n';
+    }
+    return file_contents;
 }
 
 }  // namespace utils

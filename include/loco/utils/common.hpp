@@ -24,6 +24,9 @@ auto Split(const std::string &txt, char separator = '/')
 /// @return String representation of the hex-address of the pointer
 auto PointerToHexAddress(const void *ptr) -> std::string;
 
+/// Returns a string with the contents of a given file
+auto GetFileContents(const char *filepath) -> std::string;
+
 }  // namespace utils
 }  // namespace loco
 
