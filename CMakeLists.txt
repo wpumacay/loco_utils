@@ -15,17 +15,17 @@ include(${loco_cmake_SOURCE_DIR}/Index.cmake)
 # -------------------------------------
 # Define our project :)
 project(
-  LocoUtils
+  Utils
   VERSION 0.1.2
   DESCRIPTION "A library of common functionality used alongside my projects"
-  HOMEPAGE_URL "https://github.com/wpumacay/loco_utils"
+  HOMEPAGE_URL "https://github.com/wpumacay/utils"
   LANGUAGES C CXX)
 
 # -------------------------------------
 # Define some options the user can set before|while configuring the project
-option(LOCOUTILS_BUILD_PYTHON_BINDINGS "Build bindings (requires Pybind11)" ON)
-option(LOCOUTILS_BUILD_EXAMPLES "Build C++ examples" ON)
-option(LOCOUTILS_BUILD_DOCS "Build documentation (requires Doxygen)" OFF)
+option(UTILS_BUILD_PYTHON_BINDINGS "Build bindings (requires Pybind11)" ON)
+option(UTILS_BUILD_EXAMPLES "Build C++ examples" ON)
+option(UTILS_BUILD_DOCS "Build documentation (requires Doxygen)" OFF)
 
 # -------------------------------------
 # Initialize the project using our helper modules :D
@@ -37,12 +37,12 @@ list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")
 
 # -------------------------------------
 # Bring our dependencies accordingly
-include(LocoUtilsDependencies)
+include(Dependencies)
 
 # cmake-format: off
 # -------------------------------------
-# Setup the main C++ target `LocoUtilsCpp`
-loco_create_target(LocoUtilsCpp STATIC
+# Setup the main C++ target `UtilsCpp`
+loco_create_target(UtilsCpp STATIC
  SOURCES
    ${CMAKE_CURRENT_SOURCE_DIR}/src/utils/common.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/src/utils/logging.cpp
@@ -59,27 +59,27 @@ loco_create_target(LocoUtilsCpp STATIC
 
 # -------------------------------------
 # Expose an alias for the library (CMake namespace convention)
-add_library(loco::utils ALIAS LocoUtilsCpp)
+add_library(utils::utils ALIAS UtilsCpp)
 
 # -------------------------------------
 # Add the set of examples created along this project
-if(LOCOUTILS_BUILD_EXAMPLES)
+if(UTILS_BUILD_EXAMPLES)
   add_subdirectory(examples)
 endif()
 
 # -------------------------------------
-# Add the set of Python bindings created for LocoUtilsCpp
-if(LOCOUTILS_BUILD_PYTHON_BINDINGS)
+# Add the set of Python bindings created for UtilsCpp
+if(UTILS_BUILD_PYTHON_BINDINGS)
   add_subdirectory(python/utils/bindings)
 endif()
 
 # -------------------------------------
 # Build the required documentation accordingly
-if(LOCOUTILS_BUILD_DOCS)
+if(UTILS_BUILD_DOCS)
   # cmake-format: off
   # -------------------------------------
   # Setup documentation for our target
-  loco_setup_cppdocs(LocoUtilsCpp
+  loco_setup_cppdocs(UtilsCpp
     DOXYGEN_FILE_IN ${CMAKE_CURRENT_SOURCE_DIR}/docs/Doxyfile.in
     DOXYGEN_OUTPUT_DIR ${CMAKE_CURRENT_BINARY_DIR}/docs/Doxygen
     DOXYGEN_GENERATE_HTML FALSE
@@ -88,14 +88,14 @@ if(LOCOUTILS_BUILD_DOCS)
     DOXYGEN_QUIET TRUE
     SPHINX_FILE_IN ${CMAKE_CURRENT_SOURCE_DIR}/docs/conf.py.in
     SPHINX_OUTPUT_DIR ${CMAKE_CURRENT_BINARY_DIR}/docs/Sphinx
-    SPHINX_BREATHE_PROJECT LocoUtilsCpp
+    SPHINX_BREATHE_PROJECT UtilsCpp
     SPHINX_DOXYGEN_XML_OUTDIR ${CMAKE_CURRENT_BINARY_DIR}/docs/Doxygen/xml)
   # cmake-format: on
 endif()
 
 # -------------------------------------
 # Show the properties of our main target
-loco_print_target_properties(LocoUtilsCpp)
+loco_print_target_properties(UtilsCpp)
 
 # -------------------------------------
 # Show some info of the this project

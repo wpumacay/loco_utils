@@ -2,8 +2,8 @@
 # CMake configuration rules used to generate Python Bindings via Pybind11
 # ~~~
 
-if(NOT TARGET loco::utils)
-  loco_message("Bindings require the [loco::utils] target to be defined"
+if(NOT TARGET utils::utils)
+  loco_message("Bindings require the [utils::utils] target to be defined"
                LOG_LEVEL WARNING)
   return()
 endif()
@@ -19,4 +19,4 @@ pybind11_add_module(
   ${CMAKE_CURRENT_SOURCE_DIR}/src/profiling_py.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/src/bindings_py.cpp)
 target_include_directories(utils PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)
-target_link_libraries(utils PRIVATE loco::utils)
+target_link_libraries(utils PRIVATE utils::utils)
