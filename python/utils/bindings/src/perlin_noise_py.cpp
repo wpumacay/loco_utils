@@ -1,10 +1,9 @@
 #include <pybind11/pybind11.h>
 
-#include <loco/utils/perlin_noise.hpp>
+#include <utils/perlin_noise.hpp>
 
 namespace py = pybind11;
 
-namespace loco {
 namespace utils {
 
 // NOLINTNEXTLINE
@@ -25,4 +24,3 @@ void bindings_perlin_noise_module(py::module m) {
 }
 
 }  // namespace utils
-}  // namespace loco

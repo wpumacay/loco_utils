@@ -1,13 +1,10 @@
-// clang-format off
 #include <cassert>
 #include <sstream>
 #include <fstream>
 #include <iostream>
 
-#include <loco/utils/common.hpp>
-// clang-format on
+#include <utils/common.hpp>
 
-namespace loco {
 namespace utils {
 
 auto Split(const std::string &txt, char separator) -> std::vector<std::string> {
@@ -74,4 +71,3 @@ auto GetFileContents(const char *filepath) -> std::string {
 }
 
 }  // namespace utils
-}  // namespace loco

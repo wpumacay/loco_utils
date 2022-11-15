@@ -1,12 +1,12 @@
-#include <loco/utils/logging.hpp>
+#include <utils/logging.hpp>
 
 auto main() -> int {
-    loco::utils::Logger::Init(loco::utils::Logger::eType::FILE_LOGGER);
+    utils::Logger::Init(utils::Logger::eType::FILE_LOGGER);
 
-    auto vec_str = loco::utils::Split("comp1/comp2", '/');
+    auto vec_str = utils::Split("comp1/comp2", '/');
     assert(vec_str.size() == 2);
 
-    auto address = loco::utils::PointerToHexAddress(&vec_str);
+    auto address = utils::PointerToHexAddress(&vec_str);
 
     // Core logs
     {

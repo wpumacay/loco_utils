@@ -1,10 +1,9 @@
 #include <pybind11/pybind11.h>
 
-#include <loco/utils/logging.hpp>
+#include <utils/logging.hpp>
 
 namespace py = pybind11;
 
-namespace loco {
 namespace utils {
 
 // NOLINTNEXTLINE
@@ -51,4 +50,3 @@ void bindings_logging_module(py::module m) {
 }
 
 }  // namespace utils
-}  // namespace loco

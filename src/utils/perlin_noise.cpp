@@ -1,7 +1,5 @@
+#include <utils/perlin_noise.hpp>
 
-#include <loco/utils/perlin_noise.hpp>
-
-namespace loco {
 namespace utils {
 
 // @todo(wilbert): The variables below are not actually accessible, but
@@ -24,7 +22,7 @@ void PerlinNoise::Init() {
     s_Instance->m_NoiseScale = DEFAULT_NOISE_SCALE;
 
     s_Instance->m_OctavesOffsets.clear();
-    for (size_t o = 0; o < s_Instance->m_NumOctaves; o++) {
+    for (size_t i = 0; i < s_Instance->m_NumOctaves; i++) {
         s_Instance->m_OctavesOffsets.emplace_back(
             s_Instance->m_RandUnifDist(s_Instance->m_RandEngine),
             s_Instance->m_RandUnifDist(s_Instance->m_RandEngine));
@@ -206,4 +204,3 @@ auto PerlinNoise::_Perlin(float x, float y) -> float {
 }
 
 }  // namespace utils
-}  // namespace loco

@@ -6,29 +6,27 @@
 #include <string>
 #include <vector>
 
-namespace loco {
 namespace utils {
 
 /// Divides a given string into substrings using the given character separator
 ///
-/// @param txt          String to be splitted into substrings
-/// @param separator    Character separator used for the splitting process
-/// @return Vector of strings that form the initial string, after splitting
+/// \param txt          String to be splitted into substrings
+/// \param separator    Character separator used for the splitting process
+/// \return Vector of strings that form the initial string, after splitting
 /// using the separator
 auto Split(const std::string &txt, char separator = '/')
     -> std::vector<std::string>;
 
 /// Gets the string representation of the hex-address of a given pointer
 ///
-/// @param ptr  Pointer from whom to get the hex-address representation
-/// @return String representation of the hex-address of the pointer
+/// \param ptr  Pointer from whom to get the hex-address representation
+/// \return String representation of the hex-address of the pointer
 auto PointerToHexAddress(const void *ptr) -> std::string;
 
 /// Returns a string with the contents of a given file
 auto GetFileContents(const char *filepath) -> std::string;
 
 }  // namespace utils
-}  // namespace loco
 
 //----------------------------------------------------------------------------//
 //       Use make_unique extension if the compiler is c++11 or older          //
@@ -96,7 +94,7 @@ typename _Unique_if<T>::_Known_bound make_unique(Args &&...) = delete;
 // snippet-url:
 // https://github.com/facebookresearch/habitat-sim/blob/3d810b9c006976be8bd15b4ca8cf5170c5ad398d/src/esp/core/esp.h#L108
 // NOLINTNEXTLINE @todo(wilbert) might be possible to change to contexpr?
-#define LOCO_DEFINE_SMART_POINTERS(Classname)                             \
+#define DEFINE_SMART_POINTERS(Classname)                                  \
  public:                                                                  \
     using ptr = std::shared_ptr<Classname>;                               \
     using cptr = std::shared_ptr<const Classname>;                        \
@@ -117,7 +115,7 @@ typename _Unique_if<T>::_Known_bound make_unique(Args &&...) = delete;
 // Macro based on helper macro from drake repo:
 // https://github.com/RobotLocomotion/drake/blob/master/common/drake_copyable.h
 // NOLINTNEXTLINE
-#define LOCO_NO_COPY_NO_MOVE_NO_ASSIGN(Classname)            \
+#define NO_COPY_NO_MOVE_NO_ASSIGN(Classname)                 \
  public:                                                     \
     Classname(const Classname &) = delete;                   \
     auto operator=(const Classname &)->Classname & = delete; \
@@ -125,7 +123,7 @@ typename _Unique_if<T>::_Known_bound make_unique(Args &&...) = delete;
     auto operator=(Classname &&)->Classname & = delete;
 
 // NOLINTNEXTLINE
-#define LOCO_DEFAULT_COPY_AND_MOVE_AND_ASSIGN(Classname)      \
+#define DEFAULT_COPY_AND_MOVE_AND_ASSIGN(Classname)           \
     Classname(const Classname &) = default;                   \
     auto operator=(const Classname &)->Classname & = default; \
     Classname(Classname &&) = default;                        \

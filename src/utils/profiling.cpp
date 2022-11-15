@@ -1,12 +1,9 @@
-// clang-format off
 #include <algorithm>
 #include <cstdint>
 #include <sstream>
 
-#include <loco/utils/profiling.hpp>
-// clang-format on
+#include <utils/profiling.hpp>
 
-namespace loco {
 namespace utils {
 /******************************************************************************/
 /*                           Scoped Profiling Timer                           */
@@ -231,4 +228,3 @@ auto Profiler::_GetSessions() -> std::vector<IProfilerSession*> {
 }
 
 }  // namespace utils
-}  // namespace loco

@@ -1,6 +1,5 @@
 #pragma once
 
-// clang-format off
 #include <chrono>
 #include <cstdint>
 #include <cstring>
@@ -11,9 +10,7 @@
 #include <vector>
 #include <unordered_map>
 
-#include <loco/utils/logging.hpp>
-#include "loco/utils/common.hpp"
-// clang-format on
+#include <utils/logging.hpp>
 
 // Adapted from TheCherno's tutorial on profiling:
 // video    : https://youtu.be/xlAH4dbMVnU
@@ -21,7 +18,6 @@
 
 constexpr const char* DEFAULT_SESSION = "session_default";
 
-namespace loco {
 namespace utils {
 
 /// Result object returned by profiling functions
@@ -39,9 +35,9 @@ struct ProfilerResult {
 /// Scoped profiling timer (tracks time of a function scope)
 class ProfilerTimer {
     // cppcheck-suppress unknownMacro
-    LOCO_DEFINE_SMART_POINTERS(ProfilerTimer)
+    DEFINE_SMART_POINTERS(ProfilerTimer)
 
-    LOCO_NO_COPY_NO_MOVE_NO_ASSIGN(ProfilerTimer);
+    NO_COPY_NO_MOVE_NO_ASSIGN(ProfilerTimer);
 
  public:
     /// Creates and initializes a scoped-timer
@@ -70,9 +66,9 @@ class ProfilerTimer {
 /// results (saving to disk, etc.)
 class IProfilerSession {
     // cppcheck-suppress unknownMacro
-    LOCO_DEFINE_SMART_POINTERS(IProfilerSession)
+    DEFINE_SMART_POINTERS(IProfilerSession)
 
-    LOCO_NO_COPY_NO_MOVE_NO_ASSIGN(IProfilerSession);
+    NO_COPY_NO_MOVE_NO_ASSIGN(IProfilerSession);
 
  public:
     /// Available types of sessions
@@ -133,9 +129,9 @@ class IProfilerSession {
 /// tooling
 class ProfilerSessionInternal : public IProfilerSession {
     // cppcheck-suppress unknownMacro
-    LOCO_DEFINE_SMART_POINTERS(ProfilerSessionInternal)
+    DEFINE_SMART_POINTERS(ProfilerSessionInternal)
 
-    LOCO_NO_COPY_NO_MOVE_NO_ASSIGN(ProfilerSessionInternal);
+    NO_COPY_NO_MOVE_NO_ASSIGN(ProfilerSessionInternal);
 
  public:
     /// Creates a session that stores profiling results for usage with
@@ -166,9 +162,9 @@ class ProfilerSessionInternal : public IProfilerSession {
 /// tool required format
 class ProfilerSessionExtChrome : public IProfilerSession {
     // cppcheck-suppress unknownMacro
-    LOCO_DEFINE_SMART_POINTERS(ProfilerSessionExtChrome)
+    DEFINE_SMART_POINTERS(ProfilerSessionExtChrome)
 
-    LOCO_NO_COPY_NO_MOVE_NO_ASSIGN(ProfilerSessionExtChrome);
+    NO_COPY_NO_MOVE_NO_ASSIGN(ProfilerSessionExtChrome);
 
  public:
     /// Creates a session that saves its results to disk in the
@@ -202,7 +198,7 @@ class ProfilerSessionExtChrome : public IProfilerSession {
 
 /// Profiler module(singleton) with support for multiple sessions
 class Profiler {
-    LOCO_DEFINE_SMART_POINTERS(ProfilerSessionExtChrome)
+    DEFINE_SMART_POINTERS(ProfilerSessionExtChrome)
 
  public:
     /// Initializes profiler module(singleton)
@@ -260,19 +256,17 @@ class Profiler {
 };
 
 }  // namespace utils
-}  // namespace loco
 
 // NOLINTNEXTLINE
 #define PROFILE_SCOPE(name) \
-    loco::utils::ProfilerTimer prof_timer##__LINE__(name, DEFAULT_SESSION)
+    utils::ProfilerTimer prof_timer##__LINE__(name, DEFAULT_SESSION)
 // NOLINTNEXTLINE : @todo(wilbert) check usage of constexpr template function
 #define PROFILE_SCOPE_IN_SESSION(name, session_name) \
-    loco::utils::ProfilerTimer prof_timer##__LINE__(name, session_name)
+    utils::ProfilerTimer prof_timer##__LINE__(name, session_name)
 // NOLINTNEXTLINE : @todo(wilbert) check usage of constexpr template function
-#define PROFILE_FUNCTION()                                             \
-    loco::utils::ProfilerTimer prof_timer##__LINE__(__FUNCTION_NAME__, \
-                                                    DEFAULT_SESSION)
+#define PROFILE_FUNCTION()                                       \
+    utils::ProfilerTimer prof_timer##__LINE__(__FUNCTION_NAME__, \
+                                              DEFAULT_SESSION)
 // NOLINTNEXTLINE : @todo(wilbert) check usage of constexpr template function
-#define PROFILE_FUNCTION_IN_SESSION(session_name)                      \
-    loco::utils::ProfilerTimer prof_timer##__LINE__(__FUNCTION_NAME__, \
-                                                    session_name)
+#define PROFILE_FUNCTION_IN_SESSION(session_name) \
+    utils::ProfilerTimer prof_timer##__LINE__(__FUNCTION_NAME__, session_name)

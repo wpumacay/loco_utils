@@ -1,14 +1,14 @@
-#include <loco/utils/logging.hpp>
+#include <utils/logging.hpp>
 
 auto main() -> int {
-    loco::utils::Logger::Init(loco::utils::Logger::eType::CONSOLE_LOGGER);
+    utils::Logger::Init(utils::Logger::eType::CONSOLE_LOGGER);
 
-    auto vec_str = loco::utils::Split("comp1/comp2", '/');
+    auto vec_str = utils::Split("comp1/comp2", '/');
     assert(vec_str.size() == 2);
 
     constexpr size_t BUFFER_SIZE = 100;
     auto buffer = std::array<uint8_t, BUFFER_SIZE>();
-    auto address = loco::utils::PointerToHexAddress(buffer.data());
+    auto address = utils::PointerToHexAddress(buffer.data());
 
     // Core logs
     {

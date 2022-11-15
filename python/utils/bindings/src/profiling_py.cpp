@@ -1,10 +1,9 @@
 #include <pybind11/pybind11.h>
 
-#include <loco/utils/profiling.hpp>
+#include <utils/profiling.hpp>
 
 namespace py = pybind11;
 
-namespace loco {
 namespace utils {
 
 // NOLINTNEXTLINE
@@ -36,4 +35,3 @@ void bindings_profiling_module(py::module m) {
 }
 
 }  // namespace utils
-}  // namespace loco

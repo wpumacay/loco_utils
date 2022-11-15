@@ -1,10 +1,9 @@
 #include <pybind11/pybind11.h>
 
-#include <loco/utils/path_handling.hpp>
+#include <utils/path_handling.hpp>
 
 namespace py = pybind11;
 
-namespace loco {
 namespace utils {
 
 void bindings_path_handling_module(py::module m) {
@@ -16,4 +15,3 @@ void bindings_path_handling_module(py::module m) {
 }
 
 }  // namespace utils
-}  // namespace loco

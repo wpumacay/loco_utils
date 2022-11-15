@@ -1,15 +1,12 @@
 #pragma once
 
-// clang-format off
 #include <memory>
 #include <random>
 #include <utility>
 #include <vector>
 
-#include <loco/utils/logging.hpp>
-// clang-format on
+#include <utils/logging.hpp>
 
-namespace loco {
 namespace utils {
 
 class PerlinNoise {
@@ -25,7 +22,7 @@ class PerlinNoise {
                        float noise_scale);
 
     /// Returns the noise value at a given 1d position
-    static auto Sample1d(float x) -> float;
+    static auto Sample1d(float x_val) -> float;
 
     /// Returns the noise value at a given 2d position
     static auto Sample2d(float x, float y) -> float;
@@ -92,4 +89,3 @@ class PerlinNoise {
 };
 
 }  // namespace utils
-}  // namespace loco

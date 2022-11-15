@@ -1,13 +1,12 @@
-#include <loco/utils/logging.hpp>
-#include <loco/utils/profiling.hpp>
 #include <thread>
+#include <utils/logging.hpp>
+#include <utils/profiling.hpp>
 
 auto main() -> int {
-    loco::utils::Logger::Init();
-    loco::utils::Profiler::Init(
-        loco::utils::IProfilerSession::eType::EXTERNAL_CHROME);
+    utils::Logger::Init();
+    utils::Profiler::Init(utils::IProfilerSession::eType::EXTERNAL_CHROME);
 
-    loco::utils::Profiler::BeginSession("session_timing");
+    utils::Profiler::BeginSession("session_timing");
     constexpr size_t NUM_STEPS = 10;
     for (size_t i = 0; i < NUM_STEPS; i++) {
         {
@@ -30,9 +29,9 @@ auto main() -> int {
             std::this_thread::sleep_for(std::chrono::microseconds(2000));
         }
     }
-    loco::utils::Profiler::EndSession("session_timing");
+    utils::Profiler::EndSession("session_timing");
 
-    loco::utils::Logger::Release();
-    loco::utils::Profiler::Release();
+    utils::Logger::Release();
+    utils::Profiler::Release();
     return 0;
 }

@@ -1,10 +1,7 @@
-// clang-format off
 #include <iostream>
 
-#include <loco/utils/logging.hpp>
-// clang-format on
+#include <utils/logging.hpp>
 
-namespace loco {
 namespace utils {
 // @todo(wilbert): The variables below are not actually accessible, but
 // could should think about it making it const? (will disable lint for now)
@@ -51,4 +48,3 @@ void Logger::Release() {
 }
 
 }  // namespace utils
-}  // namespace loco

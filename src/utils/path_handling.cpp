@@ -1,10 +1,7 @@
-// clang-format off
 #include <sstream>
 
-#include <loco/utils/path_handling.hpp>
-// clang-format on
+#include <utils/path_handling.hpp>
 
-namespace loco {
 namespace utils {
 
 auto GetFilename(const std::string &filepath) -> std::string {
@@ -39,4 +36,3 @@ auto GetFilenameNoExtension(const std::string &filepath) -> std::string {
 }
 
 }  // namespace utils
-}  // namespace loco

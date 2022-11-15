@@ -1,8 +1,8 @@
 #include <iostream>
-#include <loco/utils/common.hpp>
+#include <utils/common.hpp>
 
 class Foo {
-    LOCO_DEFINE_SMART_POINTERS(Foo)
+    DEFINE_SMART_POINTERS(Foo)
 
  public:
     Foo(std::string&& name, const float& pos_x, const float& pos_y)

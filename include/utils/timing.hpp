@@ -1,21 +1,18 @@
 #pragma once
 
-// clang-format off
 #include <array>
 #include <cstdint>
 #include <memory>
 #include <string>
 #include <unordered_map>
 
-#include <loco/utils/logging.hpp>
-// clang-format on
+#include <utils/logging.hpp>
 
 /// Number of frames used for averaging-window
 constexpr size_t NUM_FRAMES_FOR_AVG = 100;
 /// Name of the default event to keep track of (wall-time)
 constexpr const char* MAIN_EVENT = "walltime";
 
-namespace loco {
 namespace utils {
 
 struct ClockEvent {
@@ -81,6 +78,9 @@ class Clock {
     /// Returns all elements currently being processed in the fps window
     static auto GetFpsBuffer() -> BufferArray;
 
+ public:
+    Clock() = default;
+
  private:
     /// Starts tracking the time of a step
     void _Tick(const std::string& event);
@@ -93,27 +93,23 @@ class Clock {
     static auto _TimeStampNow() -> double;
 
  private:
-    // @todo(wilbert): The static-var below are not actually accessible, but
-    // could should think about it making it const? (will disable lint for now)
-
     /// Handle to instance of clock module (singleton)
     static std::unique_ptr<Clock> s_Instance;  // NOLINT
     /// Current wall time (in seconds)
-    float m_TimeCurrent;
+    float m_TimeCurrent = 0.0F;
     /// Delta-time in between tick-tock calls (in seconds)
-    float m_TimeStep;
+    float m_TimeStep = 0.0F;
     /// Average delta-time in between tick-tock calls (in seconds)
-    float m_TimeStepAvg;
+    float m_TimeStepAvg = 0.0F;
     /// Index used for average calculation and indexing in the times and fps
     /// buffers
-    size_t m_TimeIndex;
+    size_t m_TimeIndex = 0;
     /// Buffer of time values in the averaging window
-    BufferArray m_TimesBuffer;
+    BufferArray m_TimesBuffer{};
     /// Buffer of fps-values in the averaging window
-    BufferArray m_FpsBuffer;
+    BufferArray m_FpsBuffer{};
     /// Dictionary used to store the events by name
     std::unordered_map<std::string, ClockEvent> m_ClockEvents;
 };
 
 }  // namespace utils
-}  // namespace loco

@@ -44,12 +44,12 @@ include(LocoUtilsDependencies)
 # Setup the main C++ target `LocoUtilsCpp`
 loco_create_target(LocoUtilsCpp STATIC
  SOURCES
-   ${CMAKE_CURRENT_SOURCE_DIR}/src/loco/utils/common.cpp
-   ${CMAKE_CURRENT_SOURCE_DIR}/src/loco/utils/logging.cpp
-   ${CMAKE_CURRENT_SOURCE_DIR}/src/loco/utils/timing.cpp
-   ${CMAKE_CURRENT_SOURCE_DIR}/src/loco/utils/profiling.cpp
-   ${CMAKE_CURRENT_SOURCE_DIR}/src/loco/utils/path_handling.cpp
-   ${CMAKE_CURRENT_SOURCE_DIR}/src/loco/utils/perlin_noise.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/src/utils/common.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/src/utils/logging.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/src/utils/timing.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/src/utils/profiling.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/src/utils/path_handling.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/src/utils/perlin_noise.cpp
  INCLUDE_DIRECTORIES
    ${CMAKE_CURRENT_SOURCE_DIR}/include
  TARGET_DEPENDENCIES
@@ -70,7 +70,7 @@ endif()
 # -------------------------------------
 # Add the set of Python bindings created for LocoUtilsCpp
 if(LOCOUTILS_BUILD_PYTHON_BINDINGS)
-  add_subdirectory(python/loco/utils/bindings)
+  add_subdirectory(python/utils/bindings)
 endif()
 
 # -------------------------------------

@@ -1,8 +1,8 @@
 #include <iostream>
-#include <loco/utils/common.hpp>
+#include <utils/common.hpp>
 
 class Interface {
-    LOCO_NO_COPY_NO_MOVE_NO_ASSIGN(Interface)
+    NO_COPY_NO_MOVE_NO_ASSIGN(Interface)
  public:
     Interface() = default;
 
@@ -14,7 +14,7 @@ class Interface {
 };
 
 class DerivedA : public Interface {
-    LOCO_NO_COPY_NO_MOVE_NO_ASSIGN(DerivedA)
+    NO_COPY_NO_MOVE_NO_ASSIGN(DerivedA)
  public:
     DerivedA() = default;
 
@@ -26,7 +26,7 @@ class DerivedA : public Interface {
 };
 
 class DerivedB : public Interface {
-    LOCO_NO_COPY_NO_MOVE_NO_ASSIGN(DerivedB)
+    NO_COPY_NO_MOVE_NO_ASSIGN(DerivedB)
  public:
     DerivedB() = default;
 
