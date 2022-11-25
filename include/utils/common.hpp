@@ -99,7 +99,7 @@ typename _Unique_if<T>::_Known_bound make_unique(Args &&...) = delete;
     using ptr = std::shared_ptr<Classname>;                               \
     using cptr = std::shared_ptr<const Classname>;                        \
     using uptr = std::unique_ptr<Classname>;                              \
-    using cuptr = std::unique_ptr<Classname>;                             \
+    using cuptr = std::unique_ptr<const Classname>;                       \
     template <typename... Targs>                                          \
     static inline auto Create(Targs &&...args)->ptr {                     \
         return std::make_shared<Classname>(std::forward<Targs>(args)...); \
