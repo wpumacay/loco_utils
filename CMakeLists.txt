@@ -37,7 +37,7 @@ list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")
 
 # -------------------------------------
 # Bring our dependencies accordingly
-include(Dependencies)
+include(UtilsDependencies)
 
 # cmake-format: off
 # -------------------------------------
