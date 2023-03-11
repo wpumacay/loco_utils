@@ -27,7 +27,7 @@ loco_find_or_fetch_dependency(
   PACKAGE_NAME spdlog
   LIBRARY_NAME spdlog
   GIT_REPO https://github.com/gabime/spdlog.git
-  GIT_TAG v1.9.2
+  GIT_TAG ${UTILS_DEP_VERSION_spdlog}
   TARGETS spdlog::spdlog
   BUILD_ARGS
     -DSPDLOG_BUILD_SHARED=OFF
