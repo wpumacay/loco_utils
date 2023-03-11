@@ -20,8 +20,6 @@ void bindings_logging_module(py::module m) {
         py::class_<Class>(m, "Logger")
             .def_static("Init", &Class::Init, py::arg("type"))
             .def_static("Release", &Class::Release)
-            .def_static("IsActive", &Class::IsActive)
-            .def_static("GetType", &Class::GetType)
             .def_static("CoreTrace",
                         [](const std::string& msg) { LOG_CORE_TRACE(msg); })
             .def_static("CoreInfo",

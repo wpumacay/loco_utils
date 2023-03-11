@@ -1,50 +1,100 @@
 #include <iostream>
+#include <stdexcept>
 
 #include <utils/logging.hpp>
 
 namespace utils {
-// @todo(wilbert): The variables below are not actually accessible, but
-// could should think about it making it const? (will disable lint for now)
 
 // NOLINTNEXTLINE
-std::shared_ptr<spdlog::logger> Logger::s_CoreLogger = nullptr;
+Logger::uptr Logger::s_LoggerInstance = nullptr;
 // NOLINTNEXTLINE
-std::shared_ptr<spdlog::logger> Logger::s_ClientLogger = nullptr;
-// NOLINTNEXTLINE
-bool Logger::s_IsActive = false;
-// NOLINTNEXTLINE
-Logger::eType Logger::s_Type = Logger::eType::CONSOLE_LOGGER;
+Logger::eType Logger::s_LoggerType = ::utils::Logger::eType::CONSOLE_LOGGER;
 
-void Logger::Init(const Logger::eType &logger_type) {
-    s_IsActive = true;
-    s_Type = logger_type;
-
+Logger::Logger(eType type) : m_Type(type) {
     spdlog::set_pattern("%^[%T] %n: %v%$");
-    if (s_Type == Logger::eType::CONSOLE_LOGGER) {
-        s_CoreLogger = spdlog::stdout_color_mt("CORE");
-        s_CoreLogger->set_level(spdlog::level::trace);
-        s_ClientLogger = spdlog::stdout_color_mt("USER");
-        s_ClientLogger->set_level(spdlog::level::trace);
-    } else {
-        try {
-            s_CoreLogger = spdlog::basic_logger_mt("CORE", "./core_logs.txt");
-            s_CoreLogger->set_level(spdlog::level::trace);
-            s_ClientLogger = spdlog::basic_logger_mt("USER", "./user_logs.txt");
-            s_ClientLogger->set_level(spdlog::level::trace);
-        } catch (const spdlog::spdlog_ex &ex) {
-            std::cerr << "Logger initialization FAILED: " << ex.what() << "\n";
+    switch (m_Type) {
+        case ::utils::Logger::eType::CONSOLE_LOGGER: {
+            m_CoreLogger = spdlog::stdout_color_mt("CORE");
+            m_CoreLogger->set_level(spdlog::level::trace);
+            m_ClientLogger = spdlog::stdout_color_mt("USER");
+            m_ClientLogger->set_level(spdlog::level::trace);
+            break;
         }
+        case ::utils::Logger::eType::FILE_LOGGER: {
+            try {
+                m_CoreLogger =
+                    spdlog::basic_logger_mt("CORE", "./core_logs.txt");
+                m_CoreLogger->set_level(spdlog::level::trace);
+                m_ClientLogger =
+                    spdlog::basic_logger_mt("USER", "./user_logs.txt");
+                m_ClientLogger->set_level(spdlog::level::trace);
+            } catch (const spdlog::spdlog_ex& ex) {
+                std::cout << "Logger initialization FAILED: " << ex.what()
+                          << '\n';
+            }
+            break;
+        }
+    }
+    m_Ready = true;
+
+    std::cout << "Initialized Logging module :)\n";
+}
+
+auto Logger::GetInstance() -> Logger& {
+    if (Logger::s_LoggerInstance == nullptr) {
+        Logger::s_LoggerInstance =
+            std::unique_ptr<Logger>(new Logger(Logger::s_LoggerType));
+    }
+    return *Logger::s_LoggerInstance;
+}
+
+auto Logger::Init(eType logger_type) -> void {
+    s_LoggerType = logger_type;
+    if (Logger::s_LoggerInstance == nullptr) {
+        Logger::s_LoggerInstance =
+            std::unique_ptr<Logger>(new Logger(s_LoggerType));
     }
 }
 
-void Logger::Release() {
-    // Clean referencess. If using only macros for logging then all other
-    // references should have been deleted once the macro finish execution (so,
-    // only these two refs. are active).
-    s_CoreLogger = nullptr;
-    s_ClientLogger = nullptr;
-    s_IsActive = false;
+auto Logger::Release() -> void {
+    Logger::s_LoggerInstance = nullptr;
     spdlog::drop_all();
+}
+
+auto Logger::core_logger() -> spdlog::logger& {
+    if (m_CoreLogger == nullptr) {
+        throw std::runtime_error(
+            "Logger::core_logger >>> Should initialize the logger before using "
+            "the internal spdlog capabilities");
+    }
+    return *m_CoreLogger;
+}
+
+auto Logger::core_logger() const -> const spdlog::logger& {
+    if (m_CoreLogger == nullptr) {
+        throw std::runtime_error(
+            "Logger::core_logger >>> Should initialize the logger before using "
+            "the internal spdlog capabilities");
+    }
+    return *m_CoreLogger;
+}
+
+auto Logger::client_logger() -> spdlog::logger& {
+    if (m_ClientLogger == nullptr) {
+        throw std::runtime_error(
+            "Logger::client_logger >>> Should initialize the logger before "
+            "using the internal spdlog capabilities");
+    }
+    return *m_ClientLogger;
+}
+
+auto Logger::client_logger() const -> const spdlog::logger& {
+    if (m_ClientLogger == nullptr) {
+        throw std::runtime_error(
+            "Logger::client_logger >>> Should initialize the logger before "
+            "using the internal spdlog capabilities");
+    }
+    return *m_ClientLogger;
 }
 
 }  // namespace utils

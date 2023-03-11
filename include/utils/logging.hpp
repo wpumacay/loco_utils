@@ -1,86 +1,94 @@
 #pragma once
 
-#include <utils/common.hpp>
+#include <memory>
 
 #include <spdlog/sinks/basic_file_sink.h>
 #include <spdlog/sinks/stdout_color_sinks.h>
 #include <spdlog/spdlog.h>
 
+#include <utils/common.hpp>
+
 namespace utils {
 
 class Logger {
- public:
-    enum class eType : uint8_t { CONSOLE_LOGGER, FILE_LOGGER };
+    // cppcheck-suppress unknownMacro
+    NO_COPY_NO_MOVE_NO_ASSIGN(Logger)
 
-    /// Initialized logging module to a specific mode
-    static void Init(const eType& logger_type = eType::CONSOLE_LOGGER);
-
-    /// Releases|frees all resources used by the logging module
-    static void Release();
-
-    /// Returns whether or not the logger has been properly initialized
-    static auto IsActive() -> bool { return Logger::s_IsActive; }
-
-    /// Returns the type of logger being used, either Console-logger or
-    /// File-logger
-    static auto GetType() -> eType { return Logger::s_Type; }
+    DEFINE_SMART_POINTERS(Logger)
 
  public:
-    // Core logging fcn calls (exposed to devs for internals and other checks)
+    /// Available types of loggers
+    enum class eType : uint8_t {
+        /// Allows to log messages to the console (like printf)
+        CONSOLE_LOGGER,
+        /// Allows to log messages to a file and save it for later usage
+        FILE_LOGGER
+    };
+
+    /// Releases the resources allocated by this logger
+    ~Logger() = default;
+
+    /// Returns whether or not this logger is properly initialized
+    auto ready() const -> bool { return m_Ready; }
+
+    /// Returns the internal type of logger in use
+    auto type() const -> eType { return m_Type; }
+
+    /// Returns a mutable reference to the internal core logger
+    auto core_logger() -> spdlog::logger&;
+
+    /// Returns an unmutable reference to the internal core logger
+    auto core_logger() const -> const spdlog::logger&;
+
+    /// Returns a mutable reference to the internal client logger
+    auto client_logger() -> spdlog::logger&;
+
+    /// Returns an unmutable reference to the internal client logger
+    auto client_logger() const -> const spdlog::logger&;
+
+ public:
+    /// Initialized the logging module given a mode
+    static auto Init(eType logger_type = eType::CONSOLE_LOGGER) -> void;
+
+    /// Cleans all resources used by this module
+    static auto Release() -> void;
+
+    /// Returns a mutable reference to the unique global instance (singleton)
+    static auto GetInstance() -> Logger&;
+
+ public:
+    // -------------------------------------------------------------//
+    // Core logging fcn calls (exposed to devs for internals usage) //
+    // -------------------------------------------------------------//
 
     template <typename... Args>
     static void CoreTrace(fmt::basic_string_view<char> fmt,
                           const Args&... args) {
-        if (!Logger::s_IsActive) {
-            Logger::Init();
-        }
-        if (s_CoreLogger) {
-            s_CoreLogger->trace(fmt, args...);
-        }
+        Logger::GetInstance().core_logger().trace(fmt, args...);
     }
 
     template <typename... Args>
     static void CoreInfo(fmt::basic_string_view<char> fmt,
                          const Args&... args) {
-        if (!Logger::s_IsActive) {
-            Logger::Init();
-        }
-        if (s_CoreLogger) {
-            s_CoreLogger->info(fmt, args...);
-        }
+        Logger::GetInstance().core_logger().info(fmt, args...);
     }
 
     template <typename... Args>
     static void CoreWarn(fmt::basic_string_view<char> fmt,
                          const Args&... args) {
-        if (!Logger::s_IsActive) {
-            Logger::Init();
-        }
-        if (s_CoreLogger) {
-            s_CoreLogger->warn(fmt, args...);
-        }
+        Logger::GetInstance().core_logger().warn(fmt, args...);
     }
 
     template <typename... Args>
     static void CoreError(fmt::basic_string_view<char> fmt,
                           const Args&... args) {
-        if (!Logger::s_IsActive) {
-            Logger::Init();
-        }
-        if (s_CoreLogger) {
-            s_CoreLogger->error(fmt, args...);
-        }
+        Logger::GetInstance().core_logger().error(fmt, args...);
     }
 
     template <typename... Args>
     static void CoreCritical(fmt::basic_string_view<char> fmt,
                              const Args&... args) {
-        if (!Logger::s_IsActive) {
-            Logger::Init();
-        }
-        if (s_CoreLogger) {
-            s_CoreLogger->critical(fmt, args...);
-        }
+        Logger::GetInstance().core_logger().critical(fmt, args...);
         exit(EXIT_FAILURE);
     }
 
@@ -91,71 +99,42 @@ class Logger {
             return;
         }
 
-        if (!Logger::s_IsActive) {
-            Logger::Init();
-        }
-        if (s_CoreLogger) {
-            s_CoreLogger->critical(fmt, args...);
-        }
+        Logger::GetInstance().core_logger().critical(fmt, args...);
         exit(EXIT_FAILURE);
     }
 
-    // Client logging functionality (exposed to users for their examples and own
-    // applications)
+    //---------------------------------------------------------------------//
+    // Client logging functionality (exposed to users for their own usage) //
+    //---------------------------------------------------------------------//
 
     template <typename... Args>
     static void ClientTrace(fmt::basic_string_view<char> fmt,
                             const Args&... args) {
-        if (!Logger::s_IsActive) {
-            Logger::Init();
-        }
-        if (s_ClientLogger) {
-            s_ClientLogger->trace(fmt, args...);
-        }
+        Logger::GetInstance().client_logger().trace(fmt, args...);
     }
 
     template <typename... Args>
     static void ClientInfo(fmt::basic_string_view<char> fmt,
                            const Args&... args) {
-        if (!Logger::s_IsActive) {
-            Logger::Init();
-        }
-        if (s_ClientLogger) {
-            s_ClientLogger->info(fmt, args...);
-        }
+        Logger::GetInstance().client_logger().info(fmt, args...);
     }
 
     template <typename... Args>
     static void ClientWarn(fmt::basic_string_view<char> fmt,
                            const Args&... args) {
-        if (!Logger::s_IsActive) {
-            Logger::Init();
-        }
-        if (s_ClientLogger) {
-            s_ClientLogger->warn(fmt, args...);
-        }
+        Logger::GetInstance().client_logger().warn(fmt, args...);
     }
 
     template <typename... Args>
     static void ClientError(fmt::basic_string_view<char> fmt,
                             const Args&... args) {
-        if (!Logger::s_IsActive) {
-            Logger::Init();
-        }
-        if (s_ClientLogger) {
-            s_ClientLogger->error(fmt, args...);
-        }
+        Logger::GetInstance().client_logger().error(fmt, args...);
     }
 
     template <typename... Args>
     static void ClientCritical(fmt::basic_string_view<char> fmt,
                                const Args&... args) {
-        if (!Logger::s_IsActive) {
-            Logger::Init();
-        }
-        if (s_ClientLogger) {
-            s_ClientLogger->critical(fmt, args...);
-        }
+        Logger::GetInstance().client_logger().critical(fmt, args...);
         exit(EXIT_FAILURE);
     }
 
@@ -166,35 +145,30 @@ class Logger {
             return;
         }
 
-        if (!Logger::s_IsActive) {
-            Logger::Init();
-        }
-        if (s_ClientLogger) {
-            s_ClientLogger->critical(fmt, args...);
-        }
+        Logger::GetInstance().client_logger().critical(fmt, args...);
         exit(EXIT_FAILURE);
     }
 
  private:
-    // @todo(wilbert): The variables below are not actually accessible, but
-    // could should think about it making it const? (will disable lint for now)
+    /// Constructor for a logger given its type. Not exposed to user (singleton)
+    explicit Logger(eType type);
 
-    /// spdlog Core logger (used for devs-related logging calls)
-    static std::shared_ptr<spdlog::logger> s_CoreLogger;  // NOLINT
-    /// spdlog Client logger (used for devs-related logging calls)
-    static std::shared_ptr<spdlog::logger> s_ClientLogger;  // NOLINT
-    /// Flags used to indicate that the logging module has been properly
-    /// initialized
-    static bool s_IsActive;  // NOLINT
-    /// Type of logger being used by the logging module, either Console-logger
-    /// or File-logger
-    static eType s_Type;  // NOLINT
+    /// The unique instance of this logging module
+    static Logger::uptr s_LoggerInstance;  // NOLINT
+    /// The type of logger currenlty being used
+    static eType s_LoggerType;  // NOLINT
+
+    /// Whether or not this logger has been initialized and can be used
+    bool m_Ready = false;
+    /// The type of logger, could be either write to console or to a file
+    eType m_Type = eType::CONSOLE_LOGGER;
+    /// The spdlog core logger (should be used for developer traces)
+    std::shared_ptr<spdlog::logger> m_CoreLogger = nullptr;
+    /// The spdlog client logger (should be used for user/client traces)
+    std::shared_ptr<spdlog::logger> m_ClientLogger = nullptr;
 };
 
 }  // namespace utils
-
-// @todo(wilbert): Should actually try to change these variadic macros to
-// constexpr variadic template functions (for now will just disable linting)
 
 // NOLINTNEXTLINE
 #define LOG_CORE_TRACE(...) ::utils::Logger::CoreTrace(__VA_ARGS__)
