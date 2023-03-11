@@ -62,39 +62,39 @@ class Logger {
     // -------------------------------------------------------------//
 
     template <typename... Args>
-    static void CoreTrace(fmt::basic_string_view<char> fmt,
-                          const Args&... args) {
+    static auto CoreTrace(fmt::basic_string_view<char> fmt, const Args&... args)
+        -> void {
         Logger::GetInstance().core_logger().trace(fmt, args...);
     }
 
     template <typename... Args>
-    static void CoreInfo(fmt::basic_string_view<char> fmt,
-                         const Args&... args) {
+    static auto CoreInfo(fmt::basic_string_view<char> fmt, const Args&... args)
+        -> void {
         Logger::GetInstance().core_logger().info(fmt, args...);
     }
 
     template <typename... Args>
-    static void CoreWarn(fmt::basic_string_view<char> fmt,
-                         const Args&... args) {
+    static auto CoreWarn(fmt::basic_string_view<char> fmt, const Args&... args)
+        -> void {
         Logger::GetInstance().core_logger().warn(fmt, args...);
     }
 
     template <typename... Args>
-    static void CoreError(fmt::basic_string_view<char> fmt,
-                          const Args&... args) {
+    static auto CoreError(fmt::basic_string_view<char> fmt, const Args&... args)
+        -> void {
         Logger::GetInstance().core_logger().error(fmt, args...);
     }
 
     template <typename... Args>
-    static void CoreCritical(fmt::basic_string_view<char> fmt,
-                             const Args&... args) {
+    static auto CoreCritical(fmt::basic_string_view<char> fmt,
+                             const Args&... args) -> void {
         Logger::GetInstance().core_logger().critical(fmt, args...);
         exit(EXIT_FAILURE);
     }
 
     template <typename... Args>
-    static void CoreAssert(bool is_not_ok, fmt::basic_string_view<char> fmt,
-                           const Args&... args) {
+    static auto CoreAssert(bool is_not_ok, fmt::basic_string_view<char> fmt,
+                           const Args&... args) -> void {
         if (!is_not_ok) {
             return;
         }
@@ -108,39 +108,39 @@ class Logger {
     //---------------------------------------------------------------------//
 
     template <typename... Args>
-    static void ClientTrace(fmt::basic_string_view<char> fmt,
-                            const Args&... args) {
+    static auto ClientTrace(fmt::basic_string_view<char> fmt,
+                            const Args&... args) -> void {
         Logger::GetInstance().client_logger().trace(fmt, args...);
     }
 
     template <typename... Args>
-    static void ClientInfo(fmt::basic_string_view<char> fmt,
-                           const Args&... args) {
+    static auto ClientInfo(fmt::basic_string_view<char> fmt,
+                           const Args&... args) -> void {
         Logger::GetInstance().client_logger().info(fmt, args...);
     }
 
     template <typename... Args>
-    static void ClientWarn(fmt::basic_string_view<char> fmt,
-                           const Args&... args) {
+    static auto ClientWarn(fmt::basic_string_view<char> fmt,
+                           const Args&... args) -> void {
         Logger::GetInstance().client_logger().warn(fmt, args...);
     }
 
     template <typename... Args>
-    static void ClientError(fmt::basic_string_view<char> fmt,
-                            const Args&... args) {
+    static auto ClientError(fmt::basic_string_view<char> fmt,
+                            const Args&... args) -> void {
         Logger::GetInstance().client_logger().error(fmt, args...);
     }
 
     template <typename... Args>
-    static void ClientCritical(fmt::basic_string_view<char> fmt,
-                               const Args&... args) {
+    static auto ClientCritical(fmt::basic_string_view<char> fmt,
+                               const Args&... args) -> void {
         Logger::GetInstance().client_logger().critical(fmt, args...);
         exit(EXIT_FAILURE);
     }
 
     template <typename... Args>
-    static void ClientAssert(bool is_not_ok, fmt::basic_string_view<char> fmt,
-                             const Args&... args) {
+    static auto ClientAssert(bool is_not_ok, fmt::basic_string_view<char> fmt,
+                             const Args&... args) -> void {
         if (!is_not_ok) {
             return;
         }
