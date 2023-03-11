@@ -11,6 +11,13 @@
 #   https://github.com/deepmind/mujoco/blob/main/cmake/FindOrFetch.cmake
 # ~~~
 
+set(UTILS_DEP_VERSION_spdlog
+    ad0e89cbfb4d0c1ce4d097e134eb7be67baebb36 # Release 1.10.0
+    CACHE STRING
+          "Version of spdlog to be fetched (dependency of loco-utils library)")
+
+mark_as_advanced(UTILS_DEP_VERSION_spdlog)
+
 # cmake-format: off
 # ------------------------------------------------------------------------------
 # Spdlog is used for the logging functionality (internally uses the fmt lib)
