@@ -220,7 +220,7 @@ auto Profiler::_WriteProfileResult(const ProfilerResult& result,
 }
 
 auto Profiler::_GetSessions() -> std::vector<IProfilerSession*> {
-    std::vector<IProfilerSession*> vec_sessions;
+    std::vector<IProfilerSession*> vec_sessions(m_Sessions.size());
     for (auto& kvpair : m_Sessions) {
         vec_sessions.push_back(kvpair.second.get());
     }
