@@ -20,7 +20,7 @@ ProfilerTimer::~ProfilerTimer() {
     }
 }
 
-void ProfilerTimer::_Stop() {
+auto ProfilerTimer::_Stop() -> void {
     auto time_point_end = std::chrono::high_resolution_clock::now();
 
     int64_t time_start =
@@ -55,16 +55,16 @@ ProfilerSessionInternal::ProfilerSessionInternal(const std::string& name)
     m_Type = IProfilerSession::eType::INTERNAL;
 }
 
-void ProfilerSessionInternal::Begin() {
+auto ProfilerSessionInternal::Begin() -> void {
     m_Results.clear();
     m_State = IProfilerSession::eState::RUNNING;
 }
 
-void ProfilerSessionInternal::Write(const ProfilerResult& result) {
+auto ProfilerSessionInternal::Write(const ProfilerResult& result) -> void {
     m_Results.push_back(result);
 }
 
-void ProfilerSessionInternal::End() {
+auto ProfilerSessionInternal::End() -> void {
     m_State = IProfilerSession::eState::IDLE;
 }
 
@@ -77,7 +77,7 @@ ProfilerSessionExtChrome::ProfilerSessionExtChrome(const std::string& name)
     m_Type = IProfilerSession::eType::EXTERNAL_CHROME;
 }
 
-void ProfilerSessionExtChrome::Begin() {
+auto ProfilerSessionExtChrome::Begin() -> void {
     const auto FILE_NAME = m_Name + ".json";
     m_FileWriter.open(FILE_NAME, std::ofstream::out);
     if (!m_FileWriter.is_open()) {
@@ -92,7 +92,7 @@ void ProfilerSessionExtChrome::Begin() {
     m_State = IProfilerSession::eState::RUNNING;
 }
 
-void ProfilerSessionExtChrome::Write(const ProfilerResult& result) {
+auto ProfilerSessionExtChrome::Write(const ProfilerResult& result) -> void {
     if (m_State != IProfilerSession::eState::RUNNING) {
         return;
     }
@@ -115,7 +115,7 @@ void ProfilerSessionExtChrome::Write(const ProfilerResult& result) {
     m_FileWriter.flush();
 }
 
-void ProfilerSessionExtChrome::End() {
+auto ProfilerSessionExtChrome::End() -> void {
     if (m_State != IProfilerSession::eState::RUNNING) {
         return;
     }
@@ -125,12 +125,12 @@ void ProfilerSessionExtChrome::End() {
     m_State = IProfilerSession::eState::RUNNING;
 }
 
-void ProfilerSessionExtChrome::_WriteHeader() {
+auto ProfilerSessionExtChrome::_WriteHeader() -> void {
     m_FileWriter << R"("{\"otherData\": {},\"traceEvents\":[{}")";
     m_FileWriter.flush();
 }
 
-void ProfilerSessionExtChrome::_WriteFooter() {
+auto ProfilerSessionExtChrome::_WriteFooter() -> void {
     m_FileWriter << "]}";
     m_FileWriter.flush();
 }
@@ -143,34 +143,34 @@ void ProfilerSessionExtChrome::_WriteFooter() {
 // NOLINTNEXTLINE
 std::unique_ptr<Profiler> Profiler::s_Instance = nullptr;
 
-void Profiler::Init(const IProfilerSession::eType& type) {
+auto Profiler::Init(const IProfilerSession::eType& type) -> void {
     if (!s_Instance) {
         s_Instance = std::unique_ptr<Profiler>(new Profiler(type));
     }
     Profiler::BeginSession(DEFAULT_SESSION);
 }
 
-void Profiler::Release() {
+auto Profiler::Release() -> void {
     Profiler::EndSession(DEFAULT_SESSION);
     s_Instance = nullptr;
 }
 
-void Profiler::BeginSession(const std::string& session_name) {
+auto Profiler::BeginSession(const std::string& session_name) -> void {
     LOG_CORE_ASSERT(s_Instance,
                     "Profiler::BeginSession >>> Profiler module must be "
                     "initialized before using it");
     s_Instance->_BeginSession(session_name);
 }
 
-void Profiler::EndSession(const std::string& session_name) {
+auto Profiler::EndSession(const std::string& session_name) -> void {
     LOG_CORE_ASSERT(s_Instance,
                     "Profiler::EndSession >>> Profiler module must be "
                     "initialized before using it");
     s_Instance->_EndSession(session_name);
 }
 
-void Profiler::WriteProfileResult(const ProfilerResult& result,
-                                  const std::string& session_name) {
+auto Profiler::WriteProfileResult(const ProfilerResult& result,
+                                  const std::string& session_name) -> void {
     LOG_CORE_ASSERT(s_Instance,
                     "Profiler::WriteProfileResult >>> Profiler module must "
                     "be initialized before using it");
@@ -184,7 +184,7 @@ auto Profiler::GetSessions() -> std::vector<IProfilerSession*> {
     return s_Instance->_GetSessions();
 }
 
-void Profiler::_BeginSession(const std::string& session_name) {
+auto Profiler::_BeginSession(const std::string& session_name) -> void {
     if (m_Sessions.find(session_name) == m_Sessions.end()) {
         if (m_ProfilerType == IProfilerSession::eType::INTERNAL) {
             m_Sessions[session_name] =
@@ -197,7 +197,7 @@ void Profiler::_BeginSession(const std::string& session_name) {
     m_Sessions[session_name]->Begin();
 }
 
-void Profiler::_EndSession(const std::string& session_name) {
+auto Profiler::_EndSession(const std::string& session_name) -> void {
     if (m_Sessions.find(session_name) == m_Sessions.end()) {
         LOG_CORE_WARN(
             "Profiler::_EndSession() >>> session with name {0} not found",
@@ -207,8 +207,8 @@ void Profiler::_EndSession(const std::string& session_name) {
     }
 }
 
-void Profiler::_WriteProfileResult(const ProfilerResult& result,
-                                   const std::string& session_name) {
+auto Profiler::_WriteProfileResult(const ProfilerResult& result,
+                                   const std::string& session_name) -> void {
     if (m_Sessions.find(session_name) == m_Sessions.end()) {
         LOG_CORE_WARN(
             "Profiler::_WriteProfileResult() >>> session with name {0} not "

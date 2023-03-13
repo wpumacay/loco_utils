@@ -48,7 +48,7 @@ class ProfilerTimer {
 
  private:
     /// Stops the timer execution
-    void _Stop();
+    auto _Stop() -> void;
 
  private:
     /// Unique identifier of the timer
@@ -97,15 +97,15 @@ class IProfilerSession {
 
     /// Sends this session to its running state (to keep track of profiling
     /// results)
-    virtual void Begin() = 0;
+    virtual auto Begin() -> void = 0;
 
     /// Writes profiling result (to disk, stores it, etc.) depending of
     /// profiler type
-    virtual void Write(const ProfilerResult& result) = 0;
+    virtual auto Write(const ProfilerResult& result) -> void = 0;
 
     /// Sends this session to its idle state (stops keeping track of
     /// profiling results)
-    virtual void End() = 0;
+    virtual auto End() -> void = 0;
 
     /// Gets the type of this session
     auto type() const -> eType { return m_Type; }
@@ -142,13 +142,13 @@ class ProfilerSessionInternal : public IProfilerSession {
     ~ProfilerSessionInternal() override = default;
 
     // Documentation inherited
-    void Begin() override;
+    auto Begin() -> void override;
 
     /// Stores the result into a container for later usage
-    void Write(const ProfilerResult& result) override;
+    auto Write(const ProfilerResult& result) -> void override;
 
     // Documentation inherited
-    void End() override;
+    auto End() -> void override;
 
     /// Returns the profiler-results stored so far
     auto results() const -> std::vector<ProfilerResult> { return m_Results; }
@@ -175,21 +175,21 @@ class ProfilerSessionExtChrome : public IProfilerSession {
     ~ProfilerSessionExtChrome() override = default;
 
     // Documentation inherited
-    void Begin() override;
+    auto Begin() -> void override;
 
     /// Appends the result into a .json file for later inspection using
     /// chrome's tracing tool
-    void Write(const ProfilerResult& result) override;
+    auto Write(const ProfilerResult& result) -> void override;
 
     // Documentation inherited
-    void End() override;
+    auto End() -> void override;
 
  private:
     /// Writes header-part of the required chrome-tracing tool format
-    void _WriteHeader();
+    auto _WriteHeader() -> void;
 
     /// Writes footer-part of the required chrome-tracing tool format
-    void _WriteFooter();
+    auto _WriteFooter() -> void;
 
  private:
     /// File handle used to save results to disk
@@ -198,26 +198,26 @@ class ProfilerSessionExtChrome : public IProfilerSession {
 
 /// Profiler module(singleton) with support for multiple sessions
 class Profiler {
-    DEFINE_SMART_POINTERS(ProfilerSessionExtChrome)
+    DEFINE_SMART_POINTERS(Profiler)
 
  public:
     /// Initializes profiler module(singleton)
-    static void Init(const IProfilerSession::eType& type =
-                         IProfilerSession::eType::EXTERNAL_CHROME);
+    static auto Init(const IProfilerSession::eType& type =
+                         IProfilerSession::eType::EXTERNAL_CHROME) -> void;
 
     /// Releases resources used by the profiler module(singleton)
-    static void Release();
+    static auto Release() -> void;
 
     /// Starts a profiling session with a given name
-    static void BeginSession(const std::string& session_name);
+    static auto BeginSession(const std::string& session_name) -> void;
 
     /// Stops an existing profiling sessino with given name
-    static void EndSession(const std::string& session_name);
+    static auto EndSession(const std::string& session_name) -> void;
 
     /// Sends results to a profiler-session for appropriate handling
-    static void WriteProfileResult(
+    static auto WriteProfileResult(
         const ProfilerResult& result,
-        const std::string& session_name = DEFAULT_SESSION);
+        const std::string& session_name = DEFAULT_SESSION) -> void;
 
     /// Returns all sessions currently being tracked by the profiler module
     static auto GetSessions() -> std::vector<IProfilerSession*>;
@@ -228,14 +228,14 @@ class Profiler {
         : m_ProfilerType(type) {}
 
     /// Start a session with a given name
-    void _BeginSession(const std::string& session_name);
+    auto _BeginSession(const std::string& session_name) -> void;
 
     /// Stops a session with a given name
-    void _EndSession(const std::string& session_name);
+    auto _EndSession(const std::string& session_name) -> void;
 
     /// Sends results to a profiler-session for appropriate handling
-    void _WriteProfileResult(const ProfilerResult& result,
-                             const std::string& session_name);
+    auto _WriteProfileResult(const ProfilerResult& result,
+                             const std::string& session_name) -> void;
 
     /// Returns all sessions currently being tracked
     auto _GetSessions() -> std::vector<IProfilerSession*>;
@@ -243,7 +243,7 @@ class Profiler {
  private:
     /// Handle to instance of profiler module(singleton)
     // NOLINTNEXTLINE @todo(wilbert): replace singleton pattern?
-    static std::unique_ptr<Profiler> s_Instance;
+    static Profiler::uptr s_Instance;
 
     /// Dictionary container for all sessions created during the module's
     /// lifetime
@@ -259,14 +259,14 @@ class Profiler {
 
 // NOLINTNEXTLINE
 #define PROFILE_SCOPE(name) \
-    utils::ProfilerTimer prof_timer##__LINE__(name, DEFAULT_SESSION)
+    ::utils::ProfilerTimer prof_timer##__LINE__(name, DEFAULT_SESSION)
 // NOLINTNEXTLINE : @todo(wilbert) check usage of constexpr template function
 #define PROFILE_SCOPE_IN_SESSION(name, session_name) \
-    utils::ProfilerTimer prof_timer##__LINE__(name, session_name)
+    ::utils::ProfilerTimer prof_timer##__LINE__(name, session_name)
 // NOLINTNEXTLINE : @todo(wilbert) check usage of constexpr template function
-#define PROFILE_FUNCTION()                                       \
-    utils::ProfilerTimer prof_timer##__LINE__(__FUNCTION_NAME__, \
-                                              DEFAULT_SESSION)
+#define PROFILE_FUNCTION()                                         \
+    ::utils::ProfilerTimer prof_timer##__LINE__(__FUNCTION_NAME__, \
+                                                DEFAULT_SESSION)
 // NOLINTNEXTLINE : @todo(wilbert) check usage of constexpr template function
 #define PROFILE_FUNCTION_IN_SESSION(session_name) \
-    utils::ProfilerTimer prof_timer##__LINE__(__FUNCTION_NAME__, session_name)
+    ::utils::ProfilerTimer prof_timer##__LINE__(__FUNCTION_NAME__, session_name)

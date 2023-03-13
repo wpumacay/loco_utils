@@ -30,22 +30,24 @@ struct ClockEvent {
 };
 
 class Clock {
+    DEFINE_SMART_POINTERS(Clock)
+
  public:
     /// Buffer-type used for storing times used in averaging-window
     using BufferArray = std::array<float, NUM_FRAMES_FOR_AVG>;
 
     /// Initialize the clock module(singleton)
-    static void Init();
+    static auto Init() -> void;
 
     /// Releases this module(singleton) and its resources
-    static void Release();
+    static auto Release() -> void;
 
     /// Starts tracking the time, until a Tock() is received
-    static void Tick(const std::string& event_name = MAIN_EVENT);
+    static auto Tick(const std::string& event_name = MAIN_EVENT) -> void;
 
     /// Stop the tracking of time (started by a Tick()) and updates internal
     /// state
-    static void Tock(const std::string& event_name = MAIN_EVENT);
+    static auto Tock(const std::string& event_name = MAIN_EVENT) -> void;
 
     /// Returns a given event by its name
     static auto GetEvent(const std::string& event_name) -> ClockEvent;
@@ -83,18 +85,18 @@ class Clock {
 
  private:
     /// Starts tracking the time of a step
-    void _Tick(const std::string& event);
+    auto _Tick(const std::string& event) -> void;
 
     /// Stops the tracking of time of the current step, and updates internal
     /// state
-    void _Tock(const std::string& event);
+    auto _Tock(const std::string& event) -> void;
 
     /// Returns the time-stamp in seconds since the start of the epoch
     static auto _TimeStampNow() -> double;
 
  private:
     /// Handle to instance of clock module (singleton)
-    static std::unique_ptr<Clock> s_Instance;  // NOLINT
+    static Clock::uptr s_Instance;  // NOLINT
     /// Current wall time (in seconds)
     float m_TimeCurrent = 0.0F;
     /// Delta-time in between tick-tock calls (in seconds)

@@ -12,14 +12,14 @@ namespace utils {
 class PerlinNoise {
  public:
     /// Initializes the perlin-noise generator module(singleton)
-    static void Init();
+    static auto Init() -> void;
 
     /// Releases perlin-noise generator module's resources
-    static void Release();
+    static auto Release() -> void;
 
     /// Configures the noise-generator with the given settings
-    static void Config(size_t num_octaves, float persistance, float lacunarity,
-                       float noise_scale);
+    static auto Config(size_t num_octaves, float persistance, float lacunarity,
+                       float noise_scale) -> void;
 
     /// Returns the noise value at a given 1d position
     static auto Sample1d(float x_val) -> float;
@@ -42,8 +42,8 @@ class PerlinNoise {
 
  private:
     /// Configures the noise-generator with the given settings
-    void _Config(size_t num_octaves, float persistance, float lacunarity,
-                 float noise_scale);
+    auto _Config(size_t num_octaves, float persistance, float lacunarity,
+                 float noise_scale) -> void;
 
     /// Returns the noise value at a given 1d position
     auto _Sample1d(float x) -> float;

@@ -6,7 +6,7 @@ namespace utils {
 // could should think about it making it const? (will disable lint for now)
 std::unique_ptr<PerlinNoise> PerlinNoise::s_Instance = nullptr;  // NOLINT
 
-void PerlinNoise::Init() {
+auto PerlinNoise::Init() -> void {
     // Initialize singleton (can't use make_unique for now, as const is private)
     if (!s_Instance) {
         s_Instance = std::make_unique<PerlinNoise>();
@@ -57,10 +57,10 @@ void PerlinNoise::Init() {
                                       s_Instance->m_Permutations.end());
 }
 
-void PerlinNoise::Release() { s_Instance = nullptr; }
+auto PerlinNoise::Release() -> void { s_Instance = nullptr; }
 
-void PerlinNoise::Config(size_t num_octaves, float persistance,
-                         float lacunarity, float noise_scale) {
+auto PerlinNoise::Config(size_t num_octaves, float persistance,
+                         float lacunarity, float noise_scale) -> void {
     LOG_CORE_ASSERT(s_Instance,
                     "PerlinNoise::Config >>> Must initialize perlin-noise "
                     "module before using it");
@@ -81,8 +81,8 @@ auto PerlinNoise::Sample2d(float x, float y) -> float {
     return s_Instance->_Sample2d(x, y);
 }
 
-void PerlinNoise::_Config(size_t num_octaves, float persistance,
-                          float lacunarity, float noise_scale) {
+auto PerlinNoise::_Config(size_t num_octaves, float persistance,
+                          float lacunarity, float noise_scale) -> void {
     m_NumOctaves = num_octaves;
     m_Persistance = persistance;
     m_Lacunarity = lacunarity;

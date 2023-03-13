@@ -17,7 +17,7 @@ auto ClockEvent::ToString() const -> std::string {
 // NOLINTNEXTLINE : using singleton here (instance is not publicly available)
 std::unique_ptr<Clock> Clock::s_Instance = nullptr;
 
-void Clock::Init() {
+auto Clock::Init() -> void {
     if (!s_Instance) {
         s_Instance = std::make_unique<Clock>();
     }
@@ -43,16 +43,16 @@ void Clock::Init() {
     s_Instance->m_ClockEvents[MAIN_EVENT].time_duration = 0.0;
 }
 
-void Clock::Release() { s_Instance = nullptr; }
+auto Clock::Release() -> void { s_Instance = nullptr; }
 
-void Clock::Tick(const std::string& event_name) {
+auto Clock::Tick(const std::string& event_name) -> void {
     LOG_CORE_ASSERT(
         s_Instance,
         "Clock::Tick >>> Must initialize clock-module before using it");
     s_Instance->_Tick(event_name);
 }
 
-void Clock::Tock(const std::string& event_name) {
+auto Clock::Tock(const std::string& event_name) -> void {
     LOG_CORE_ASSERT(
         s_Instance,
         "Clock::Tock >>> Must initialize clock-module before using it");
@@ -130,7 +130,7 @@ auto Clock::GetFpsBuffer() -> Clock::BufferArray {
     return s_Instance->m_FpsBuffer;
 }
 
-void Clock::_Tick(const std::string& event_name) {
+auto Clock::_Tick(const std::string& event_name) -> void {
     if (m_ClockEvents.find(event_name) == m_ClockEvents.end()) {
         m_ClockEvents[event_name] = ClockEvent();
         m_ClockEvents[event_name].name = event_name;
@@ -138,7 +138,7 @@ void Clock::_Tick(const std::string& event_name) {
     m_ClockEvents[event_name].time_start = _TimeStampNow();
 }
 
-void Clock::_Tock(const std::string& event_name) {
+auto Clock::_Tock(const std::string& event_name) -> void {
     if (m_ClockEvents.find(event_name) == m_ClockEvents.end()) {
         LOG_CORE_WARN(
             "Clock::_Tock >>> tried calling _Tock() with a non-started "
