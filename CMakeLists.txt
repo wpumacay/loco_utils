@@ -26,6 +26,7 @@ project(
 option(UTILS_BUILD_PYTHON_BINDINGS "Build bindings (requires Pybind11)" ON)
 option(UTILS_BUILD_EXAMPLES "Build C++ examples" ON)
 option(UTILS_BUILD_DOCS "Build documentation (requires Doxygen)" OFF)
+option(UTILS_BUILD_TESTS "Build C++ unit-tests (requires Catch2)" ON)
 
 # -------------------------------------
 # Initialize the project using our helper modules :D
@@ -65,6 +66,12 @@ add_library(utils::utils ALIAS UtilsCpp)
 # Add the set of examples created along this project
 if(UTILS_BUILD_EXAMPLES)
   add_subdirectory(examples)
+endif()
+
+# -------------------------------------
+# Add C++ tests to the build process
+if(UTILS_BUILD_TESTS)
+  add_subdirectory(tests/cpp)
 endif()
 
 # -------------------------------------
