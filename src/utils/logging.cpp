@@ -6,9 +6,7 @@
 namespace utils {
 
 // NOLINTNEXTLINE
-Logger::uptr Logger::s_LoggerInstance = nullptr;
-// NOLINTNEXTLINE
-Logger::eType Logger::s_LoggerType = ::utils::Logger::eType::CONSOLE_LOGGER;
+Logger::uptr Logger::s_Instance = nullptr;
 
 Logger::Logger(eType type) : m_Type(type) {
     spdlog::set_pattern("%^[%T] %n: %v%$");
@@ -41,23 +39,22 @@ Logger::Logger(eType type) : m_Type(type) {
 }
 
 auto Logger::GetInstance() -> Logger& {
-    if (Logger::s_LoggerInstance == nullptr) {
-        Logger::s_LoggerInstance =
-            std::unique_ptr<Logger>(new Logger(Logger::s_LoggerType));
+    if (Logger::s_Instance == nullptr) {
+        // By default, if not initialized, use a console logger
+        Logger::s_Instance =
+            std::unique_ptr<Logger>(new Logger(Logger::eType::CONSOLE_LOGGER));
     }
-    return *Logger::s_LoggerInstance;
+    return *Logger::s_Instance;
 }
 
 auto Logger::Init(eType logger_type) -> void {
-    s_LoggerType = logger_type;
-    if (Logger::s_LoggerInstance == nullptr) {
-        Logger::s_LoggerInstance =
-            std::unique_ptr<Logger>(new Logger(s_LoggerType));
+    if (Logger::s_Instance == nullptr) {
+        Logger::s_Instance = std::unique_ptr<Logger>(new Logger(logger_type));
     }
 }
 
 auto Logger::Release() -> void {
-    Logger::s_LoggerInstance = nullptr;
+    Logger::s_Instance = nullptr;
     spdlog::drop_all();
 }
 

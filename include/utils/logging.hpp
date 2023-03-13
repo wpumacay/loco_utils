@@ -154,9 +154,7 @@ class Logger {
     explicit Logger(eType type);
 
     /// The unique instance of this logging module
-    static Logger::uptr s_LoggerInstance;  // NOLINT
-    /// The type of logger currenlty being used
-    static eType s_LoggerType;  // NOLINT
+    static Logger::uptr s_Instance;  // NOLINT
 
     /// Whether or not this logger has been initialized and can be used
     bool m_Ready = false;
