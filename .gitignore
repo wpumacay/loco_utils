@@ -26,4 +26,5 @@ tmp/
 
 # logging files
 *.json
-*.txt
+core_logs.txt
+user_logs.txt
