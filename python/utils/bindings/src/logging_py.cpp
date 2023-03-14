@@ -10,16 +10,23 @@ namespace utils {
 void bindings_logging_module(py::module m) {
     {
         using Enum = Logger::eType;
-        py::enum_<Enum>(m, "LoggerType", py::arithmetic())
+        constexpr auto EnumName = "LoggerType";  // NOLINT
+        py::enum_<Enum>(m, EnumName, py::arithmetic())
             .value("CONSOLE_LOGGER", Enum::CONSOLE_LOGGER)
             .value("FILE_LOGGER", Enum::FILE_LOGGER);
     }
 
     {
         using Class = Logger;
-        py::class_<Class>(m, "Logger")
-            .def_static("Init", &Class::Init, py::arg("type"))
+        constexpr auto ClassName = "Logger";  // NOLINT
+        py::class_<Class>(m, ClassName)
+            .def_property_readonly("ready", &Class::ready)
+            .def_property_readonly("type", &Class::type)
+            .def_static("Init", &Class::Init,
+                        py::arg("type") = Logger::eType::CONSOLE_LOGGER)
             .def_static("Release", &Class::Release)
+            .def_static("GetInstance", &Class::GetInstance,
+                        py::return_value_policy::reference)
             .def_static("CoreTrace",
                         [](const std::string& msg) { LOG_CORE_TRACE(msg); })
             .def_static("CoreInfo",
