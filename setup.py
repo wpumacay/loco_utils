@@ -177,7 +177,7 @@ if os.path.exists("README.md"):
 
 setup(
     name="utils",
-    version="0.1.2",
+    version="0.2.0",
     description="A small C/C++ helper library",
     long_description=long_description,
     long_description_content_type="text/markdown",
