@@ -73,11 +73,11 @@ class CMakeBuild(build_ext):
             # Set Python_EXECUTABLE instead if you use PYBIND11_FINDPYTHON
             "-DPYTHON_EXECUTABLE={}".format(sys.executable),
             # Make sure we're building python bindings
-            "-DTINYUTILS_BUILD_PYTHON_BINDINGS=ON",
+            "-DUTILS_BUILD_PYTHON_BINDINGS=ON",
             # Make sure we're not building examples nor tests
-            "-DTINYUTILS_BUILD_EXAMPLES=OFF",
+            "-DUTILS_BUILD_EXAMPLES=OFF",
             # Make sure we're not building any documentation
-            "-DTINYUTILS_BUILD_DOCS=OFF",
+            "-DUTILS_BUILD_DOCS=OFF",
         ]
         build_args = []
 
@@ -175,15 +175,10 @@ if os.path.exists("README.md"):
     with open("README.md", "r", encoding="utf-8") as fh:
         long_description = fh.read()
 
-required_packages = []
-if os.path.exists("requirements.txt"):
-    with open("requirements.txt", "r", encoding="utf-8") as fh:
-        required_packages = [line.replace("\n", "") for line in fh.readlines()]
-
 setup(
-    name="wp-tinyutils",
-    version="0.0.1",
-    description="A small C/C++ helper library for some common utils",
+    name="utils",
+    version="0.1.2",
+    description="A small C/C++ helper library",
     long_description=long_description,
     long_description_content_type="text/markdown",
     author="Wilbert Santos Pumacay Huallpa",
@@ -197,8 +192,7 @@ setup(
     ],
     packages=find_packages(),
     zip_safe=False,
-    install_requires=required_packages,
     package_data={},
-    ext_modules=[CMakeExtension("tinyutils", ".")],
+    ext_modules=[CMakeExtension("utils", ".")],
     cmdclass={"build_ext": CMakeBuild},
 )
