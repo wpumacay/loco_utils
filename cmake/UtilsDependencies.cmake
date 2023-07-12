@@ -15,12 +15,18 @@ set(UTILS_DEP_VERSION_spdlog
     ad0e89cbfb4d0c1ce4d097e134eb7be67baebb36 # Release 1.10.0
     CACHE STRING
           "Version of spdlog to be fetched (dependency of loco-utils library)")
+
 set(UTILS_DEP_VERSION_catch2
     182c910b4b63ff587a3440e08f84f70497e49a81 # Release 2.13.10
     CACHE STRING "Version of Catch2 to be fetched (used for unittests)")
 
+set(UTILS_DEP_VERSION_pybind11
+    5b0a6fc2017fcc176545afe3e09c9f9885283242 # Release v2.10.4
+    CACHE STRING "Version of PyBind11 to be fetched (used for python bindings)")
+
 mark_as_advanced(UTILS_DEP_VERSION_spdlog)
 mark_as_advanced(UTILS_DEP_VERSION_catch2)
+mark_as_advanced(UTILS_DEP_VERSION_pybind11)
 
 # cmake-format: off
 # ------------------------------------------------------------------------------
@@ -75,20 +81,11 @@ loco_find_or_fetch_dependency(
   USE_SYSTEM_PACKAGE FALSE
   PACKAGE_NAME pybind11
   LIBRARY_NAME pybind11
-  GIT_REPO https://github.com/RobotLocomotion/pybind11.git
-  GIT_TAG drake
+  GIT_REPO https://github.com/pybind/pybind11.git
+  GIT_TAG ${UTILS_DEP_VERSION_pybind11}
   TARGETS pybind11::headers
   BUILD_ARGS
     -DPYBIND11_TEST=OFF
-  PATCH_COMMAND
-    "${GIT_EXECUTABLE}"
-    "apply"
-    "-q"
-    "${CMAKE_CURRENT_SOURCE_DIR}/cmake/pybind11-fix-vs2022.patch"
-    "||"
-    "${CMAKE_COMMAND}"
-    "-E"
-    "true"
   EXCLUDE_FROM_ALL)
 
 # cmake-format: on
