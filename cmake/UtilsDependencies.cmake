@@ -4,6 +4,7 @@
 # Dependencies:
 # * spdlog
 # * pybind11
+# * catch2
 #
 # - Based on the superbuild script by jeffamstutz for ospray
 #   https://github.com/jeffamstutz/superbuild_ospray/blob/main/macros.cmake
@@ -38,6 +39,7 @@ loco_find_or_fetch_dependency(
   LIBRARY_NAME catch2
   GIT_REPO https://github.com/catchorg/Catch2.git
   GIT_TAG ${UTILS_DEP_VERSION_catch2}
+  GIT_PROGRESS FALSE
   TARGETS Catch2::Catch2
   BUILD_ARGS
     -DCATCH_INSTALL_DOCS=OFF
@@ -59,6 +61,7 @@ loco_find_or_fetch_dependency(
   LIBRARY_NAME spdlog
   GIT_REPO https://github.com/gabime/spdlog.git
   GIT_TAG ${UTILS_DEP_VERSION_spdlog}
+  GIT_PROGRESS FALSE
   TARGETS spdlog::spdlog
   BUILD_ARGS
     -DSPDLOG_BUILD_SHARED=OFF
@@ -74,15 +77,13 @@ loco_find_or_fetch_dependency(
 # Notice that we're using a forked version in which usage of unique-ptr is
 # allowed, as we use this functionality in some other projects
 # ------------------------------------------------------------------------------
-
-find_package(Git REQUIRED)
-
 loco_find_or_fetch_dependency(
   USE_SYSTEM_PACKAGE FALSE
   PACKAGE_NAME pybind11
   LIBRARY_NAME pybind11
   GIT_REPO https://github.com/pybind/pybind11.git
   GIT_TAG ${UTILS_DEP_VERSION_pybind11}
+  GIT_PROGRESS FALSE
   TARGETS pybind11::headers
   BUILD_ARGS
     -DPYBIND11_TEST=OFF
