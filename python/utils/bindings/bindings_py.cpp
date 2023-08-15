@@ -13,7 +13,7 @@ extern void bindings_profiling_module(py::module m);
 }  // namespace utils
 
 // NOLINTNEXTLINE
-PYBIND11_MODULE(utils, m) {
+PYBIND11_MODULE(utils_bindings, m) {
     utils::bindings_logging_module(m);
     utils::bindings_path_handling_module(m);
     utils::bindings_timing_module(m);

@@ -150,6 +150,6 @@ class CMakeBuild(build_ext):
 
 
 setup(
-    ext_modules=[CMakeExtension("utils", ".")],
+    ext_modules=[CMakeExtension("utils_bindings", ".")],
     cmdclass={"build_ext": CMakeBuild},
 )

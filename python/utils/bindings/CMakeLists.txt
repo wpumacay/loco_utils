@@ -10,7 +10,7 @@ endif()
 
 # Create target for our python bindings (standalone MODULE)
 pybind11_add_module(
-  utils
+  utils_bindings
   MODULE
   ${CMAKE_CURRENT_SOURCE_DIR}/logging_py.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/path_handling_py.cpp
@@ -18,5 +18,6 @@ pybind11_add_module(
   ${CMAKE_CURRENT_SOURCE_DIR}/perlin_noise_py.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/profiling_py.cpp
   ${CMAKE_CURRENT_SOURCE_DIR}/bindings_py.cpp)
-target_include_directories(utils PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)
-target_link_libraries(utils PRIVATE utils::utils)
+target_include_directories(utils_bindings
+                           PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)
+target_link_libraries(utils_bindings PRIVATE utils::utils)
