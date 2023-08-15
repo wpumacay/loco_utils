@@ -54,7 +54,7 @@ loco_create_target(UtilsCpp STATIC
  INCLUDE_DIRECTORIES
    ${CMAKE_CURRENT_SOURCE_DIR}/include
  TARGET_DEPENDENCIES
-   spdlog::spdlog
+   spdlog::spdlog math::math
  WARNINGS_AS_ERRORS FALSE)
 # cmake-format: on
 

@@ -5,9 +5,13 @@
 #include <utility>
 #include <vector>
 
+#include <math/vec2_t.hpp>
+
 #include <utils/logging.hpp>
 
 namespace utils {
+
+using Vec2 = ::math::Vector2<float>;
 
 class PerlinNoise {
  public:
@@ -26,6 +30,9 @@ class PerlinNoise {
 
     /// Returns the noise value at a given 2d position
     static auto Sample2d(float x, float y) -> float;
+
+    /// Returns the noise value at the given 2d position
+    static auto Sample2d(const Vec2& xy) -> float;
 
     /// Default min-range for uniform distribution
     static constexpr float DEFAULT_RAND_MIN = -1e4F;
@@ -81,7 +88,7 @@ class PerlinNoise {
     /// Permutations used for noise generation
     std::vector<size_t> m_Permutations;
     /// Random offsets used for noise generation
-    std::vector<std::pair<float, float>> m_OctavesOffsets;
+    std::vector<Vec2> m_OctavesOffsets;
     /// Create C++ random-engine
     std::default_random_engine m_RandEngine;
     /// Create C++ uniform real distribution

@@ -14,12 +14,12 @@ void bindings_perlin_noise_module(py::module m) {
         py::class_<Class>(m, "PerlinNoise")
             .def_static("Init", &Class::Init)
             .def_static("Release", &Class::Release)
-            .def_static("Config", &Class::Config, py::arg("num_octaves"),
-                        py::arg("persistance"), py::arg("lacunarity"),
-                        py::arg("noise_scale"))
-            .def_static("Sample1d", &Class::Sample1d, py::arg("x"))
-            .def_static("Sample2d", &Class::Sample2d, py::arg("x"),
-                        py::arg("y"));
+            .def_static("Config", &Class::Config)
+            .def_static("Sample1d", &Class::Sample1d)
+            .def_static("Sample2d",
+                        static_cast<float (*)(float, float)>(&Class::Sample2d))
+            .def_static("Sample2d",
+                        static_cast<float (*)(const Vec2&)>(&Class::Sample2d));
     }
 }
 

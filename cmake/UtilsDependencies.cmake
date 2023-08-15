@@ -25,9 +25,14 @@ set(UTILS_DEP_VERSION_pybind11
     5b0a6fc2017fcc176545afe3e09c9f9885283242 # Release v2.10.4
     CACHE STRING "Version of PyBind11 to be fetched (used for python bindings)")
 
+set(UTILS_DEP_VERSION_math
+    7f863e0dbf9f0e9ba0d35b38ab912baf7431053f # Version v0.5.1
+    CACHE STRING "Version of internal math repo to be fetched")
+
 mark_as_advanced(UTILS_DEP_VERSION_spdlog)
 mark_as_advanced(UTILS_DEP_VERSION_catch2)
 mark_as_advanced(UTILS_DEP_VERSION_pybind11)
+mark_As_advanced(UTILS_DEP_VERSION_math)
 
 # cmake-format: off
 # ------------------------------------------------------------------------------
@@ -87,6 +92,24 @@ loco_find_or_fetch_dependency(
   TARGETS pybind11::headers
   BUILD_ARGS
     -DPYBIND11_TEST=OFF
+  EXCLUDE_FROM_ALL)
+
+# ------------------------------------------------------------------------------
+# "Math" is used as math library (defines vectors, matrices, and operations
+# that could be used on these types). The API is similar to Eigen's
+# ------------------------------------------------------------------------------
+loco_find_or_fetch_dependency(
+  USE_SYSTEM_PACKAGE FALSE
+  LIBRARY_NAME math
+  GIT_REPO https://github.com/wpumacay/math.git
+  GIT_TAG ${UTILS_DEP_VERSION_math}
+  GIT_PROGRESS FALSE
+  TARGETS math::math math::math_py_helpers
+  BUILD_ARGS
+    -DMATH_BUILD_PYTHON_BINDINGS=OFF
+    -DMATH_BUILD_EXAMPLES=OFF
+    -DMATH_BUILD_TESTS=OFF
+    -DMATH_BUILD_DOCS=OFF
   EXCLUDE_FROM_ALL)
 
 # cmake-format: on

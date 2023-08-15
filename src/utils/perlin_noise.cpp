@@ -81,6 +81,13 @@ auto PerlinNoise::Sample2d(float x, float y) -> float {
     return s_Instance->_Sample2d(x, y);
 }
 
+auto PerlinNoise::Sample2d(const Vec2& xy) -> float {
+    LOG_CORE_ASSERT(s_Instance,
+                    "PerlinNoise::Sample2d >>> Must initialize perlin-noise "
+                    "module before using it");
+    return s_Instance->_Sample2d(xy.x(), xy.y());
+}
+
 auto PerlinNoise::_Config(size_t num_octaves, float persistance,
                           float lacunarity, float noise_scale) -> void {
     m_NumOctaves = num_octaves;
@@ -104,8 +111,8 @@ auto PerlinNoise::_Sample2d(float x, float y) -> float {
     float noise_value = 0.0F;
 
     for (size_t i = 0; i < m_NumOctaves; i++) {
-        float sample_x = freq * (x / m_NoiseScale) + m_OctavesOffsets[i].first;
-        float sample_y = freq * (y / m_NoiseScale) + m_OctavesOffsets[i].second;
+        float sample_x = freq * (x / m_NoiseScale) + m_OctavesOffsets[i].x();
+        float sample_y = freq * (y / m_NoiseScale) + m_OctavesOffsets[i].y();
         noise_value += ampl * _Perlin(sample_x, sample_y);
         ampl *= m_Persistance;
         freq *= m_Lacunarity;
