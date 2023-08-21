@@ -25,6 +25,10 @@ set(UTILS_DEP_VERSION_pybind11
     5b0a6fc2017fcc176545afe3e09c9f9885283242 # Release v2.10.4
     CACHE STRING "Version of PyBind11 to be fetched (used for python bindings)")
 
+set(UTILS_DEP_VERSION_tinyobjloader
+    1421a10d6ed9742f5b2c1766d22faa6cfbc56248
+    CACHE STRING "Version of 'tinyobjloader' to be fetched")
+
 set(UTILS_DEP_VERSION_math
     7f863e0dbf9f0e9ba0d35b38ab912baf7431053f # Version v0.5.1
     CACHE STRING "Version of internal math repo to be fetched")
@@ -32,6 +36,7 @@ set(UTILS_DEP_VERSION_math
 mark_as_advanced(UTILS_DEP_VERSION_spdlog)
 mark_as_advanced(UTILS_DEP_VERSION_catch2)
 mark_as_advanced(UTILS_DEP_VERSION_pybind11)
+mark_as_advanced(UTILS_DEP_VERSION_tinyobjloader)
 mark_As_advanced(UTILS_DEP_VERSION_math)
 
 # cmake-format: off
@@ -45,6 +50,7 @@ loco_find_or_fetch_dependency(
   GIT_REPO https://github.com/catchorg/Catch2.git
   GIT_TAG ${UTILS_DEP_VERSION_catch2}
   GIT_PROGRESS FALSE
+  GIT_SHALLOW TRUE
   TARGETS Catch2::Catch2
   BUILD_ARGS
     -DCATCH_INSTALL_DOCS=OFF
@@ -67,6 +73,7 @@ loco_find_or_fetch_dependency(
   GIT_REPO https://github.com/gabime/spdlog.git
   GIT_TAG ${UTILS_DEP_VERSION_spdlog}
   GIT_PROGRESS FALSE
+  GIT_SHALLOW TRUE
   TARGETS spdlog::spdlog
   BUILD_ARGS
     -DSPDLOG_BUILD_SHARED=OFF
@@ -89,10 +96,26 @@ loco_find_or_fetch_dependency(
   GIT_REPO https://github.com/pybind/pybind11.git
   GIT_TAG ${UTILS_DEP_VERSION_pybind11}
   GIT_PROGRESS FALSE
+  GIT_SHALLOW TRUE
   TARGETS pybind11::headers
   BUILD_ARGS
     -DPYBIND11_TEST=OFF
   EXCLUDE_FROM_ALL)
+
+# ------------------------------------------------------------------------------
+# Tinyobjloader is used for loading and parsing meshes in .obj file format
+# ------------------------------------------------------------------------------
+loco_find_or_fetch_dependency(
+  USE_SYSTEM_PACKAGE FALSE
+  PACKAGE_NAME tinyobjloader
+  LIBRARY_NAME tinyobjloader
+  GIT_REPO https://github.com/tinyobjloader/tinyobjloader.git
+  GIT_TAG ${UTILS_DEP_VERSION_tinyobjloader}
+  GIT_PROGRESS FALSE
+  GIT_SHALLOW FALSE
+  TARGETS tinyobjloader
+  EXCLUDE_FROM_ALL)
+
 
 # ------------------------------------------------------------------------------
 # "Math" is used as math library (defines vectors, matrices, and operations
@@ -104,6 +127,7 @@ loco_find_or_fetch_dependency(
   GIT_REPO https://github.com/wpumacay/math.git
   GIT_TAG ${UTILS_DEP_VERSION_math}
   GIT_PROGRESS FALSE
+  GIT_SHALLOW TRUE
   TARGETS math::math math::math_py_helpers
   BUILD_ARGS
     -DMATH_BUILD_PYTHON_BINDINGS=OFF
