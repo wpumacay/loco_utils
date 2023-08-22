@@ -51,10 +51,11 @@ loco_create_target(UtilsCpp STATIC
    ${CMAKE_CURRENT_SOURCE_DIR}/src/utils/profiling.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/src/utils/path_handling.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/src/utils/perlin_noise.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/src/utils/obj_loader.cpp
  INCLUDE_DIRECTORIES
    ${CMAKE_CURRENT_SOURCE_DIR}/include
  TARGET_DEPENDENCIES
-   spdlog::spdlog math::math
+   spdlog::spdlog math::math tinyobjloader
  WARNINGS_AS_ERRORS FALSE)
 # cmake-format: on
 
