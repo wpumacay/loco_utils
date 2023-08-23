@@ -1,4 +1,5 @@
 
+#include <utils/logging.hpp>
 #include <utils/obj_loader.hpp>
 
 constexpr const char* OBJ_GEOM_STR = R"(
@@ -71,6 +72,10 @@ newmtl cube
 
 auto main() -> int {
     auto data = ::utils::ParseObjFromString(OBJ_GEOM_STR, OBJ_MTL_STR);
+
+    LOG_INFO("# of vertices: {0}", data.vertices.size());
+    LOG_INFO("# of normals: {0}", data.normals.size());
+    LOG_INFO("# of texcoords: {0}", data.texcoords.size());
 
     return 0;
 }

@@ -24,4 +24,8 @@ struct VertexData {
 auto ParseObjFromString(const std::string& obj_geom_str,
                         const std::string& obj_mtl_str) -> VertexData;
 
+auto ParseObjFromFile(const std::string& obj_file) -> VertexData;
+
+auto _ParseObjFromReader(const tinyobj::ObjReader& obj_reader) -> VertexData;
+
 }  // namespace utils
