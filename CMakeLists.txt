@@ -6,7 +6,7 @@ include(FetchContent)
 FetchContent_Declare(
   loco_cmake
   GIT_REPOSITORY https://github.com/wpumacay/loco_cmake.git
-  GIT_TAG e210ab141a1a85dd1330d436530319ba6bf8c42c # Version v0.1.2
+  GIT_TAG 2a1148ebe5381874c043dd2d5ff6885a1b0d7071 # Version v0.1.3
   GIT_PROGRESS FALSE
   GIT_SHALLOW TRUE)
 FetchContent_MakeAvailable(loco_cmake)
@@ -51,10 +51,11 @@ loco_create_target(UtilsCpp STATIC
    ${CMAKE_CURRENT_SOURCE_DIR}/src/utils/profiling.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/src/utils/path_handling.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/src/utils/perlin_noise.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/src/utils/obj_loader.cpp
  INCLUDE_DIRECTORIES
    ${CMAKE_CURRENT_SOURCE_DIR}/include
  TARGET_DEPENDENCIES
-   spdlog::spdlog math::math
+   spdlog::spdlog math::math tinyobjloader
  WARNINGS_AS_ERRORS FALSE)
 # cmake-format: on
 
