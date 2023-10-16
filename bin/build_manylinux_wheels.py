@@ -25,7 +25,7 @@ def main() -> int:
         "--version",
         help="The version to be built",
         type=str,
-        default="0.6.0",
+        default="0.2.4",
     )
     parser.add_argument(
         "--index",
