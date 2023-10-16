@@ -2,6 +2,7 @@ include *.py
 include *.txt
 recursive-include cmake *.cmake
 recursive-include include *.hpp
+recursive-include src *.cpp
 recursive-include python *.cpp
 recursive-include python *.hpp
 recursive-include python *.txt
