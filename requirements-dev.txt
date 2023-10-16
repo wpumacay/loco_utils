@@ -8,3 +8,4 @@ cpplint
 pre-commit
 ipython
 ipykernel
+twine
