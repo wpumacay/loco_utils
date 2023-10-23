@@ -37,7 +37,7 @@ class ProfilerTimer {
     // cppcheck-suppress unknownMacro
     DEFINE_SMART_POINTERS(ProfilerTimer)
 
-    NO_COPY_NO_MOVE_NO_ASSIGN(ProfilerTimer);
+    NO_COPY_NO_MOVE_NO_ASSIGN(ProfilerTimer)
 
  public:
     /// Creates and initializes a scoped-timer
@@ -68,7 +68,7 @@ class IProfilerSession {
     // cppcheck-suppress unknownMacro
     DEFINE_SMART_POINTERS(IProfilerSession)
 
-    NO_COPY_NO_MOVE_NO_ASSIGN(IProfilerSession);
+    NO_COPY_NO_MOVE_NO_ASSIGN(IProfilerSession)
 
  public:
     /// Available types of sessions
@@ -131,7 +131,7 @@ class ProfilerSessionInternal : public IProfilerSession {
     // cppcheck-suppress unknownMacro
     DEFINE_SMART_POINTERS(ProfilerSessionInternal)
 
-    NO_COPY_NO_MOVE_NO_ASSIGN(ProfilerSessionInternal);
+    NO_COPY_NO_MOVE_NO_ASSIGN(ProfilerSessionInternal)
 
  public:
     /// Creates a session that stores profiling results for usage with
@@ -164,7 +164,7 @@ class ProfilerSessionExtChrome : public IProfilerSession {
     // cppcheck-suppress unknownMacro
     DEFINE_SMART_POINTERS(ProfilerSessionExtChrome)
 
-    NO_COPY_NO_MOVE_NO_ASSIGN(ProfilerSessionExtChrome);
+    NO_COPY_NO_MOVE_NO_ASSIGN(ProfilerSessionExtChrome)
 
  public:
     /// Creates a session that saves its results to disk in the
