@@ -16,7 +16,7 @@ include(${loco_cmake_SOURCE_DIR}/Index.cmake)
 # Define our project :)
 project(
   Utils
-  VERSION 0.2.7
+  VERSION 0.2.8
   DESCRIPTION "A library of common functionality used alongside my projects"
   HOMEPAGE_URL "https://github.com/wpumacay/utils"
   LANGUAGES C CXX)
