@@ -2,6 +2,8 @@ name: ci-windows
 
 on:
   push:
+    branches:
+      - master
   pull_request:
     branches:
       - master
