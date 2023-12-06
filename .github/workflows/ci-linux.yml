@@ -1,4 +1,4 @@
-name: ci-linux
+name: Building and Testing on Linux 🐧
 
 on:
   push:
@@ -14,36 +14,44 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest]
+        compiler: [gcc, clang]
         build-type: [Release, Debug]
-        python:
-          - 3.7
-          - 3.8
-          - 3.9
 
-    name: "Build: ${{matrix.os}} • ${{matrix.python}} • ${{matrix.build-type}}"
-    runs-on: ${{matrix.os}}
+    name: "Build: ${{ matrix.os }} • ${{ matrix.build-type }} • ${{ matrix.compiler }}"
+    runs-on: ${{ matrix.os }}
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
 
-    - name: Setup Python ${{matrix.python}}
+    - name: Setup Python
       uses: actions/setup-python@v4
       with:
-        python-version: ${{matrix.python}}
+        python-version: "3.x"
 
-    - name: Prepare Python Environment
-      run: python -m pip install -r requirements.txt
-
-    - name: Update CMake
+    - name: Setup CMake
       uses: jwlawson/actions-setup-cmake@v1.14.1
       with:
         github-api-token: ${{ secrets.GITHUB_TOKEN }}
 
+    - if: ${{ matrix.compiler == 'gcc' }}
+      name: Configure GNU/GCC as C/C++ compiler
+      run: |
+        echo "Choosing GNU/GCC as compiler"
+        echo "CC=gcc" >> $GITHUB_ENV
+        echo "CXX=g++" >> $GITHUB_ENV
+
+    - if: ${{ matrix.compiler == 'clang' }}
+      name: Configure LLVM/Clang as C/C++ compiler
+      run: |
+        echo "Choosing LLVM/Clang as compiler"
+        echo "CC=clang" >> $GITHUB_ENV
+        echo "CXX=clang++" >> $GITHUB_ENV
+
     - name: Configure CMake
-      run: cmake -S . -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{matrix.build-type}}
+      run: cmake -S . -B build -DCMAKE_BUILD_TYPE=${{ matrix.build-type }}
 
     - name: Build C++ Project
-      run: cmake --build ${{github.workspace}}/build --config ${{matrix.build-type}}
+      run: cmake --build build --config ${{ matrix.build-type }}
 
     - name: Run C++ Tests
-      run: ctest --test-dir ${{github.workspace}}/build/tests/cpp
+      run: ctest --test-dir build/tests/cpp
