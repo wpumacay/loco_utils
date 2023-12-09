@@ -22,7 +22,7 @@ set(UTILS_DEP_VERSION_catch2
     CACHE STRING "Version of Catch2 to be fetched (used for unittests)")
 
 set(UTILS_DEP_VERSION_pybind11
-    5b0a6fc2017fcc176545afe3e09c9f9885283242 # Release v2.10.4
+    8a099e44b3d5f85b20f05828d919d2332a8de841 # Release v2.11.1
     CACHE STRING "Version of PyBind11 to be fetched (used for python bindings)")
 
 set(UTILS_DEP_VERSION_tinyobjloader
@@ -30,7 +30,7 @@ set(UTILS_DEP_VERSION_tinyobjloader
     CACHE STRING "Version of 'tinyobjloader' to be fetched")
 
 set(UTILS_DEP_VERSION_math
-    c5bfd8383f802d90a0db658b6405f23a6cebabd9 # Version v0.6.6
+    96ab339023e05212a2f2ebe5bb798f88fcb4ca31 # Version v0.6.7
     CACHE STRING "Version of internal math repo to be fetched")
 
 mark_as_advanced(UTILS_DEP_VERSION_spdlog)
@@ -43,6 +43,11 @@ mark_As_advanced(UTILS_DEP_VERSION_math)
 # ------------------------------------------------------------------------------
 # Catch2 is used for generating unittests for our C++ codebase
 # ------------------------------------------------------------------------------
+
+set(CATCH_INSTALL_DOCS OFF CACHE BOOL "" FORCE)
+set(CATCH_INSTALL_EXTRAS OFF CACHE BOOL "" FORCE)
+set(CATCH_DEVELOPMENT_BUILD OFF CACHE BOOL "" FORCE)
+
 loco_find_or_fetch_dependency(
   USE_SYSTEM_PACKAGE FALSE
   PACKAGE_NAME Catch2
@@ -52,10 +57,6 @@ loco_find_or_fetch_dependency(
   GIT_PROGRESS FALSE
   GIT_SHALLOW TRUE
   TARGETS Catch2::Catch2
-  BUILD_ARGS
-    -DCATCH_INSTALL_DOCS=OFF
-    -DCATCH_INSTALL_EXTRAS=OFF
-    -DCATCH_DEVELOPMENT_BUILD=OFF
   EXCLUDE_FROM_ALL)
 
 # Add custom scripts for test-case registration to the module path
@@ -66,6 +67,14 @@ endif()
 # ------------------------------------------------------------------------------
 # Spdlog is used for the logging functionality (internally uses the fmt lib)
 # ------------------------------------------------------------------------------
+
+set(SPDLOG_BUILD_SHARED OFF CACHE BOOL "" FORCE)
+set(SPDLOG_BUILD_EXAMPLE OFF CACHE BOOL "" FORCE)
+set(SPDLOG_BUILD_EXAMPLE_HO OFF CACHE BOOL "" FORCE)
+set(SPDLOG_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+set(SPDLOG_BUILD_TESTS_HO OFF CACHE BOOL "" FORCE)
+set(SPDLOG_BUILD_BENCH OFF CACHE BOOL "" FORCE)
+
 loco_find_or_fetch_dependency(
   USE_SYSTEM_PACKAGE FALSE
   PACKAGE_NAME spdlog
@@ -75,13 +84,6 @@ loco_find_or_fetch_dependency(
   GIT_PROGRESS FALSE
   GIT_SHALLOW TRUE
   TARGETS spdlog::spdlog
-  BUILD_ARGS
-    -DSPDLOG_BUILD_SHARED=OFF
-    -DSPDLOG_BUILD_EXAMPLE=OFF
-    -DSPDLOG_BUILD_EXAMPLE_HO=OFF
-    -DSPDLOG_BUILD_TESTS=OFF
-    -DSPDLOG_BUILD_TESTS_HO=OFF
-    -DSPDLOG_BUILD_BENCH=OFF
   EXCLUDE_FROM_ALL)
 
 # ------------------------------------------------------------------------------
@@ -89,6 +91,9 @@ loco_find_or_fetch_dependency(
 # Notice that we're using a forked version in which usage of unique-ptr is
 # allowed, as we use this functionality in some other projects
 # ------------------------------------------------------------------------------
+
+set(PYBIND11_TEST OFF CACHE BOOL "" FORCE)
+
 loco_find_or_fetch_dependency(
   USE_SYSTEM_PACKAGE FALSE
   PACKAGE_NAME pybind11
@@ -98,8 +103,6 @@ loco_find_or_fetch_dependency(
   GIT_PROGRESS FALSE
   GIT_SHALLOW TRUE
   TARGETS pybind11::headers
-  BUILD_ARGS
-    -DPYBIND11_TEST=OFF
   EXCLUDE_FROM_ALL)
 
 # ------------------------------------------------------------------------------
@@ -118,22 +121,23 @@ loco_find_or_fetch_dependency(
 
 
 # ------------------------------------------------------------------------------
-# "Math" is used as math library (defines vectors, matrices, and operations
+# Math3d is used as math library (defines vectors, matrices, and operations
 # that could be used on these types). The API is similar to Eigen's
 # ------------------------------------------------------------------------------
+
+set(MATH_BUILD_PYTHON_BINDINGS OFF CACHE BOOL "" FORCE)
+set(MATH_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
+set(MATH_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+set(MATH_BUILD_DOCS OFF CACHE BOOL "" FORCE)
+
 loco_find_or_fetch_dependency(
   USE_SYSTEM_PACKAGE FALSE
   LIBRARY_NAME math
   GIT_REPO https://github.com/wpumacay/math.git
   GIT_TAG ${UTILS_DEP_VERSION_math}
   GIT_PROGRESS FALSE
-  GIT_SHALLOW TRUE
-  TARGETS math::math math::math_py_helpers
-  BUILD_ARGS
-    -DMATH_BUILD_PYTHON_BINDINGS=OFF
-    -DMATH_BUILD_EXAMPLES=OFF
-    -DMATH_BUILD_TESTS=OFF
-    -DMATH_BUILD_DOCS=OFF
+  GIT_SHALLOW FALSE
+  TARGETS math::math
   EXCLUDE_FROM_ALL)
 
 # cmake-format: on
