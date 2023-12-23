@@ -68,7 +68,7 @@ endif()
 # Spdlog is used for the logging functionality (internally uses the fmt lib)
 # ------------------------------------------------------------------------------
 
-set(SPDLOG_BUILD_SHARED OFF CACHE BOOL "" FORCE)
+set(SPDLOG_BUILD_SHARED ON CACHE BOOL "" FORCE)
 set(SPDLOG_BUILD_EXAMPLE OFF CACHE BOOL "" FORCE)
 set(SPDLOG_BUILD_EXAMPLE_HO OFF CACHE BOOL "" FORCE)
 set(SPDLOG_BUILD_TESTS OFF CACHE BOOL "" FORCE)
@@ -108,6 +108,9 @@ loco_find_or_fetch_dependency(
 # ------------------------------------------------------------------------------
 # Tinyobjloader is used for loading and parsing meshes in .obj file format
 # ------------------------------------------------------------------------------
+
+set(BUILD_SHARED_LIBS ON CACHE BOOL "" FORCE)
+
 loco_find_or_fetch_dependency(
   USE_SYSTEM_PACKAGE FALSE
   PACKAGE_NAME tinyobjloader
