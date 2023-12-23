@@ -30,7 +30,7 @@ set(UTILS_DEP_VERSION_tinyobjloader
     CACHE STRING "Version of 'tinyobjloader' to be fetched")
 
 set(UTILS_DEP_VERSION_math
-    a31f55fb57983286ad8e30c8915b3461d9ce8557 # Version v0.6.7
+    c73d5fdcdae57ace694e112a4a6ae149b153dc0b # Version v0.6.7
     CACHE STRING "Version of internal math repo to be fetched")
 
 mark_as_advanced(UTILS_DEP_VERSION_spdlog)
