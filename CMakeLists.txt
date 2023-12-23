@@ -48,7 +48,7 @@ include(UtilsDependencies)
 # cmake-format: off
 # -------------------------------------
 # Setup the main C++ target `UtilsCpp`
-loco_create_target(UtilsCpp STATIC
+loco_create_target(UtilsCpp SHARED
  SOURCES
    ${CMAKE_CURRENT_SOURCE_DIR}/src/utils/common.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/src/utils/logging.cpp
