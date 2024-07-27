@@ -15,7 +15,7 @@ constexpr const char* MAIN_EVENT = "walltime";
 
 namespace utils {
 
-struct ClockEvent {
+struct UTILS_API ClockEvent {
     /// Unique identifier of the event
     std::string name;
     /// Starting time-stamp of the event
@@ -26,10 +26,10 @@ struct ClockEvent {
     double time_duration;
 
     /// Returns the string representation of the event
-    auto ToString() const -> std::string;
+    UTILS_NODISCARD auto ToString() const -> std::string;
 };
 
-class Clock {
+class UTILS_API Clock {
     DEFINE_SMART_POINTERS(Clock)
 
  public:
