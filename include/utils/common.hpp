@@ -1,5 +1,109 @@
 #pragma once
 
+// -----------------------------------------------------------------------------
+// Language detection adapted from https://github.com/g-truc/glm
+
+// clang-format off
+
+#if defined(UTILS_FORCE_INLINE)
+    #if defined(UTILS_COMPILER_CLANG) || defined(UTILS_COMPILER_GCC)
+        #define UTILS_INLINE inline __attribute__((__always_inline__))
+    #elif defined(UTILS_COMPILER_MSVC)
+        #define UTILS_INLINE __forceinline
+    #else
+        #define UTILS_INLINE inline
+    #endif
+#else
+    #define UTILS_INLINE
+#endif
+
+#if defined(UTILS_COMPILER_CLANG) || defined(UTILS_COMPILER_GCC)
+    #define UTILS_NEVER_INLINE __attribute__((noinline))
+#elif defined(UTILS_COMPILER_MSVC)
+    #define UTILS_NEVER_INLINE __declspec(noinline)
+#else
+    #define UTILS_NEVER_INLINE
+#endif
+
+#define UTILS_LANG_CXX98_FLAG (1 << 1)
+#define UTILS_LANG_CXX03_FLAG (1 << 2)
+#define UTILS_LANG_CXX0X_FLAG (1 << 3)
+#define UTILS_LANG_CXX11_FLAG (1 << 4)
+#define UTILS_LANG_CXX14_FLAG (1 << 5)
+#define UTILS_LANG_CXX17_FLAG (1 << 6)
+#define UTILS_LANG_CXX20_FLAG (1 << 7)
+
+#define UTILS_LANG_CXX98 UTILS_LANG_CXX98_FLAG
+#define UTILS_LANG_CXX03 (UTILS_LANG_CXX98 | UTILS_LANG_CXX03_FLAG)
+#define UTILS_LANG_CXX0X (UTILS_LANG_CXX03 | UTILS_LANG_CXX0X_FLAG)
+#define UTILS_LANG_CXX11 (UTILS_LANG_CXX0X | UTILS_LANG_CXX11_FLAG)
+#define UTILS_LANG_CXX14 (UTILS_LANG_CXX11 | UTILS_LANG_CXX14_FLAG)
+#define UTILS_LANG_CXX17 (UTILS_LANG_CXX14 | UTILS_LANG_CXX17_FLAG)
+#define UTILS_LANG_CXX20 (UTILS_LANG_CXX17 | UTILS_LANG_CXX20_FLAG)
+
+#if defined(UTILS_FORCE_CXX20)
+    #define UTILS_LANG UTILS_LANG_CXX20
+#elif defined(UTILS_FORCE_CXX17)
+    #define UTILS_LANG UTILS_LANG_CXX17
+#elif defined(UTILS_FORCE_CXX14)
+    #define UTILS_LANG UTILS_LANG_CXX14
+#elif defined(UTILS_FORCE_CXX11)
+    #define UTILS_LANG UTILS_LANG_CXX11
+#else
+    #if __cplusplus > 201703L
+        #define UTILS_LANG UTILS_LANG_CXX20
+    #elif __cplusplus == 201703L
+        #define UTILS_LANG UTILS_LANG_CXX17
+    #elif __cplusplus == 201402L
+        #define UTILS_LANG UTILS_LANG_CXX14
+    #elif __cplusplus == 201103L
+        #define UTILS_LANG UTILS_LANG_CXX11
+    #else
+        #error "C++ standard must be one of 11, 14, 17, and 20"
+    #endif
+#endif
+
+// [[nodiscard]]
+#if UTILS_LANG & UTILS_LANG_CXX17_FLAG
+    #define UTILS_NODISCARD [[nodiscard]]
+#else
+    #define UTILS_NODISCARD
+#endif
+
+#if defined _WIN32 || defined __CYGWIN__
+    #define UTILS_DLL_EXPORT __declspec(dllexport)
+    #define UTILS_DLL_IMPORT __declspec(dllimport)
+    #define UTILS_DLL_LOCAL
+#else
+    #if __GNUC__ >= 4
+        #define UTILS_DLL_EXPORT __attribute__ ((visibility ("default")))
+        #define UTILS_DLL_IMPORT __attribute__ ((visibility ("default")))
+        #define UTILS_DLL_LOCAL __attribute__ ((visibility ("hidden")))
+    #else
+        #define UTILS_DLL_EXPORT
+        #define UTILS_DLL_IMPORT
+        #define UTILS_DLL_LOCAL
+    #endif
+#endif
+
+#define UTILS_DECL UTILS_NODISCARD
+
+#ifdef UTILS_STATIC
+    #define UTILS_API
+    #define UTILS_LOCAL
+#else
+    #ifdef UTILS_DLL_EXPORTS
+        #define UTILS_API UTILS_DLL_EXPORT
+    #else
+        #define UTILS_API UTILS_DLL_IMPORT
+    #endif
+    #define UTILS_LOCAL UTILS_DLL_LOCAL
+#endif
+
+// clang-format on
+
+// -----------------------------------------------------------------------------
+
 #include <cstdint>
 #include <cstdlib>
 #include <memory>
@@ -14,17 +118,17 @@ namespace utils {
 /// \param separator    Character separator used for the splitting process
 /// \return Vector of strings that form the initial string, after splitting
 /// using the separator
-auto Split(const std::string &txt, char separator = '/')
+UTILS_API auto Split(const std::string &txt, char separator = '/')
     -> std::vector<std::string>;
 
 /// Gets the string representation of the hex-address of a given pointer
 ///
 /// \param ptr  Pointer from whom to get the hex-address representation
 /// \return String representation of the hex-address of the pointer
-auto PointerToHexAddress(const void *ptr) -> std::string;
+UTILS_API auto PointerToHexAddress(const void *ptr) -> std::string;
 
 /// Returns a string with the contents of a given file
-auto GetFileContents(const char *filepath) -> std::string;
+UTILS_API auto GetFileContents(const char *filepath) -> std::string;
 
 }  // namespace utils
 

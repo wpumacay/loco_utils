@@ -11,6 +11,7 @@
 #include <unordered_map>
 
 #include <utils/logging.hpp>
+#include "utils/common.hpp"
 
 // Adapted from TheCherno's tutorial on profiling:
 // video    : https://youtu.be/xlAH4dbMVnU
@@ -21,7 +22,7 @@ constexpr const char* DEFAULT_SESSION = "session_default";
 namespace utils {
 
 /// Result object returned by profiling functions
-struct ProfilerResult {
+struct UTILS_API ProfilerResult {
     /// Unique identifier for this profiling result
     std::string name = "result";
     /// Starting timestamp (in microseconds)
@@ -33,7 +34,7 @@ struct ProfilerResult {
 };
 
 /// Scoped profiling timer (tracks time of a function scope)
-class ProfilerTimer {
+class UTILS_API ProfilerTimer {
     // cppcheck-suppress unknownMacro
     DEFINE_SMART_POINTERS(ProfilerTimer)
 
@@ -64,7 +65,7 @@ class ProfilerTimer {
 
 /// Interface for profiling sessions, which are used to handle profiling
 /// results (saving to disk, etc.)
-class IProfilerSession {
+class UTILS_API IProfilerSession {
     // cppcheck-suppress unknownMacro
     DEFINE_SMART_POINTERS(IProfilerSession)
 
@@ -108,13 +109,13 @@ class IProfilerSession {
     virtual auto End() -> void = 0;
 
     /// Gets the type of this session
-    auto type() const -> eType { return m_Type; }
+    UTILS_NODISCARD auto type() const -> eType { return m_Type; }
 
     /// Gets the current state of this session
-    auto state() const -> eState { return m_State; }
+    UTILS_NODISCARD auto state() const -> eState { return m_State; }
 
     /// Gets the name of this session
-    auto name() const -> std::string { return m_Name; }
+    UTILS_NODISCARD auto name() const -> std::string { return m_Name; }
 
  protected:
     /// Unique identifier of this session
@@ -127,7 +128,7 @@ class IProfilerSession {
 
 /// Profiling session that stores results for later usage of internal
 /// tooling
-class ProfilerSessionInternal : public IProfilerSession {
+class UTILS_API ProfilerSessionInternal : public IProfilerSession {
     // cppcheck-suppress unknownMacro
     DEFINE_SMART_POINTERS(ProfilerSessionInternal)
 
@@ -151,7 +152,9 @@ class ProfilerSessionInternal : public IProfilerSession {
     auto End() -> void override;
 
     /// Returns the profiler-results stored so far
-    auto results() const -> std::vector<ProfilerResult> { return m_Results; }
+    UTILS_NODISCARD auto results() const -> std::vector<ProfilerResult> {
+        return m_Results;
+    }
 
  private:
     /// Container used to store sessino results for later usage
@@ -160,7 +163,7 @@ class ProfilerSessionInternal : public IProfilerSession {
 
 /// Profiling session that saves the results to disk in the chrome-tracing
 /// tool required format
-class ProfilerSessionExtChrome : public IProfilerSession {
+class UTILS_API ProfilerSessionExtChrome : public IProfilerSession {
     // cppcheck-suppress unknownMacro
     DEFINE_SMART_POINTERS(ProfilerSessionExtChrome)
 
@@ -197,7 +200,7 @@ class ProfilerSessionExtChrome : public IProfilerSession {
 };
 
 /// Profiler module(singleton) with support for multiple sessions
-class Profiler {
+class UTILS_API Profiler {
     DEFINE_SMART_POINTERS(Profiler)
 
  public:

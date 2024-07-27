@@ -10,7 +10,7 @@
 
 namespace utils {
 
-class Logger {
+class UTILS_API Logger {
     // cppcheck-suppress unknownMacro
     NO_COPY_NO_MOVE_NO_ASSIGN(Logger)
 
@@ -29,22 +29,22 @@ class Logger {
     ~Logger() = default;
 
     /// Returns whether or not this logger is properly initialized
-    auto ready() const -> bool { return m_Ready; }
+    UTILS_NODISCARD auto ready() const -> bool { return m_Ready; }
 
     /// Returns the internal type of logger in use
-    auto type() const -> eType { return m_Type; }
+    UTILS_NODISCARD auto type() const -> eType { return m_Type; }
 
     /// Returns a mutable reference to the internal core logger
-    auto core_logger() -> spdlog::logger&;
+    UTILS_NODISCARD auto core_logger() -> spdlog::logger&;
 
     /// Returns an unmutable reference to the internal core logger
-    auto core_logger() const -> const spdlog::logger&;
+    UTILS_NODISCARD auto core_logger() const -> const spdlog::logger&;
 
     /// Returns a mutable reference to the internal client logger
-    auto client_logger() -> spdlog::logger&;
+    UTILS_NODISCARD auto client_logger() -> spdlog::logger&;
 
     /// Returns an unmutable reference to the internal client logger
-    auto client_logger() const -> const spdlog::logger&;
+    UTILS_NODISCARD auto client_logger() const -> const spdlog::logger&;
 
  public:
     /// Initialized the logging module given a mode

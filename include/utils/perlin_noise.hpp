@@ -13,7 +13,7 @@ namespace utils {
 
 using Vec2 = ::math::Vector2<float>;
 
-class PerlinNoise {
+class UTILS_API PerlinNoise {
  public:
     /// Initializes the perlin-noise generator module(singleton)
     static auto Init() -> void;

@@ -16,7 +16,7 @@ include(${loco_cmake_SOURCE_DIR}/Index.cmake)
 # Define our project :)
 project(
   Utils
-  VERSION 0.2.10
+  VERSION 0.2.11
   DESCRIPTION "A library of common functionality used alongside my projects"
   HOMEPAGE_URL "https://github.com/wpumacay/utils"
   LANGUAGES C CXX)
@@ -36,6 +36,8 @@ set_property(CACHE UTILS_BUILD_CXX_STANDARD PROPERTY STRINGS 11 14 17 20)
 # -------------------------------------
 # Initialize the project using our helper modules :D
 loco_initialize_project(CXX_STANDARD ${UTILS_BUILD_CXX_STANDARD})
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
 
 # -------------------------------------
 # Allow the usage of our helper macros and functions
@@ -65,6 +67,28 @@ loco_create_target(UtilsCpp SHARED
     ${UTILS_BUILD_CXX_STANDARD}
  WARNINGS_AS_ERRORS FALSE)
 # cmake-format: on
+
+# -------------------------------------
+# TODO(wilbert): should move this check into the create_target macro
+if(CMAKE_CXX_STANDARD EQUAL 20)
+  target_compile_definitions(UtilsCpp PUBLIC -DUTILS_FORCE_CXX20)
+elseif(CMAKE_CXX_STANDARD EQUAL 17)
+  target_compile_definitions(UtilsCpp PUBLIC -DUTILS_FORCE_CXX17)
+elseif(CMAKE_CXX_STANDARD EQUAL 14)
+  target_compile_definitions(UtilsCpp PUBLIC -DUTILS_FORCE_CXX14)
+elseif(CMAKE_CXX_STANDARD EQUAL 11)
+  target_compile_definitions(UtilsCpp PUBLIC -DUTILS_FORCE_CXX11)
+else()
+  message(
+    WARNING "Math3d >>> should setup which standard to use. Using autodetect")
+endif()
+
+# -------------------------------------
+# Handle symbol visibility
+set_target_properties(UtilsCpp PROPERTIES C_VISIBILITY_PRESET hidden)
+set_target_properties(UtilsCpp PROPERTIES CXX_VISIBILITY_PRESET hidden)
+set_target_properties(UtilsCpp PROPERTIES VISIBILITY_INLINES_HIDDEN ON)
+target_compile_definitions(UtilsCpp PRIVATE -DUTILS_DLL_EXPORTS)
 
 # -------------------------------------
 # Expose an alias for the library (CMake namespace convention)
