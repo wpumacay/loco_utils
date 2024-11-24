@@ -2,7 +2,6 @@
 
 #include <chrono>
 #include <cstdint>
-#include <cstring>
 #include <fstream>
 #include <memory>
 #include <string>
@@ -250,8 +249,8 @@ class UTILS_API Profiler {
 
     /// Dictionary container for all sessions created during the module's
     /// lifetime
-    std::unordered_map<std::string, std::unique_ptr<IProfilerSession>>
-        m_Sessions;
+    std::unordered_map<std::string, std::shared_ptr<IProfilerSession>>
+        m_Sessions; // TODO(wilbert): fix issue with unique_ptr on Windows
 
     /// Type of the profiler-sessions created (either INTERNAL, or
     /// EXTERNAL_CHROME)

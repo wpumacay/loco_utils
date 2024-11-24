@@ -13,7 +13,7 @@
 # ~~~
 
 set(UTILS_DEP_VERSION_spdlog
-    ad0e89cbfb4d0c1ce4d097e134eb7be67baebb36 # Release 1.10.0
+    8e5613379f5140fefb0b60412fbf1f5406e7c7f8 # Release 1.15.0
     CACHE STRING
           "Version of spdlog to be fetched (dependency of loco-utils library)")
 

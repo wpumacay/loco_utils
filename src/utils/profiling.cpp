@@ -177,13 +177,6 @@ auto Profiler::WriteProfileResult(const ProfilerResult& result,
     s_Instance->_WriteProfileResult(result, session_name);
 }
 
-auto Profiler::GetSessions() -> std::vector<IProfilerSession*> {
-    LOG_CORE_ASSERT(s_Instance,
-                    "Profiler::GetSessions >>> Profiler module must be "
-                    "initialized before using it");
-    return s_Instance->_GetSessions();
-}
-
 auto Profiler::_BeginSession(const std::string& session_name) -> void {
     if (m_Sessions.find(session_name) == m_Sessions.end()) {
         if (m_ProfilerType == IProfilerSession::eType::INTERNAL) {
@@ -217,14 +210,6 @@ auto Profiler::_WriteProfileResult(const ProfilerResult& result,
     } else {
         m_Sessions[session_name]->Write(result);
     }
-}
-
-auto Profiler::_GetSessions() -> std::vector<IProfilerSession*> {
-    std::vector<IProfilerSession*> vec_sessions(m_Sessions.size());
-    for (auto& kvpair : m_Sessions) {
-        vec_sessions.push_back(kvpair.second.get());
-    }
-    return vec_sessions;
 }
 
 }  // namespace utils
