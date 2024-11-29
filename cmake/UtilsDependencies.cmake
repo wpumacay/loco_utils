@@ -22,7 +22,7 @@ set(UTILS_DEP_VERSION_catch2
     CACHE STRING "Version of Catch2 to be fetched (used for unittests)")
 
 set(UTILS_DEP_VERSION_pybind11
-    8a099e44b3d5f85b20f05828d919d2332a8de841 # Release v2.11.1
+    a2e59f0e7065404b44dfe92a28aca47ba1378dc4 # Release v2.13.6
     CACHE STRING "Version of PyBind11 to be fetched (used for python bindings)")
 
 set(UTILS_DEP_VERSION_tinyobjloader
@@ -30,7 +30,7 @@ set(UTILS_DEP_VERSION_tinyobjloader
     CACHE STRING "Version of 'tinyobjloader' to be fetched")
 
 set(UTILS_DEP_VERSION_math
-    465647cac069bb1268bccc8adc33157e982f473b # Version v0.6.10
+    e2cd57e3dc01dc0ac7c1b083208ed6feb3ed6a79 # Version v0.6.16
     CACHE STRING "Version of internal math repo to be fetched")
 
 mark_as_advanced(UTILS_DEP_VERSION_spdlog)
